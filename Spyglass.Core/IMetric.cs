@@ -9,7 +9,5 @@ namespace Spyglass.Core
         string Name { get; }
 
         object Value { get; }
-
-        string Units { get; }
     }
 }

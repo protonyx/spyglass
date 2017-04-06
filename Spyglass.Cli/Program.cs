@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Spyglass.Core.Sources;
 
 namespace Spyglass.Cli
 {
@@ -6,7 +8,15 @@ namespace Spyglass.Cli
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var metricTest = new HttpRequestSource
+            {
+                Name = "Google",
+                Uri = new Uri("http://www.google.com")
+            };
+
+            var metrics = metricTest.GetMetrics().ToList();
+
+            Console.WriteLine("");
         }
     }
 }
