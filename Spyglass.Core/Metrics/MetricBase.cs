@@ -4,12 +4,10 @@ using System.Text;
 
 namespace Spyglass.Core.Metrics
 {
-    public class ValueMetric : IMetric
+    public abstract class MetricBase : IMetric
     {
         public string Name { get; set; }
 
-        public object Value { get; set; }
-
-        public string Units { get; set; }
+        public abstract IMetricValueProvider GetValueProvider();
     }
 }
