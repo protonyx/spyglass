@@ -4,8 +4,12 @@ using System.Text;
 
 namespace Spyglass.Core
 {
-    public interface IMetricSink
+    public enum MetricType
     {
-        void PutMetrics(IEnumerable<IMetric> metrics);
+        Gauge,
+        Counter,
+        Meter,
+        Histogram,
+        Timer
     }
 }

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Spyglass.Core
+namespace Spyglass.Core.Metrics
 {
     public interface IMetric
     {
         string Name { get; }
 
-        object Value { get; }
+        IMetricValueProvider GetValueProvider();
     }
 }
