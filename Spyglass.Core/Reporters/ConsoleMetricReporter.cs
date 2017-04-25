@@ -7,10 +7,20 @@ namespace Spyglass.Core.Reporters
 {
     public class ConsoleMetricReporter : IMetricReporter
     {
-        public void ReportMetric(IMetric metric)
+        protected IMetricContext Context { get; }
+
+        public ConsoleMetricReporter(IMetricContext context)
         {
-            var valueProvider = metric.GetValueProvider();
-            Console.WriteLine($"{metric.Name}: {valueProvider.Value} {valueProvider.Units}");
+            Context = context;
+        }
+
+        public void Report()
+        {
+            foreach (var metric in this.Context.Metrics)
+            {
+                var valueProvider = metric.GetValueProvider();
+                Console.WriteLine($"{metric.Name}: {valueProvider.Value} {valueProvider.Units}");
+            }
         }
 
         public void Flush()

@@ -20,16 +20,17 @@ namespace Spyglass.Cli
                 Name = "Google",
                 Uri = new Uri("http://www.google.com")
             };
-            context.AddMetric(httpMetric);
+            context.Metrics.Add(httpMetric);
 
             var pingMetric = new PingGauge
             {
                 Name = "Gateway Pingable",
                 Hostname = "192.168.0.1"
             };
-            context.AddMetric(pingMetric);
+            context.Metrics.Add(pingMetric);
 
-            context.Report(new ConsoleMetricReporter());
+            var reporter = new ConsoleMetricReporter(context);
+            reporter.Report();
 
             Console.ReadKey();
         }

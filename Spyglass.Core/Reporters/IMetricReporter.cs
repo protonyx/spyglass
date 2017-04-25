@@ -5,8 +5,7 @@ namespace Spyglass.Core.Reporters
 {
     public interface IMetricReporter
     {
-        void ReportMetric(IMetric metric);
-
+        void Report();
         void Flush();
     }
 }
