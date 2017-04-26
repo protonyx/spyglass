@@ -20,10 +20,10 @@ namespace Spyglass.Api.Controllers
             UnitOfWorkFactory = unitOfWorkFactory;
         }
 
-        protected MongoRepository<IMetricContext> GetRepository()
+        protected MongoRepository<MetricContext> GetRepository()
         {
             var uow = this.UnitOfWorkFactory.Create();
-            return uow.Repository<IMetricContext>();
+            return uow.Repository<MetricContext>();
         }
 
         [HttpGet]
@@ -31,6 +31,37 @@ namespace Spyglass.Api.Controllers
         {
             var repo = GetRepository();
             return Ok(repo.GetAll());
+        }
+
+        [HttpGet("{name}")]
+        public IActionResult Get(string name)
+        {
+            var repo = GetRepository();
+            var context = repo.GetAll()
+                .FirstOrDefault(t => t.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase));
+
+            if (context == null)
+                return NotFound();
+
+            return Ok(context);
+        }
+
+        [HttpPost("{name}")]
+        public IActionResult Create(string name)
+        {
+            var repo = GetRepository();
+            var existing = repo.GetAll()
+                .FirstOrDefault(t => t.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase));
+            if (existing != null)
+                return BadRequest();
+
+            var context = new MetricContext
+            {
+                Name = name
+            };
+
+            repo.Add(context);
+            return Ok(context);
         }
     }
 }
