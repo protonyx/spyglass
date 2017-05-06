@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Spyglass.Core.Metrics;
 
@@ -16,10 +17,10 @@ namespace Spyglass.Core.Reporters
 
         public void Report()
         {
-            foreach (var metric in this.Context.Metrics)
+            foreach (var metric in this.Context.Metrics.Where(t => t is IMetricValueProvider))
             {
-                var valueProvider = metric.GetValueProvider();
-                Console.WriteLine($"{metric.Name}: {valueProvider.Value} {valueProvider.Units}");
+                var value = ((IMetricValueProvider)metric).GetValue();
+                Console.WriteLine($"{metric.Name}: {value}");
             }
         }
 

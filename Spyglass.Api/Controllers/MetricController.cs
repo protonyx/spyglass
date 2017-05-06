@@ -1,66 +1,50 @@
 ﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Spyglass.Api.DAL;
 using Spyglass.Api.Models;
+using Spyglass.Core;
+using Spyglass.Core.Metrics;
 
 namespace Spyglass.Api.Controllers
 {
     [Route("api/[controller]")]
     public class MetricController : Controller
     {
-        protected MongoUnitOfWorkFactory UnitOfWorkFactory { get; }
+        protected IMapper Mapper { get; }
 
-        public MetricController(MongoUnitOfWorkFactory uowFactory)
+        public MetricController(IMapper mapper)
         {
-            this.UnitOfWorkFactory = uowFactory;
+            Mapper = mapper;
         }
-
-        // GET api/values
+        
         [HttpGet]
-        public IEnumerable<Metric> Get()
+        public IActionResult Get()
         {
-            var uow = UnitOfWorkFactory.Create();
+            var assm = Assembly.Load(new AssemblyName("Spyglass.Core"));
 
-            return uow.Repository<Metric>().GetAll();
-        }
+            var metricTypes = assm.ExportedTypes
+                .Where(t => typeof(IMetric).IsAssignableFrom(t))
+                .Where(t => t.GetTypeInfo().GetCustomAttribute<ConfigurableMetricAttribute>() != null)
+                .ToList();
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public Metric Get(Guid id)
-        {
-            var uow = UnitOfWorkFactory.Create();
+            var modelExplorer = new EmptyModelMetadataProvider();
 
-            return uow.Repository<Metric>().Get(id);
-        }
+            var descriptors = metricTypes
+                .Select(t => new MetricDescriptor
+                {
+                    Name = t.GetTypeInfo().GetCustomAttribute<ConfigurableMetricAttribute>().Name,
+                    Properties = modelExplorer.GetMetadataForProperties(t)
+                        .Select(this.Mapper.Map<ModelPropertyMetadata>)
+                });
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]Metric value)
-        {
-            var uow = UnitOfWorkFactory.Create();
-
-            uow.Repository<Metric>().Add(value);
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(Guid id, [FromBody]Metric entity)
-        {
-            var uow = UnitOfWorkFactory.Create();
-
-            uow.Repository<Metric>().Update(id, entity);
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(Guid id)
-        {
-            var uow = UnitOfWorkFactory.Create();
-
-            uow.Repository<Metric>().Remove(id);
+            return Ok(descriptors);
         }
     }
 }

@@ -8,10 +8,12 @@ using Spyglass.Core.Metrics;
 
 namespace Spyglass.Core.Gauge
 {
+    [ConfigurableMetric("HTTP Request")]
     public class HttpRequestGauge : FunctionGauge
     {
         public string Method { get; set; } = "GET";
 
+        [Required]
         public Uri Uri { get; set; }
 
         public HttpRequestGauge()

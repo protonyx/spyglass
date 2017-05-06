@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Spyglass.Core.Metrics
 {
     public abstract class MetricBase : IMetric
     {
-        public string Name { get; set; }
+        [Display(AutoGenerateField = false)]
+        public Guid Id { get; set; }
 
-        public abstract IMetricValueProvider GetValueProvider();
+        [Display(Order = 0)]
+        [Required]
+        public string Name { get; set; }
     }
 }

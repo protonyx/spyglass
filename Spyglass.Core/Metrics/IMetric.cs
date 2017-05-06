@@ -6,8 +6,8 @@ namespace Spyglass.Core.Metrics
 {
     public interface IMetric
     {
-        string Name { get; }
+        Guid Id { get; set; }
 
-        IMetricValueProvider GetValueProvider();
+        string Name { get; }
     }
 }

@@ -8,11 +8,12 @@ using Spyglass.Core.Metrics;
 
 namespace Spyglass.Core.Gauge
 {
+    [ConfigurableMetric("File size")]
     public class FileSizeGauge : FunctionGauge
     {
+        [Display(Order = 1)]
+        [Required]
         public string FilePath { get; set; }
-
-        public string Units => "MB";
 
         public FileSizeGauge()
         {

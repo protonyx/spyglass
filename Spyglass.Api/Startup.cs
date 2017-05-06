@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -32,6 +34,14 @@ namespace Spyglass.Api
             services.AddMvc();
 
             services.AddSingleton(typeof(MongoUnitOfWorkFactory));
+
+            // AutoMapper
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfiles(Assembly.GetEntryAssembly());
+            });
+            var mapper = config.CreateMapper();
+            services.AddSingleton<IMapper>((sp) => mapper);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

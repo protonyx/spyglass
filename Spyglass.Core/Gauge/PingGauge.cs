@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -9,8 +10,10 @@ using Spyglass.Core.Metrics;
 
 namespace Spyglass.Core.Gauge
 {
+    [ConfigurableMetric("Ping")]
     public class PingGauge : FunctionGauge
     {
+        [Required]
         public string Hostname { get; set; }
 
         public PingGauge()

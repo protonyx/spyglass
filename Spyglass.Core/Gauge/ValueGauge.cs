@@ -23,9 +23,9 @@ namespace Spyglass.Core.Gauge
             return _value;
         }
 
-        public override IMetricValueProvider GetValueProvider()
+        object IMetricValueProvider.GetValue()
         {
-            return this;
+            return GetValue();
         }
     }
 }

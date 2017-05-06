@@ -9,10 +9,6 @@ namespace Spyglass.Core.Gauge
     {
         protected Func<double> _valueProvider;
 
-        public string Units { get; set; }
-
-        public object Value => GetValue();
-
         public FunctionGauge(Func<double> valueProvider)
         {
             _valueProvider = valueProvider;
@@ -35,14 +31,14 @@ namespace Spyglass.Core.Gauge
             }
         }
 
+        object IMetricValueProvider.GetValue()
+        {
+            return GetValue();
+        }
+
         public void Set(double value)
         {
             throw new InvalidOperationException("Unable to set the value of a Function Gauge");
-        }
-
-        public override IMetricValueProvider GetValueProvider()
-        {
-            return this;
         }
     }
 }

@@ -6,13 +6,11 @@ namespace Spyglass.Core.Metrics
 {
     public interface IMetricValueProvider
     {
-        string Units { get; }
-
-        object Value { get; }
+        object GetValue();
     }
 
     public interface IMetricValueProvider<T> : IMetricValueProvider
     {
-        T GetValue();
+        new T GetValue();
     }
 }
