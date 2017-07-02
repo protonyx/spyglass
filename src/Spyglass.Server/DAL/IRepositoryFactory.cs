@@ -2,6 +2,6 @@
 {
     public interface IRepositoryFactory
     {
-        IRepository<TModel> Create<TModel>();
+        IRepository<TModel> Create<TModel>() where TModel : IHasKey;
     }
 }

@@ -29,7 +29,7 @@ namespace Spyglass.Server.Controllers
         public IActionResult Get(string name)
         {
             var repo = GetRepository();
-            var context = repo.FindBy(t => t.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase))
+            var context = repo.FindBy(t => t.Name.Equals(name))
                 .FirstOrDefault();
 
             if (context == null)
@@ -42,7 +42,7 @@ namespace Spyglass.Server.Controllers
         public IActionResult Create(string name)
         {
             var repo = GetRepository();
-            var existing = repo.FindBy(t => t.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase))
+            var existing = repo.FindBy(t => t.Name.Equals(name))
                 .FirstOrDefault();
             if (existing != null)
                 return BadRequest();
