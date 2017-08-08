@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Net.Http;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
+using System.Net.Http;
 
-namespace Spyglass.Core.Gauge
+namespace Spyglass.SDK.Providers
 {
     [ConfigurableMetric("HTTP Request")]
-    public class HttpRequestGauge : FunctionGauge
+    public class HttpRequestValueProvider : FunctionValueProvider
     {
         public string Method { get; set; } = "GET";
 
         [Required]
         public Uri Uri { get; set; }
 
-        public HttpRequestGauge()
+        public HttpRequestValueProvider()
         {
             this._valueProvider = GetStatusCode;
         }
@@ -51,7 +48,7 @@ namespace Spyglass.Core.Gauge
             return (double) response.StatusCode;
         }
 
-        public void Set(double value)
+        public override void Set(double value)
         {
             throw new InvalidOperationException("Unable to set the value of an HTTP Request metric");
         }

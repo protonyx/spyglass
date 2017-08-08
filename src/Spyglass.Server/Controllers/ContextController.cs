@@ -1,8 +1,7 @@
 using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Spyglass.Core;
-using Spyglass.SDK.Metrics;
+using Spyglass.SDK.Data;
 using Spyglass.Server.DAL;
 
 namespace Spyglass.Server.Controllers
@@ -80,7 +79,7 @@ namespace Spyglass.Server.Controllers
         }
         
         [HttpPost("{contextName}/Metrics")]
-        public IActionResult CreateMetric(string contextName, [FromBody]IMetric value)
+        public IActionResult CreateMetric(string contextName, [FromBody]Metric value)
         {
             var repo = GetRepository();
             var context = GetContext(contextName);
@@ -94,7 +93,7 @@ namespace Spyglass.Server.Controllers
         }
         
         //[HttpPut("{contextName}/Metrics/{id}")]
-        //public IActionResult UpdateMetric(string contextName, Guid id, [FromBody]IMetric entity)
+        //public IActionResult UpdateMetric(string contextName, Guid id, [FromBody]Metric entity)
         //{
         //    var uow = UnitOfWorkFactory.Create();
 

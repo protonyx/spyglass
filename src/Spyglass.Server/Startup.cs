@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Spyglass.SDK.Converters;
+using Spyglass.SDK.Services;
 using Spyglass.Server.DAL;
 
 namespace Spyglass.Server
@@ -27,9 +29,14 @@ namespace Spyglass.Server
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc()
+                .AddJsonOptions(opt =>
+                {
+                    opt.SerializerSettings.Converters.Add(new MetricProviderConverter());
+                });
 
-            services.AddSingleton(typeof(MongoUnitOfWorkFactory));
+            services.AddSingleton<IRepositoryFactory, MongoRepositoryFactory>();
+            services.AddSingleton<ProviderService>();
 
             // AutoMapper
             var config = new MapperConfiguration(cfg =>

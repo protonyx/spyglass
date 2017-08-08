@@ -1,4 +1,6 @@
-﻿namespace Spyglass.Server.DAL
+﻿using Spyglass.SDK.Data;
+
+namespace Spyglass.Server.DAL
 {
     public interface IRepositoryFactory
     {

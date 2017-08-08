@@ -3,9 +3,9 @@ using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Spyglass.Core;
-using Spyglass.Core.Gauge;
-using Spyglass.Core.Reporters;
+using Spyglass.SDK.Data;
+using Spyglass.SDK.Providers;
+using Spyglass.SDK.Reporters;
 
 namespace Spyglass.Agent
 {
@@ -22,28 +22,29 @@ namespace Spyglass.Agent
 
             var config = builder.Build();
             iocBuilder.AddSingleton(config);
-
-            var context = new MetricContext
+            
+            var metrics = new[]
             {
-                Name = "Test"
+                new Metric
+                {
+                    Name = "Google",
+                    ValueProvider = new HttpRequestValueProvider
+                    {
+                        Uri = new Uri("http://www.google.com")
+                    }
+                },
+                new Metric
+                {
+                    Name = "Gateway Pingable",
+                    ValueProvider = new PingValueProvider
+                    {
+                        Hostname = "192.168.0.1"
+                    }
+                }
             };
 
-            var httpMetric = new HttpRequestGauge
-            {
-                Name = "Google",
-                Uri = new Uri("http://www.google.com")
-            };
-            context.Metrics.Add(httpMetric);
-
-            var pingMetric = new PingGauge
-            {
-                Name = "Gateway Pingable",
-                Hostname = "192.168.0.1"
-            };
-            context.Metrics.Add(pingMetric);
-
-            var reporter = new ConsoleMetricReporter(context);
-            reporter.Report();
+            var reporter = new ConsoleMetricReporter();
+            reporter.Report(metrics);
 
             var ioc = iocBuilder.BuildServiceProvider();
             ioc.GetService<ILoggerFactory>()

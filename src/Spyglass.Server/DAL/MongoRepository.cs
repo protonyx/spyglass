@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using Spyglass.SDK.Data;
 
 namespace Spyglass.Server.DAL
 {

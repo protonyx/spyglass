@@ -1,8 +1,11 @@
-﻿namespace Spyglass.SDK.Reporters
+﻿using System.Collections.Generic;
+using Spyglass.SDK.Data;
+
+namespace Spyglass.SDK.Reporters
 {
     public interface IMetricReporter
     {
-        void Report();
+        void Report(IEnumerable<Metric> metrics);
         void Flush();
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Spyglass.Core
+namespace Spyglass.SDK
 {
     public class ConfigurableMetricAttribute : Attribute
     {

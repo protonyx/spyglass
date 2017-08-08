@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Driver;
+using Spyglass.SDK.Data;
 
 namespace Spyglass.Server.DAL
 {
@@ -14,7 +15,12 @@ namespace Spyglass.Server.DAL
 
         public MongoRepositoryFactory()
         {
-            this.Client = new MongoClient("mongodb://localhost:27017");
+            var settings = new MongoClientSettings
+            {
+                Server = new MongoServerAddress("kelvin", 27017),
+                ConnectTimeout = TimeSpan.FromSeconds(10)
+            };
+            this.Client = new MongoClient(settings);
             this.Database = this.Client.GetDatabase("spyglass");
         }
 

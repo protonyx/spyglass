@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using Spyglass.Core.Gauge;
 
-namespace Spyglass.Core.Gauge
+namespace Spyglass.SDK.Providers
 {
     [ConfigurableMetric("Database Query")]
-    public class DatabaseQueryGauge : FunctionGauge
+    public class DatabaseQueryValueProvider : FunctionValueProvider
     {
         public string Hostname { get; set; }
 
@@ -31,7 +27,7 @@ namespace Spyglass.Core.Gauge
 
         public string Units { get; set; }
 
-        public DatabaseQueryGauge()
+        public DatabaseQueryValueProvider()
         {
             this._valueProvider = GetQueryValue;
         }

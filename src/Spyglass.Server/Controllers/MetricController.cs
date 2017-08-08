@@ -3,8 +3,9 @@ using System.Reflection;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Spyglass.Core;
-using Spyglass.SDK.Metrics;
+using Spyglass.SDK;
+using Spyglass.SDK.Data;
+using Spyglass.Server.DAL;
 using Spyglass.Server.Models;
 
 namespace Spyglass.Server.Controllers
@@ -14,32 +15,34 @@ namespace Spyglass.Server.Controllers
     {
         protected IMapper Mapper { get; }
 
-        public MetricController(IMapper mapper)
+        protected IRepositoryFactory RepositoryFactory { get; }
+
+        public MetricController(
+            IMapper mapper,
+            IRepositoryFactory repositoryFactory)
         {
             Mapper = mapper;
+            RepositoryFactory = repositoryFactory;
         }
         
         [HttpGet]
         public IActionResult Get()
         {
-            var assm = Assembly.Load(new AssemblyName("Spyglass.Core"));
+            var repo = RepositoryFactory.Create<Metric>();
 
-            var metricTypes = assm.ExportedTypes
-                .Where(t => typeof(IMetric).IsAssignableFrom(t))
-                .Where(t => t.GetTypeInfo().GetCustomAttribute<ConfigurableMetricAttribute>() != null)
-                .ToList();
+            return Ok(repo.GetAll());
+        }
 
-            var modelExplorer = new EmptyModelMetadataProvider();
+        [HttpPost]
+        public IActionResult CreateMetric([FromBody] Metric metric)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
 
-            var descriptors = metricTypes
-                .Select(t => new MetricDescriptor
-                {
-                    Name = t.GetTypeInfo().GetCustomAttribute<ConfigurableMetricAttribute>().Name,
-                    Properties = modelExplorer.GetMetadataForProperties(t)
-                        .Select(this.Mapper.Map<ModelPropertyMetadata>)
-                });
+            var repo = RepositoryFactory.Create<Metric>();
 
-            return Ok(descriptors);
+            var newMetric = repo.Add(metric);
+            return Created(Url.Action(nameof(Get)), newMetric);
         }
     }
 }

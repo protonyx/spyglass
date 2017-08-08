@@ -1,20 +1,17 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
-using System.Text;
 
-namespace Spyglass.Core.Gauge
+namespace Spyglass.SDK.Providers
 {
     [ConfigurableMetric("File size")]
-    public class FileSizeGauge : FunctionGauge
+    public class FileSizeValueProvider : FunctionValueProvider
     {
         [Display(Order = 1)]
         [Required]
         public string FilePath { get; set; }
 
-        public FileSizeGauge()
+        public FileSizeValueProvider()
         {
             this._valueProvider = GetFileSize;
         }

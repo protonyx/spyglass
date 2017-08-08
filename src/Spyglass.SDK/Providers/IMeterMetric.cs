@@ -1,9 +1,9 @@
-﻿namespace Spyglass.SDK.Metrics
+﻿namespace Spyglass.SDK.Providers
 {
     /// <summary>
     /// Measure the rate at which a set of events occur.
     /// </summary>
-    public interface IMeterMetric : IMetric
+    public interface IMeterMetric
     {
         /// <summary>
         /// Mark the occurence of an event.

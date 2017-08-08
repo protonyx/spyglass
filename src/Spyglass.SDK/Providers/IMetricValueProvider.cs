@@ -1,4 +1,4 @@
-﻿namespace Spyglass.SDK.Metrics
+﻿namespace Spyglass.SDK.Providers
 {
     public interface IMetricValueProvider
     {

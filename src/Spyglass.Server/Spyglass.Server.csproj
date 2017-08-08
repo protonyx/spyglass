@@ -23,7 +23,6 @@
     <PackageReference Include="MongoDB.Driver" Version="2.4.4" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Spyglass.Core\Spyglass.Core.csproj" />
     <ProjectReference Include="..\Spyglass.SDK\Spyglass.SDK.csproj" />
   </ItemGroup>
 </Project>

@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Spyglass.SDK.Metrics;
 
-namespace Spyglass.Core.Gauge
+namespace Spyglass.SDK.Providers
 {
-    public class FunctionGauge : MetricBase, IGaugeMetric
+    public class FunctionValueProvider : IMetricValueProvider<double>
     {
         protected Func<double> _valueProvider;
 
-        public FunctionGauge(Func<double> valueProvider)
+        public FunctionValueProvider(Func<double> valueProvider)
         {
             _valueProvider = valueProvider;
         }
 
-        public FunctionGauge()
+        public FunctionValueProvider()
         {
             
         }
@@ -36,7 +33,7 @@ namespace Spyglass.Core.Gauge
             return GetValue();
         }
 
-        public void Set(double value)
+        public virtual void Set(double value)
         {
             throw new InvalidOperationException("Unable to set the value of a Function Gauge");
         }

@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Threading;
-using System.Net;
 using System.Net.NetworkInformation;
+using System.Text;
+using System.Threading;
 
-namespace Spyglass.Core.Gauge
+namespace Spyglass.SDK.Providers
 {
     [ConfigurableMetric("Ping")]
-    public class PingGauge : FunctionGauge
+    public class PingValueProvider : FunctionValueProvider
     {
         [Required]
         public string Hostname { get; set; }
 
-        public PingGauge()
+        public PingValueProvider()
         {
             this._valueProvider = GetPing;
         }
