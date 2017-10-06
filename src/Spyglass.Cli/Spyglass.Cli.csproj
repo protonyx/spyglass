@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <UserSecretsId>fc3eda9a-d4a8-4079-9aa5-5166090db476</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Spyglass.SDK\Spyglass.SDK.csproj" />
+  </ItemGroup>
+</Project>

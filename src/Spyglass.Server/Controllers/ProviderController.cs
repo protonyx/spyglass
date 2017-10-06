@@ -19,15 +19,14 @@ namespace Spyglass.Server.Controllers
         {
             Mapper = mapper;
         }
-        
+
         [HttpGet]
         public IActionResult Get()
         {
-            var assm = Assembly.Load(new AssemblyName("Spyglass.Core"));
+            var assm = Assembly.Load(new AssemblyName("Spyglass.Providers"));
 
             var providerTypes = assm.ExportedTypes
                 .Where(t => typeof(IMetricValueProvider).IsAssignableFrom(t))
-                .Where(t => t.GetTypeInfo().GetCustomAttribute<ConfigurableMetricAttribute>() != null)
                 .ToList();
 
             var modelExplorer = new EmptyModelMetadataProvider();
@@ -35,7 +34,7 @@ namespace Spyglass.Server.Controllers
             var descriptors = providerTypes
                 .Select(t => new MetricDescriptor
                 {
-                    Name = t.GetTypeInfo().GetCustomAttribute<ConfigurableMetricAttribute>().Name,
+                    Name = t.GetTypeInfo().Name,
                     Properties = modelExplorer.GetMetadataForProperties(t)
                         .Select(this.Mapper.Map<ModelPropertyMetadata>)
                 });

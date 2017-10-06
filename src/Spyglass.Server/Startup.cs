@@ -5,9 +5,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Spyglass.SDK.Converters;
-using Spyglass.SDK.Services;
-using Spyglass.Server.DAL;
+using Spyglass.SDK.Data;
+using Spyglass.Server.Converters;
+using Spyglass.Server.Services;
+using Spyglass.Data.MongoDb;
 
 namespace Spyglass.Server
 {
@@ -20,6 +21,12 @@ namespace Spyglass.Server
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
+
+            if (env.IsDevelopment())
+            {
+              builder.AddUserSecrets<Startup>();
+            }
+
             Configuration = builder.Build();
         }
 
@@ -28,14 +35,15 @@ namespace Spyglass.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
+          services.AddSingleton(this.Configuration);  
+          
             services.AddMvc()
                 .AddJsonOptions(opt =>
                 {
                     opt.SerializerSettings.Converters.Add(new MetricProviderConverter());
                 });
 
-            services.AddSingleton<IRepositoryFactory, MongoRepositoryFactory>();
+            services.AddSingleton<IDataContext, SpyglassMongoContext>();
             services.AddSingleton<ProviderService>();
 
             // AutoMapper

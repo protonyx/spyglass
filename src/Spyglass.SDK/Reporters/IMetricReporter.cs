@@ -5,7 +5,7 @@ namespace Spyglass.SDK.Reporters
 {
     public interface IMetricReporter
     {
-        void Report(IEnumerable<Metric> metrics);
+        void Report(IEnumerable<IMetricValueProvider> metrics);
         void Flush();
     }
 }

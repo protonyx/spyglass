@@ -1,5 +1,5 @@
 {
-  "$schema": "../node_modules/@angular/cli/lib/config/schema.json",
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "project": {
     "name": "spyglass"
   },
@@ -19,14 +19,9 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "sg",
       "styles": [
-        "../bower_components/tether/dist/css/tether.css",
-        "../bower_components/bootstrap/dist/css/bootstrap.css",
-        "styles.css"
+        "scss/style.scss"
       ],
       "scripts": [
-        "../bower_components/jquery/dist/jquery.js",
-        "../bower_components/tether/dist/js/tether.js",
-        "../bower_components/bootstrap/dist/js/bootstrap.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
@@ -57,7 +52,7 @@
     }
   },
   "defaults": {
-    "styleExt": "css",
+    "styleExt": "scss",
     "component": {}
   }
 }
