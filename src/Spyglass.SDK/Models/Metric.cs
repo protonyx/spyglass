@@ -10,14 +10,16 @@ namespace Spyglass.SDK.Models
         [Display(AutoGenerateField = false)]
         public Guid Id { get; set; } = Guid.NewGuid();
 
+        public Guid? ContextId { get; set; }
+
         [Display(Order = 0)]
         [Required]
         public string Name { get; set; }
 
         [Required]
-        public string Type { get; set; }
+        public string ProviderType { get; set; }
 
-        public IMetricValueProvider ValueProvider { get; set; }
+        public IMetricValueProvider ProviderConfiguration { get; set; }
 
         public object GetKey()
         {

@@ -7,22 +7,12 @@ namespace Spyglass.SDK.Models
 {
     public class MetricContext : IHasKey
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required]
         public string Name { get; set; }
 
-        public ICollection<Metric> Metrics { get; }
-
-        #region Constructor
-
-        public MetricContext()
-        {
-            this.Id = Guid.NewGuid();
-            this.Metrics = new List<Metric>();
-        }
-
-        #endregion
+        public string Description { get; set; }
 
         public object GetKey()
         {
