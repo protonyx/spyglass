@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2005
@@ -12,6 +12,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spyglass.Cli", "Spyglass.Cli\Spyglass.Cli.csproj", "{256A4342-CE9F-4961-8965-DD2557405A3E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spyglass.Data.MongoDb", "Spyglass.Data.MongoDb\Spyglass.Data.MongoDb.csproj", "{CBDCCA22-2051-48D1-9593-AA6F9B5D2FC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spyglass.Tests", "Spyglass.Tests\Spyglass.Tests.csproj", "{53A0093B-8C12-4618-8188-2A7967ACE4B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,10 +81,26 @@ Global
 		{CBDCCA22-2051-48D1-9593-AA6F9B5D2FC2}.Debug|x86.Build.0 = Debug|Any CPU
 		{CBDCCA22-2051-48D1-9593-AA6F9B5D2FC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBDCCA22-2051-48D1-9593-AA6F9B5D2FC2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CBDCCA22-2051-48D1-9593-AA6F9B5D2FC2}.Release|x64.ActiveCfg = Release|Any CPU
-		{CBDCCA22-2051-48D1-9593-AA6F9B5D2FC2}.Release|x64.Build.0 = Release|Any CPU
-		{CBDCCA22-2051-48D1-9593-AA6F9B5D2FC2}.Release|x86.ActiveCfg = Release|Any CPU
-		{CBDCCA22-2051-48D1-9593-AA6F9B5D2FC2}.Release|x86.Build.0 = Release|Any CPU
+		{CBDCCA22-2051-48D1-9593-AA6F9B5D2FC2}.Debug|x64.ActiveCfg = Debug|x64
+		{CBDCCA22-2051-48D1-9593-AA6F9B5D2FC2}.Debug|x64.Build.0 = Debug|x64
+		{CBDCCA22-2051-48D1-9593-AA6F9B5D2FC2}.Debug|x86.ActiveCfg = Debug|x86
+		{CBDCCA22-2051-48D1-9593-AA6F9B5D2FC2}.Debug|x86.Build.0 = Debug|x86
+		{CBDCCA22-2051-48D1-9593-AA6F9B5D2FC2}.Release|x64.ActiveCfg = Release|x64
+		{CBDCCA22-2051-48D1-9593-AA6F9B5D2FC2}.Release|x64.Build.0 = Release|x64
+		{CBDCCA22-2051-48D1-9593-AA6F9B5D2FC2}.Release|x86.ActiveCfg = Release|x86
+		{CBDCCA22-2051-48D1-9593-AA6F9B5D2FC2}.Release|x86.Build.0 = Release|x86
+		{53A0093B-8C12-4618-8188-2A7967ACE4B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53A0093B-8C12-4618-8188-2A7967ACE4B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53A0093B-8C12-4618-8188-2A7967ACE4B7}.Debug|x64.ActiveCfg = Debug|x64
+		{53A0093B-8C12-4618-8188-2A7967ACE4B7}.Debug|x64.Build.0 = Debug|x64
+		{53A0093B-8C12-4618-8188-2A7967ACE4B7}.Debug|x86.ActiveCfg = Debug|x86
+		{53A0093B-8C12-4618-8188-2A7967ACE4B7}.Debug|x86.Build.0 = Debug|x86
+		{53A0093B-8C12-4618-8188-2A7967ACE4B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53A0093B-8C12-4618-8188-2A7967ACE4B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53A0093B-8C12-4618-8188-2A7967ACE4B7}.Release|x64.ActiveCfg = Release|x64
+		{53A0093B-8C12-4618-8188-2A7967ACE4B7}.Release|x64.Build.0 = Release|x64
+		{53A0093B-8C12-4618-8188-2A7967ACE4B7}.Release|x86.ActiveCfg = Release|x86
+		{53A0093B-8C12-4618-8188-2A7967ACE4B7}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
