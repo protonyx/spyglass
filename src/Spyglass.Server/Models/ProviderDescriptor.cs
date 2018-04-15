@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Spyglass.Server.Models
 {
-    public class MetricDescriptor
+    public class ProviderDescriptor
     {
         public string Name { get; set; }
 

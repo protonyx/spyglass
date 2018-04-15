@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Spyglass.SDK.Data;
@@ -6,7 +6,7 @@ using Spyglass.SDK.Providers;
 
 namespace Spyglass.Providers
 {
-    public class DatabaseQueryValueProvider : MetricValueProviderBase
+    public class DatabaseQueryValueProvider : IMetricValueProvider
     {
         [Required]
         public string Driver { get; set; }
@@ -19,12 +19,12 @@ namespace Spyglass.Providers
 
         public string Units { get; set; }
 
-        public override string GetTypeName()
+        public string GetTypeName()
         {
           return "Database Query";
         }
 
-        public override IEnumerable<IMetricValue> GetValue()
+        public IEnumerable<IMetricValue> GetValue()
         {
             yield break;
         }

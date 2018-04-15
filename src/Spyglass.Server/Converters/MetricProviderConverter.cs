@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -10,6 +10,13 @@ namespace Spyglass.Server.Converters
 {
     public class MetricProviderConverter : JsonConverter
     {
+        protected ProviderService ProviderService { get; }
+
+        public MetricProviderConverter(ProviderService providerService)
+        {
+            ProviderService = providerService;
+        }
+
         public override bool CanWrite => false;
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
@@ -23,20 +30,19 @@ namespace Spyglass.Server.Converters
             JObject jsonObject = JObject.Load(reader);
 
             var typeProperty = jsonObject.Properties()
-                .FirstOrDefault(p => p.Name.Equals(nameof(Metric.Type), StringComparison.OrdinalIgnoreCase));
+                .FirstOrDefault(p => p.Name.Equals(nameof(Metric.ProviderType), StringComparison.OrdinalIgnoreCase));
 
             if (typeProperty == null)
-                throw new InvalidOperationException($"Property {nameof(Metric.Type)} is required");
+                throw new InvalidOperationException($"Property {nameof(Metric.ProviderType)} is required");
             
-            var providerService = new ProviderService();
             var typePropertyValue = typeProperty.First.Value<string>();
-            var providerType = providerService.GetProvider(typePropertyValue);
+            var providerType = ProviderService.GetProvider(typePropertyValue);
 
             if (providerType == null)
                 throw new InvalidOperationException($"Type {typePropertyValue} could not be resolved");
 
             JToken provider;
-            if (jsonObject.TryGetValue(nameof(Metric.ValueProvider), StringComparison.OrdinalIgnoreCase, out provider))
+            if (jsonObject.TryGetValue(nameof(Metric.Provider), StringComparison.OrdinalIgnoreCase, out provider))
             {
                 ((JProperty)provider.Parent).Remove();
                 using (var subReader = jsonObject.CreateReader())
@@ -44,7 +50,7 @@ namespace Spyglass.Server.Converters
                     serializer.Populate(subReader, metric);
                 }
 
-                metric.ValueProvider = (IMetricValueProvider)provider.ToObject(providerType);
+                metric.Provider = (IMetricValueProvider)provider.ToObject(providerType);
             }
 
             return metric;

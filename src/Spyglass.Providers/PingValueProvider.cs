@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -10,17 +10,17 @@ using Spyglass.SDK.Models;
 
 namespace Spyglass.SDK.Providers
 {
-    public class PingValueProvider : MetricValueProviderBase
+    public class PingValueProvider : IMetricValueProvider
     {
         [Required]
         public string Hostname { get; set; }
 
-        public override string GetTypeName()
+        public string GetTypeName()
         {
           return "Ping";
         }
 
-        public override IEnumerable<IMetricValue> GetValue()
+        public IEnumerable<IMetricValue> GetValue()
         {
             if (string.IsNullOrWhiteSpace(Hostname))
                 throw new ArgumentNullException(nameof(Hostname));

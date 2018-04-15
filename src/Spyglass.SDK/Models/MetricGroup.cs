@@ -1,13 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Spyglass.SDK.Data;
 
 namespace Spyglass.SDK.Models
 {
-    public class MetricContext : IHasKey
+    public class MetricGroup : IHasKey
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid? Id { get; set; } = Guid.NewGuid();
 
         [Required]
         public string Name { get; set; }

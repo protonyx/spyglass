@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Spyglass.SDK.Reporters;
 using Spyglass.SDK.Data;
@@ -11,9 +11,12 @@ namespace Spyglass.Cli
         {
             foreach (var metric in metrics)
             {
-                var value = metric.GetValue();
-              var name = metric.GetTypeName();
-                Console.WriteLine($"{name}: {value}");
+                var values = metric.GetValue();
+                var name = metric.GetTypeName();
+                foreach (var value in values)
+                {
+                    Console.WriteLine($"{name}: {value}");
+                }
             }
         }
 

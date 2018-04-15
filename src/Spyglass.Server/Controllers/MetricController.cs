@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Spyglass.SDK.Data;
@@ -47,7 +47,7 @@ namespace Spyglass.Server.Controllers
             if (entity == null)
                 return NotFound();
 
-            var provider = entity.ProviderConfiguration;
+            var provider = entity.Provider;
             var value = provider.GetValue();
             
             return Ok(value);

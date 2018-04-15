@@ -1,14 +1,18 @@
-﻿using System.Reflection;
+using System;
+using System.IO;
+using System.Reflection;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Spyglass.SDK.Data;
 using Spyglass.Server.Converters;
 using Spyglass.Server.Services;
 using Spyglass.Data.MongoDb;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Spyglass.Server
 {
@@ -35,12 +39,12 @@ namespace Spyglass.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-          services.AddSingleton(this.Configuration);  
+            services.AddSingleton(this.Configuration);  
           
             services.AddMvc()
                 .AddJsonOptions(opt =>
                 {
-                    opt.SerializerSettings.Converters.Add(new MetricProviderConverter());
+                    //opt.SerializerSettings.Converters.Add(new MetricProviderConverter());
                 });
 
             services.AddSingleton<IDataContext, SpyglassMongoContext>();
@@ -53,18 +57,37 @@ namespace Spyglass.Server
             });
             var mapper = config.CreateMapper();
             services.AddSingleton<IMapper>((sp) => mapper);
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info()
+                {
+                    Title = "Spyglass API",
+                    Version = "v1"
+                });
+
+                var filePath = Path.Combine(AppContext.BaseDirectory, "Spyglass.Server.xml");
+                c.IncludeXmlComments(filePath);
+
+                c.MapType<Guid>(() => new Schema() { Type = "string (Guid)"});
+            });
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            // Setup logging
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddDebug();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseMvc();
         }
