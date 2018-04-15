@@ -12,19 +12,23 @@ namespace Spyglass.Server.Services
 {
     public class ProviderService
     {
-        protected IMapper Mapper { get; }
+        protected static Dictionary<string, Type> ProviderMap { get; }
 
-        protected Dictionary<string, Type> ProviderMap { get; }
-
-        public ProviderService(IMapper mapper)
+        static ProviderService()
         {
-            Mapper = mapper;
-
             var assm = Assembly.Load(new AssemblyName("Spyglass.Providers"));
 
             ProviderMap = assm.ExportedTypes
                 .Where(t => typeof(IMetricValueProvider).IsAssignableFrom(t))
                 .ToDictionary(t => t.Name, t => t);
+        }
+
+        protected IMapper Mapper { get; }
+
+
+        public ProviderService(IMapper mapper)
+        {
+            Mapper = mapper;
         }
 
         public ProviderDescriptor GetMetadata(Type providerType)
@@ -39,14 +43,14 @@ namespace Spyglass.Server.Services
             };
         }
 
-        public Type GetProvider(string name)
+        public static Type GetProvider(string name)
         {
             return ProviderMap.ContainsKey(name) ? ProviderMap[name] : null;
         }
 
-        public IReadOnlyDictionary<string, Type> GetProviders()
+        public static IReadOnlyDictionary<string, Type> GetProviders()
         {
-            return this.ProviderMap;
+            return ProviderMap;
         }
     }
 }

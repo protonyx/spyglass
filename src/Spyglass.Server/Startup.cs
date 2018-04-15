@@ -44,7 +44,7 @@ namespace Spyglass.Server
             services.AddMvc()
                 .AddJsonOptions(opt =>
                 {
-                    //opt.SerializerSettings.Converters.Add(new MetricProviderConverter());
+                    opt.SerializerSettings.Converters.Add(new MetricProviderConverter());
                 });
 
             services.AddSingleton<IDataContext, SpyglassMongoContext>();

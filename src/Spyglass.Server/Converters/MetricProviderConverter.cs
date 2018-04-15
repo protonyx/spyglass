@@ -10,13 +10,6 @@ namespace Spyglass.Server.Converters
 {
     public class MetricProviderConverter : JsonConverter
     {
-        protected ProviderService ProviderService { get; }
-
-        public MetricProviderConverter(ProviderService providerService)
-        {
-            ProviderService = providerService;
-        }
-
         public override bool CanWrite => false;
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

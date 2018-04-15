@@ -57,6 +57,8 @@ namespace Spyglass.Server.Controllers
         public IActionResult CreateMetric([FromBody] Metric entity)
         {
             entity.Id = Guid.NewGuid();
+            entity.CreatedDate = DateTime.Now;
+            entity.ModifiedDate = DateTime.Now;
 
             this.MetricRepository.Add(entity);
 
@@ -72,6 +74,8 @@ namespace Spyglass.Server.Controllers
 
             if (entity == null)
                 return NotFound();
+
+            entity.ModifiedDate = DateTime.Now;
 
             this.MetricRepository.Update(metric);
 
