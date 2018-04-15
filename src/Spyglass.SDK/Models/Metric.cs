@@ -21,6 +21,10 @@ namespace Spyglass.SDK.Models
 
         [Required]
         public string ProviderType { get; set; }
+        
+        public DateTime CreatedDate { get; set; }
+        
+        public DateTime ModifiedDate { get; set; }
 
         public IMetricValueProvider Provider { get; set; }
 
