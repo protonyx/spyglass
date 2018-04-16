@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using AutoMapper;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Spyglass.SDK.Data;
-using Spyglass.Server.Models;
+using Spyglass.SDK.Models;
 
-namespace Spyglass.Server.Services
+namespace Spyglass.SDK.Services
 {
     public class ProviderService
     {
@@ -21,26 +18,6 @@ namespace Spyglass.Server.Services
             ProviderMap = assm.ExportedTypes
                 .Where(t => typeof(IMetricValueProvider).IsAssignableFrom(t))
                 .ToDictionary(t => t.Name, t => t);
-        }
-
-        protected IMapper Mapper { get; }
-
-
-        public ProviderService(IMapper mapper)
-        {
-            Mapper = mapper;
-        }
-
-        public ProviderDescriptor GetMetadata(Type providerType)
-        {
-            var modelExplorer = new EmptyModelMetadataProvider();
-            var properties = modelExplorer.GetMetadataForProperties(providerType);
-
-            return new ProviderDescriptor
-            {
-                Name = providerType.GetTypeInfo().Name,
-                Properties = properties.Select(this.Mapper.Map<ModelPropertyMetadata>)
-            };
         }
 
         public static Type GetProvider(string name)

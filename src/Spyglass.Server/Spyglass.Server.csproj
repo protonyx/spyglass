@@ -34,4 +34,7 @@
     <ProjectReference Include="..\Spyglass.SDK\Spyglass.SDK.csproj" />
     <ProjectReference Include="..\Spyglass.Data.MongoDb\Spyglass.Data.MongoDb.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
 </Project>

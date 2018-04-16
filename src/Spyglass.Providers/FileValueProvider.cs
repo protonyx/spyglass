@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -20,32 +21,37 @@ namespace Spyglass.SDK.Providers
           return "File";
         }
 
-        public IEnumerable<IMetricValue> GetValue()
+        public async Task<IEnumerable<IMetricValue>> GetValueAsync()
+        {
+            return GetValues();
+        }
+
+        public IEnumerable<IMetricValue> GetValues() 
         {
             var file = new FileInfo(FilePath);
 
             yield return new MetricValue
             {
-              Name = "Exists",
-              Value = file.Exists,
-              Units = ""
+                Name = "Exists",
+                Value = file.Exists,
+                Units = ""
             };
 
             if (!file.Exists)
-              yield break;
+                yield break;
 
             yield return new MetricValue
             {
-              Name = "Since Last Modified",
-              Value = DateTime.Now - file.LastWriteTime,
-              Units = "Seconds"
+                Name = "Since Last Modified",
+                Value = DateTime.Now - file.LastWriteTime,
+                Units = "Seconds"
             };
 
             yield return new MetricValue
             {
-              Name = "Size",
-              Value = file.Length,
-              Units = "Bytes"
+                Name = "Size",
+                Value = file.Length,
+                Units = "Bytes"
             };
         }
     }

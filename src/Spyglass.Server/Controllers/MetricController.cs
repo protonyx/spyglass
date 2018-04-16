@@ -48,9 +48,9 @@ namespace Spyglass.Server.Controllers
                 return NotFound();
 
             var provider = entity.Provider;
-            var value = provider.GetValue();
+            var value = provider.GetValueAsync();
             
-            return Ok(value);
+            return Ok(value.Result);
         }
 
         [HttpPost]

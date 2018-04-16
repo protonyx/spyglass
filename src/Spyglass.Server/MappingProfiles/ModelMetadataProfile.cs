@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Spyglass.Server.Models;
+using Spyglass.SDK.Models;
 
 namespace Spyglass.Server.MappingProfiles
 {
@@ -8,7 +8,7 @@ namespace Spyglass.Server.MappingProfiles
     {
         public ModelMetadataProfile()
         {
-            CreateMap<ModelMetadata, ModelPropertyMetadata>()
+            CreateMap<Microsoft.AspNetCore.Mvc.ModelBinding.ModelMetadata, ModelPropertyMetadata>()
                 .ForMember(t => t.ModelType, opt => opt.MapFrom(t => t.UnderlyingOrModelType.Name));
         }
     }

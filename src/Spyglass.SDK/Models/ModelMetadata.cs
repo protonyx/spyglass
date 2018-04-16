@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace Spyglass.Server.Models
+namespace Spyglass.SDK.Models
 {
-    public class ProviderDescriptor
+    public class ModelMetadata
     {
         public string Name { get; set; }
 

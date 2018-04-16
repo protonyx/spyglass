@@ -48,7 +48,7 @@ namespace Spyglass.Server
                 });
 
             services.AddSingleton<IDataContext, SpyglassMongoContext>();
-            services.AddSingleton<ProviderService>();
+            services.AddSingleton<MetadataService>();
 
             // AutoMapper
             var config = new MapperConfiguration(cfg =>

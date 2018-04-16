@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -20,8 +21,10 @@ namespace Spyglass.SDK.Providers
           return "HTTP Request";
         }
 
-        public IEnumerable<IMetricValue> GetValue()
+        public async Task<IEnumerable<IMetricValue>> GetValueAsync()
         {
+            var metrics = new List<IMetricValue>();
+
             var client = new HttpClient()
             {
                 BaseAddress = Uri
@@ -44,15 +47,14 @@ namespace Spyglass.SDK.Providers
                 Method = method
             };
 
-            var task = client.SendAsync(msg);
-            task.Wait();
-            var response = task.Result;
+            var response = await client.SendAsync(msg);
 
-            yield return new MetricValue
+            metrics.Add(new MetricValue
             {
               Name = "Status Code",
               Value = response.StatusCode
-            };
+            });
+            return metrics;
         }
     }
 }

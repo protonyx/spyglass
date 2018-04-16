@@ -1,8 +1,11 @@
 using System;
+using System.Threading.Tasks;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Spyglass.SDK.Data;
 using Spyglass.SDK.Providers;
+using System.Linq;
 
 namespace Spyglass.Providers
 {
@@ -24,9 +27,9 @@ namespace Spyglass.Providers
           return "Database Query";
         }
 
-        public IEnumerable<IMetricValue> GetValue()
+        public async Task<IEnumerable<IMetricValue>> GetValueAsync()
         {
-            yield break;
+            return Enumerable.Empty<IMetricValue>();
         }
     }
 }

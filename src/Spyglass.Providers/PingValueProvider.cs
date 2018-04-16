@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Spyglass.SDK.Data;
 using Spyglass.SDK.Models;
 
@@ -20,12 +21,12 @@ namespace Spyglass.SDK.Providers
           return "Ping";
         }
 
-        public IEnumerable<IMetricValue> GetValue()
+        public async Task<IEnumerable<IMetricValue>> GetValueAsync()
         {
             if (string.IsNullOrWhiteSpace(Hostname))
                 throw new ArgumentNullException(nameof(Hostname));
 
-            var waiter = new AutoResetEvent(false);
+            var metrics = new List<IMetricValue>();
 
             var ping = new Ping();
             var options = new PingOptions()
@@ -36,16 +37,26 @@ namespace Spyglass.SDK.Providers
             string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             byte[] buffer = Encoding.ASCII.GetBytes(data);
             int timeout = 120;
-            var pingTask = ping.SendPingAsync(Hostname, timeout, buffer, options);
-            pingTask.Wait();
 
-            var reply = pingTask.Result;
+            bool pingable = false;
 
-            yield return new MetricValue
+            try
             {
-              Name = "Pingable",
-              Value = reply.Status == IPStatus.Success
-            };
+                var reply = await ping.SendPingAsync(Hostname, timeout, buffer, options);
+
+                pingable = reply.Status == IPStatus.Success;
+            }
+            catch (Exception e)
+            {
+                //
+            }
+
+            metrics.Add(new MetricValue
+            {
+                Name = "Pingable",
+                Value = pingable
+            });
+            return metrics;
         }
     }
 }

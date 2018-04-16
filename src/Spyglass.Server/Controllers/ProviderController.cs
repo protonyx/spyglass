@@ -9,7 +9,7 @@ using Spyglass.SDK;
 using Spyglass.SDK.Data;
 using Spyglass.SDK.Models;
 using Spyglass.SDK.Providers;
-using Spyglass.Server.Models;
+using Spyglass.SDK.Services;
 using Spyglass.Server.Services;
 
 namespace Spyglass.Server.Controllers
@@ -20,14 +20,14 @@ namespace Spyglass.Server.Controllers
     {
         protected IMapper Mapper { get; }
 
-        protected ProviderService ProviderService { get; }
+        protected MetadataService MetadataService { get; }
 
         public ProviderController(
             IMapper mapper,
-            ProviderService providerService)
+            MetadataService metadataService)
         {
             Mapper = mapper;
-            ProviderService = providerService;
+            MetadataService = metadataService;
         }
 
         /// <summary>
@@ -35,11 +35,11 @@ namespace Spyglass.Server.Controllers
         /// </summary>
         /// <returns>Provider metadata</returns>
         [HttpGet]
-        [ProducesResponseType(typeof(ICollection<ProviderDescriptor>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ICollection<SDK.Models.ModelMetadata>), (int)HttpStatusCode.OK)]
         public IActionResult GetProviders()
         {
             var descriptors = ProviderService.GetProviders()
-                .Select(kv => ProviderService.GetMetadata(kv.Value))
+                .Select(kv => MetadataService.GetMetadata(kv.Value))
                 .ToList();
 
             return Ok(descriptors);
@@ -51,7 +51,7 @@ namespace Spyglass.Server.Controllers
         /// <param name="name">Provider type</param>
         /// <returns>Provider metadata</returns>
         [HttpGet("{name}")]
-        [ProducesResponseType(typeof(ProviderDescriptor), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(SDK.Models.ModelMetadata), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public IActionResult GetProvider(string name)
         {
@@ -60,7 +60,7 @@ namespace Spyglass.Server.Controllers
             if (provider == null)
                 return NotFound();
 
-            var descriptor = ProviderService.GetMetadata(provider);
+            var descriptor = MetadataService.GetMetadata(provider);
 
             return Ok(descriptor);
         }

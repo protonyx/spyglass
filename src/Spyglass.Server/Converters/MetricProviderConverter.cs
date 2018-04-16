@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Spyglass.SDK.Data;
 using Spyglass.SDK.Models;
-using Spyglass.Server.Services;
+using Spyglass.SDK.Services;
 
 namespace Spyglass.Server.Converters
 {

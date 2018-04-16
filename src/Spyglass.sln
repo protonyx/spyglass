@@ -2,17 +2,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spyglass.Server", "Spyglass.Server\Spyglass.Server.csproj", "{519820D2-39F5-46EF-AF61-F5AA5B378C49}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spyglass.Server", "Spyglass.Server\Spyglass.Server.csproj", "{519820D2-39F5-46EF-AF61-F5AA5B378C49}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spyglass.SDK", "Spyglass.SDK\Spyglass.SDK.csproj", "{12CCFC14-EB4E-49E3-BD83-EB6EC270AC8A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spyglass.SDK", "Spyglass.SDK\Spyglass.SDK.csproj", "{12CCFC14-EB4E-49E3-BD83-EB6EC270AC8A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spyglass.Providers", "Spyglass.Providers\Spyglass.Providers.csproj", "{38C15E98-9139-40A0-B743-B799BBBF639A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spyglass.Providers", "Spyglass.Providers\Spyglass.Providers.csproj", "{38C15E98-9139-40A0-B743-B799BBBF639A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spyglass.Cli", "Spyglass.Cli\Spyglass.Cli.csproj", "{256A4342-CE9F-4961-8965-DD2557405A3E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spyglass.Cli", "Spyglass.Cli\Spyglass.Cli.csproj", "{256A4342-CE9F-4961-8965-DD2557405A3E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spyglass.Data.MongoDb", "Spyglass.Data.MongoDb\Spyglass.Data.MongoDb.csproj", "{CBDCCA22-2051-48D1-9593-AA6F9B5D2FC2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spyglass.Data.MongoDb", "Spyglass.Data.MongoDb\Spyglass.Data.MongoDb.csproj", "{CBDCCA22-2051-48D1-9593-AA6F9B5D2FC2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spyglass.Tests", "Spyglass.Tests\Spyglass.Tests.csproj", "{53A0093B-8C12-4618-8188-2A7967ACE4B7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spyglass.Tests", "Spyglass.Tests\Spyglass.Tests.csproj", "{53A0093B-8C12-4618-8188-2A7967ACE4B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

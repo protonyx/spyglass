@@ -11,9 +11,9 @@ namespace Spyglass.Cli
         {
             foreach (var metric in metrics)
             {
-                var values = metric.GetValue();
+                var values = metric.GetValueAsync();
                 var name = metric.GetTypeName();
-                foreach (var value in values)
+                foreach (var value in values.Result)
                 {
                     Console.WriteLine($"{name}: {value}");
                 }
