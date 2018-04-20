@@ -2,6 +2,6 @@
 <mat-list>
   <mat-list-item *ngFor="let group of groups$ | async">
     <h3 matLine>{{group.name}}</h3>
-    <span>{{group.description}}</span>
+    <p matLine>{{group.description}}</p>
   </mat-list-item>
 </mat-list>
