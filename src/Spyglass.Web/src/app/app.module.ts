@@ -55,6 +55,8 @@ import { reducers, metaReducers } from './reducers';
 import { EffectsModule } from '@ngrx/effects';
 import { AppEffects } from './app.effects';
 import {GroupListComponent} from './metrics/components/group-list.component';
+import {MetricsEffects} from './metrics/effects/metrics.effects';
+import {MetricGroupService} from './services/metric-group.service';
 
 @NgModule({
   declarations: [
@@ -77,9 +79,9 @@ import {GroupListComponent} from './metrics/components/group-list.component';
     MatButtonModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([AppEffects])
+    EffectsModule.forRoot([AppEffects, MetricsEffects])
   ],
-  providers: [],
+  providers: [MetricGroupService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

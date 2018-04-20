@@ -1,5 +1,7 @@
+<span *ngIf="loading$ | async">loading</span>
 <mat-list>
   <mat-list-item *ngFor="let group of groups$ | async">
-    <h3 matLine>{{group}}</h3>
+    <h3 matLine>{{group.name}}</h3>
+    <span>{{group.description}}</span>
   </mat-list-item>
 </mat-list>

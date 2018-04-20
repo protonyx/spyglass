@@ -39,7 +39,9 @@ namespace Spyglass.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(this.Configuration);  
+            services.AddSingleton(this.Configuration);
+
+            services.AddCors();
           
             services.AddMvc()
                 .AddJsonOptions(opt =>
@@ -86,8 +88,16 @@ namespace Spyglass.Server
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(builder =>
+                        builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+
             app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwaggerUI(c => 
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Spyglass v1");
+            });
 
             app.UseMvc();
         }

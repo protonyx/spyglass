@@ -28,6 +28,11 @@ export function reducer(
     case MetricGroupsActionTypes.CreateGroup:
       return state;
     case MetricGroupsActionTypes.LoadSuccessful:
+      return {
+        ...state,
+        groups: action.payload,
+        loading: false
+      };
     case MetricGroupsActionTypes.LoadFailure:
       return {
         ...state,
