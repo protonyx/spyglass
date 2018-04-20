@@ -6,10 +6,13 @@ services:
     build:
       context: ./Spyglass.Server
       dockerfile: Dockerfile
+    environment:
+      - ConnectionStrings__MongoDb=mongodb://mongo.data:27017/?uuidRepresentation=standard
+      - ASPNETCORE_ENVIRONMENT=Production
     ports:
       - "5000:5000"
     links:
-      - database
+      - mongo.data
 
   web:
     image: spyglass-web
@@ -21,7 +24,7 @@ services:
     links:
       - api
 
-  database:
+  mongo.data:
     image: mongo
     ports:
       - "27017:27017"

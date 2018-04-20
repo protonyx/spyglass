@@ -1,11 +1,4 @@
-FROM node:6
-
-RUN mkdir -p /usr/src/app
-
-WORKDIR /usr/src/app
-
-COPY ./dist /usr/src/app
-
-EXPOSE 4200
-
-CMD [ "npm", "start" ]
+FROM nginx
+LABEL author="Protonyx"
+COPY ./dist /usr/share/nginx/html
+COPY ./config/nginx-custom.conf /etc/nginx/conf.d/default.conf

@@ -1,1 +1,22 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+body {
+  font-family: Roboto, Arial, sans-serif;
+  margin: 0;
+}
+
+.sp-toolbar {
+  padding: 6px;
+
+  .sp-toolbar-icon {
+    padding: 0 14px;
+  }
+
+  .sp-fill-remaining {
+    flex: 1 1 auto;
+  }
+
+  button {
+    margin: 0 4px;
+  }
+}

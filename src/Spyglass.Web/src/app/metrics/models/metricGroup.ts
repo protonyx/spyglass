@@ -1,6 +1,6 @@
 import { Metric } from './metric';
 
-export class Context {
+export class MetricGroup {
   public id: string;
   public name: string;
 
