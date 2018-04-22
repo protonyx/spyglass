@@ -6,9 +6,22 @@ import * as MetricGroupActions from '../metricGroup.actions';
 import * as fromMetrics from '../../reducers';
 
 @Component({
-  templateUrl: './group-list.component.html'
+  template: `
+    <mat-sidenav-container>
+      <mat-sidenav>
+        <sg-group-list 
+          [groups]="groups$ | async" 
+          (createGroup)="handleCreateGroup()">
+        </sg-group-list>
+      </mat-sidenav>
+      <mat-sidenav-content>
+        <router-outlet></router-outlet>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+      
+  `
 })
-export class GroupListComponent implements OnInit {
+export class MetricGroupListPageComponent implements OnInit {
   groups$: Observable<MetricGroup[]>;
   loading$: Observable<boolean>;
 
@@ -19,7 +32,7 @@ export class GroupListComponent implements OnInit {
     this.loading$ = store.pipe(select(fromMetrics.getLoading));
   }
 
-  createGroup() {
+  handleCreateGroup() {
     this.store.dispatch(new MetricGroupActions.CreateMetricGroup())
   }
 

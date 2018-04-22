@@ -6,13 +6,15 @@ import {MetricGroup} from '../models/metricGroup';
 
 export interface State {
   loading: boolean,
-  groups: MetricGroup[]
+  groups: MetricGroup[],
+  selectedGroupId: string
 }
 
 
 export const initialState: State = { // adapter.getInitialState();
   loading: false,
-  groups: []
+  groups: [],
+  selectedGroupId: null
 };
 
 export function reducer(
@@ -44,3 +46,5 @@ export function reducer(
 export const getLoading = (state: State) => state.loading;
 
 export const getGroups = (state: State) => state.groups;
+
+export const getSelectedGroup = (state: State) => state.selectedGroupId;

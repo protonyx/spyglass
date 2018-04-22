@@ -54,15 +54,29 @@ import { environment } from '../environments/environment';
 import { reducers, metaReducers } from './reducers';
 import { EffectsModule } from '@ngrx/effects';
 import { AppEffects } from './app.effects';
-import {GroupListComponent} from './metrics/components/group-list.component';
-import {MetricsEffects} from './metrics/effects/metrics.effects';
+import { MetricsEffects } from './metrics/effects/metrics.effects';
+
+// Containers
+import { MetricGroupListPageComponent } from './metrics/containers/metric-group-list-page.component';
+import { MetricGroupDetailsPageComponent } from './metrics/containers/metric-group-details-page.component';
+
+// Components
+import { MetricGroupListComponent } from './metrics/components/metric-group-list.component';
+import { MetricGroupDetailsComponent } from './metrics/components/metric-group-details.component';
+import { MetricDetailsComponent } from './metrics/components/metric-details.component';
+
+// Services
 import {MetricGroupService} from './services/metric-group.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    GroupListComponent
+    MetricGroupListPageComponent,
+    MetricGroupDetailsPageComponent,
+    MetricGroupListComponent,
+    MetricGroupDetailsComponent,
+    MetricDetailsComponent
   ],
   imports: [
     AppRouteModule,

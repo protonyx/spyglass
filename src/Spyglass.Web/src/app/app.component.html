@@ -1,40 +1,50 @@
+<ng-container>
+  <mat-toolbar class="sg-toolbar mat-elevation-z6" color="primary">
+    <button mat-icon-button
+            class="sg-toolbar-icon"
+            (click)="sidenav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <span>Spyglass</span>
+    <span class="sg-fill-remaining"></span>
+  </mat-toolbar>
+
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav
+                 mode="side"
+                 opened="true"
+      role="navigation">
+      <!-- sidenav content -->
+      <mat-nav-list>
+        <mat-list-item *ngFor="let navItem of navItems">
+          <mat-icon matListIcon>{{navItem.icon}}</mat-icon>
+           <a matLine
+           routerLinkActive
+           #routerLinkActiveInstance="routerLinkActive"
+           [attr.tabindex]="routerLinkActiveInstance.isActive ? 0 : -1"
+           [routerLink]="[navItem.route]">
+          {{navItem.name}}
+           </a>
+        </mat-list-item>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <!-- main content -->
+    <mat-sidenav-content class="mat-drawer-container">
+      <div>
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+
+  </mat-sidenav-container>
+
+  <mat-toolbar class="sg-footer">
+    <span>Version</span>
+  </mat-toolbar>
+</ng-container>
 
 
-<mat-sidenav-container>
-  <mat-sidenav #sidenav>
-    <!-- sidenav content -->
-    <mat-nav-list>
-      <a *ngFor="let navItem of navItems"
-         mat-list-item
-         (click)="sidenav.close()"
-         routerLinkActive
-         #routerLinkActiveInstance="routerLinkActive"
-         [attr.tabindex]="routerLinkActiveInstance.isActive ? 0 : -1"
-         [routerLink]="[navItem.route]">
-        {{navItem.name}}
-      </a>
-    </mat-nav-list>
-    <button mat-button tabindex="-1" (click)="sidenav.close()">CLOSE</button>
-  </mat-sidenav>
-
-  <!-- main content -->
-  <div>
-    <mat-toolbar color="primary">
-      <button mat-icon-button (click)="sidenav.open('mouse')">
-        <mat-icon>menu</mat-icon>
-      </button>
-
-      <span>Spyglass</span>
-      <span class="sp-fill-remaining"></span>
-
-    </mat-toolbar>
-
-    <div>
-      <router-outlet></router-outlet>
-    </div>
-  </div>
-
-</mat-sidenav-container>
 
 <mat-menu #appMenu="matMenu">
   <button mat-menu-item> Test </button>

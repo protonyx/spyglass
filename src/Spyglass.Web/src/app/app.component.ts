@@ -6,7 +6,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   navItems = [
-    {name: 'Metric Groups', route: '/groups'}
+    {name: 'Dashboard', route: '/dashboard', icon: 'menu'},
+    {name: 'Metrics', route: '/groups', icon: 'dashboard'}
   ];
 
   constructor() {}

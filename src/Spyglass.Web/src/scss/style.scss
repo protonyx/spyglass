@@ -5,18 +5,25 @@ body {
   margin: 0;
 }
 
-.sp-toolbar {
+.sg-toolbar {
   padding: 6px;
 
-  .sp-toolbar-icon {
+  .sg-toolbar-icon {
     padding: 0 14px;
   }
 
-  .sp-fill-remaining {
+  .sg-fill-remaining {
     flex: 1 1 auto;
   }
 
   button {
     margin: 0 4px;
   }
+}
+
+.sg-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }

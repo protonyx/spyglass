@@ -1,7 +1,7 @@
 import {RouterModule, Routes} from '@angular/router';
 import {NgModule} from '@angular/core';
 import {HomeComponent} from './home/home.component';
-import {GroupListComponent} from './metrics/components/group-list.component';
+import {MetricGroupListPageComponent} from './metrics/containers/metric-group-list-page.component';
 
 const appRoutes: Routes = [
   {
@@ -10,7 +10,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'groups',
-    component: GroupListComponent
+    component: MetricGroupListPageComponent
   }
 ];
 

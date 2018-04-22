@@ -30,3 +30,8 @@ export const getGroups = createSelector(
   getMetricState,
   fromMetrics.getGroups
 );
+
+export const getSelectedGroup = createSelector(
+  getMetricState,
+  fromMetrics.getSelectedGroup
+);

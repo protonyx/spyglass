@@ -22,4 +22,10 @@ export class MetricGroupService {
 
     return this.http.post<MetricGroup>(url, data);
   }
+
+  deleteGroup(id: string): Observable<any> {
+    const url = `${environment.apiUrl}/api/MetricGroup/${id}`;
+
+    return this.http.delete(url);
+  }
 }

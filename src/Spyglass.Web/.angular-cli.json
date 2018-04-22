@@ -5,6 +5,7 @@
   },
   "apps": [
     {
+      "name": "spyglass",
       "root": "src",
       "outDir": "dist",
       "assets": [
@@ -53,6 +54,10 @@
   "defaults": {
     "styleExt": "scss",
     "component": {
+      "spec": false,
+      "inlineStyle": true,
+      "inlineTemplate": true,
+      "flat": true
     },
     "schematics": {
       "collection": "@ngrx/schematics"
