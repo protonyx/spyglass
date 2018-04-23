@@ -67,6 +67,7 @@ import { MetricDetailsComponent } from './metrics/components/metric-details.comp
 
 // Services
 import {MetricGroupService} from './services/metric-group.service';
+import { NotFoundComponent } from './core/components/not-found.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import {MetricGroupService} from './services/metric-group.service';
     MetricGroupDetailsPageComponent,
     MetricGroupListComponent,
     MetricGroupDetailsComponent,
-    MetricDetailsComponent
+    MetricDetailsComponent,
+    NotFoundComponent
   ],
   imports: [
     AppRouteModule,
@@ -85,6 +87,7 @@ import {MetricGroupService} from './services/metric-group.service';
     RouterModule,
     FormsModule,
     HttpClientModule,
+    MatCardModule,
     MatSidenavModule,
     MatToolbarModule,
     MatListModule,

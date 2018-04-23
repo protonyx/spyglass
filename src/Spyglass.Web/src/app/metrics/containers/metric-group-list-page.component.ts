@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Store, select} from '@ngrx/store';
 import {Observable} from 'rxjs';
 import {MetricGroup} from '../models/metricGroup';
-import * as MetricGroupActions from '../metricGroup.actions';
-import * as fromMetrics from '../../reducers';
+import * as MetricGroupActions from '../actions/metricGroup.actions';
+import * as fromMetrics from '../reducers';
 
 @Component({
   template: `
@@ -11,6 +11,7 @@ import * as fromMetrics from '../../reducers';
       <mat-sidenav>
         <sg-group-list 
           [groups]="groups$ | async" 
+          (selectGroup)="handleSelectGroup($event)"
           (createGroup)="handleCreateGroup()">
         </sg-group-list>
       </mat-sidenav>
@@ -27,9 +28,13 @@ export class MetricGroupListPageComponent implements OnInit {
 
   constructor(private store: Store<fromMetrics.State>) {
     this.groups$ = store.pipe(
-      select(fromMetrics.getGroups)
+      select(fromMetrics.getAllGroups)
     );
     this.loading$ = store.pipe(select(fromMetrics.getLoading));
+  }
+
+  handleSelectGroup(selection: MetricGroup) {
+    this.store.dispatch(new MetricGroupActions.SelectMetricGroup(selection.id));
   }
 
   handleCreateGroup() {

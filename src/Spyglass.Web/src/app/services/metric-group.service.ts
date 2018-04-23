@@ -17,6 +17,12 @@ export class MetricGroupService {
     return this.http.get<MetricGroup[]>(url);
   }
 
+  getGroup(id: string): Observable<MetricGroup> {
+    const url = `${environment.apiUrl}/api/MetricGroup/${id}`;
+
+    return this.http.get<MetricGroup>(url);
+  }
+
   createGroup(data: MetricGroup): Observable<MetricGroup> {
     const url = `${environment.apiUrl}/api/MetricGroup`;
 

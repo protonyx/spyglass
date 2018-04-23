@@ -3,7 +3,13 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import {Action} from '@ngrx/store';
 import {Observable} from 'rxjs';
 import 'rxjs/add/observable/of';
-import {LoadMetricGroups, LoadSuccessful, LoadFailure, MetricGroupsActionTypes} from '../metricGroup.actions';
+import {
+  LoadMetricGroups,
+  LoadSuccessful,
+  LoadFailure,
+  MetricGroupsActionTypes,
+  SelectMetricGroup
+} from '../actions/metricGroup.actions';
 import {map, switchMap, catchError} from 'rxjs/operators';
 import {MetricGroupService} from '../../services/metric-group.service';
 import {MetricGroup} from '../models/metricGroup';

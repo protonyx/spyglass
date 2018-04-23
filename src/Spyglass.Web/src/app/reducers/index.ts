@@ -18,20 +18,3 @@ export const reducers: ActionReducerMap<State> = {
 
 
 export const metaReducers: MetaReducer<State>[] = !environment.production ? [] : [];
-
-export const getMetricState = createFeatureSelector<fromMetrics.State>('metrics');
-
-export const getLoading = createSelector(
-  getMetricState,
-  fromMetrics.getLoading
-);
-
-export const getGroups = createSelector(
-  getMetricState,
-  fromMetrics.getGroups
-);
-
-export const getSelectedGroup = createSelector(
-  getMetricState,
-  fromMetrics.getSelectedGroup
-);

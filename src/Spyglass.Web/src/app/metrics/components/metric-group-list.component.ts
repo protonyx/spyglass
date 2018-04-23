@@ -6,7 +6,7 @@ import {MetricGroup} from '../models/metricGroup';
   template: `
     <mat-nav-list>
       <a mat-list-item *ngFor="let group of groups"
-        [routerLink]="[group.id]">
+         [routerLink]="['/group', group.id]">
         <h3 matLine>{{ group.name }}</h3>
         <p matLine>{{ group.description }}</p>
         <mat-divider inset></mat-divider>
@@ -16,13 +16,6 @@ import {MetricGroup} from '../models/metricGroup';
 })
 export class MetricGroupListComponent {
   @Input() groups: MetricGroup[];
-  @Output() createGroup: EventEmitter<any>;
 
-  constructor() {
-    this.createGroup = new EventEmitter<any>();
-  }
-
-  handleCreateGroup() {
-    this.createGroup.emit();
-  }
+  constructor() { }
 }
