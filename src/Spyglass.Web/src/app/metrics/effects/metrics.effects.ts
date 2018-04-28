@@ -4,30 +4,44 @@ import {Action} from '@ngrx/store';
 import {Observable} from 'rxjs';
 import 'rxjs/add/observable/of';
 import {
-  LoadMetricGroups,
-  LoadSuccessful,
-  LoadFailure,
-  MetricGroupsActionTypes,
-  SelectMetricGroup
-} from '../actions/metricGroup.actions';
+  MetricActionTypes,
+  LoadGroups,
+  LoadGroupsSuccessful,
+  LoadGroupsFailure,
+  LoadMetrics,
+  LoadMetricsSuccessful,
+  LoadMetricsFailure
+} from '../actions/metrics.actions';
 import {map, switchMap, catchError} from 'rxjs/operators';
-import {MetricGroupService} from '../../services/metric-group.service';
+import {MetricService} from '../services/metric.service';
 import {MetricGroup} from '../models/metricGroup';
+import {Metric} from "../models/metric";
 
 
 @Injectable()
 export class MetricsEffects {
   @Effect()
-  load$: Observable<Action> = this.actions$.pipe(
-    ofType<LoadMetricGroups>(MetricGroupsActionTypes.Load),
+  loadGroups$: Observable<Action> = this.actions$.pipe(
+    ofType<LoadGroups>(MetricActionTypes.LoadGroups),
     switchMap(action => {
-      return this.metricGroupService.getGroups().pipe(
-        map((groups: MetricGroup[]) => new LoadSuccessful(groups)),
-        catchError(error => Observable.of(new LoadFailure(error)))
+      return this.metricService.getGroups().pipe(
+        map((groups: MetricGroup[]) => new LoadGroupsSuccessful(groups)),
+        catchError(error => Observable.of(new LoadGroupsFailure(error)))
       );
     })
   );
 
+  @Effect()
+  loadMetrics$: Observable<Action> = this.actions$.pipe(
+    ofType<LoadMetrics>(MetricActionTypes.LoadMetrics),
+    switchMap(action => {
+      return this.metricService.getMetrics().pipe(
+        map((metrics: Metric[]) => new LoadMetricsSuccessful(metrics)),
+        catchError(error => Observable.of(new LoadMetricsFailure(error)))
+      )
+    })
+  );
+
   constructor(private actions$: Actions,
-              private metricGroupService: MetricGroupService) {}
+              private metricService: MetricService) {}
 }

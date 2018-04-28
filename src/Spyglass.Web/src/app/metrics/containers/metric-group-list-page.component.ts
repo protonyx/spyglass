@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Store, select} from '@ngrx/store';
 import {Observable} from 'rxjs';
 import {MetricGroup} from '../models/metricGroup';
-import * as MetricGroupActions from '../actions/metricGroup.actions';
+import * as MetricGroupActions from '../actions/metrics.actions';
 import * as fromMetrics from '../reducers';
 
 @Component({

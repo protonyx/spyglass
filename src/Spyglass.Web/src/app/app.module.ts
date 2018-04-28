@@ -66,8 +66,10 @@ import { MetricGroupDetailsComponent } from './metrics/components/metric-group-d
 import { MetricDetailsComponent } from './metrics/components/metric-details.component';
 
 // Services
-import {MetricGroupService} from './services/metric-group.service';
+import {MetricService} from './metrics/services/metric.service';
 import { NotFoundComponent } from './core/components/not-found.component';
+import { MetricPageComponent } from './metrics/containers/metric-page.component';
+import { LayoutComponent } from './core/components/layout.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +80,9 @@ import { NotFoundComponent } from './core/components/not-found.component';
     MetricGroupListComponent,
     MetricGroupDetailsComponent,
     MetricDetailsComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    MetricPageComponent,
+    LayoutComponent
   ],
   imports: [
     AppRouteModule,
@@ -98,7 +102,7 @@ import { NotFoundComponent } from './core/components/not-found.component';
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([AppEffects, MetricsEffects])
   ],
-  providers: [MetricGroupService],
+  providers: [MetricService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

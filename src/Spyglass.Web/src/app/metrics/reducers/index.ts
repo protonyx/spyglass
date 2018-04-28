@@ -1,12 +1,20 @@
-import {LoadSuccessful, MetricGroupsActionTypes, MetricsActionsUnion, SelectMetricGroup} from '../actions/metricGroup.actions';
+import {
+  LoadGroupsSuccessful, LoadMetricsSuccessful,
+  LoadSuccessful,
+  MetricActionTypes,
+  MetricsActionsUnion,
+  SelectMetricGroup
+} from '../actions/metrics.actions';
 import {createEntityAdapter, EntityAdapter, EntityState} from '@ngrx/entity'
 import {MetricGroup} from '../models/metricGroup';
 import {createFeatureSelector, createSelector} from "@ngrx/store";
+import {Metric} from "../models/metric";
 
 export interface State {
   loading: boolean,
   groups: EntityState<MetricGroup>,
-  selectedGroupId: string | null
+  selectedGroupId: string | null,
+  metrics: EntityState<Metric>
 }
 
 export const groupAdapter: EntityAdapter<MetricGroup> = createEntityAdapter<MetricGroup>({
@@ -14,10 +22,16 @@ export const groupAdapter: EntityAdapter<MetricGroup> = createEntityAdapter<Metr
   sortComparer: false,
 });
 
+export const metricAdapter: EntityAdapter<Metric> = createEntityAdapter<Metric>({
+  selectId: (group: Metric) => group.id,
+  sortComparer: false,
+});
+
 export const initialState: State = {
   loading: false,
   groups: groupAdapter.getInitialState(),
-  selectedGroupId: null
+  selectedGroupId: null,
+  metrics: metricAdapter.getInitialState()
 };
 
 export function reducer(
@@ -25,29 +39,47 @@ export function reducer(
   action: MetricsActionsUnion
 ): State {
   switch (action.type) {
-    case MetricGroupsActionTypes.Load:
+    case MetricActionTypes.LoadGroups:
       return {
         ...state,
         loading: true
       };
-    case MetricGroupsActionTypes.CreateGroup:
+    case MetricActionTypes.LoadGroupsSuccessful:
+      return {
+        ...state,
+        groups: groupAdapter.addMany((action as LoadGroupsSuccessful).payload, {...state.groups}),
+        loading: false
+      };
+    case MetricActionTypes.LoadGroupsFailure:
+      return {
+        ...state,
+        loading: false
+      };
+    case MetricActionTypes.LoadMetrics:
+      return {
+        ...state,
+        loading: true
+      };
+    case MetricActionTypes.LoadMetricsSuccessful:
+      return {
+        ...state,
+        metrics: metricAdapter.addMany((action as LoadMetricsSuccessful).payload, {...state.metrics}),
+        loading: false
+      };
+    case MetricActionTypes.LoadMetricsFailure:
+      return {
+        ...state,
+        loading: false
+      };
+    case MetricActionTypes.CreateGroup:
       return state;
-    case MetricGroupsActionTypes.SelectGroup:
+    case MetricActionTypes.SelectGroup:
       return {
         ...state,
         selectedGroupId: (action as SelectMetricGroup).payload
       };
-    case MetricGroupsActionTypes.LoadSuccessful:
-      return {
-        ...state,
-        groups: groupAdapter.addMany((action as LoadSuccessful).payload, {...state.groups}),
-        loading: false
-      };
-    case MetricGroupsActionTypes.LoadFailure:
-      return {
-        ...state,
-        loading: false
-      }
+    case MetricActionTypes.CreateMetric:
+      return state;
   }
 }
 

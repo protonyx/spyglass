@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/co
 import {Store, select} from '@ngrx/store';
 import {Observable} from 'rxjs';
 import {MetricGroup} from '../models/metricGroup';
-import * as MetricGroupActions from '../actions/metricGroup.actions';
+import * as MetricGroupActions from '../actions/metrics.actions';
 import * as fromMetrics from '../reducers';
 import {ActivatedRoute} from "@angular/router";
 import {Subscription} from "rxjs/Subscription";
