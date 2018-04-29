@@ -10,6 +10,8 @@ export enum MetricActionTypes {
   LoadMetricsSuccessful = '[Metrics API] Load Successful',
   LoadMetricsFailure = '[Metrics API] Load Failure',
   CreateGroup = '[Metrics Page] Create Group',
+  CreateGroupSuccessful = '[Metric Group API] Create Group Successful',
+  CreateGroupFailure = '[Metric Group API] Create Group Failure',
   SelectGroup = '[Metrics Page] Select Group',
   CreateMetric = '[Metrics Page] Create Metric',
 }
@@ -48,6 +50,20 @@ export class LoadMetricsFailure implements Action {
 
 export class CreateMetricGroup implements Action {
   readonly type = MetricActionTypes.CreateGroup;
+
+  constructor(public payload: MetricGroup) {}
+}
+
+export class CreateMetricGroupSuccessful implements Action {
+  readonly type = MetricActionTypes.CreateGroupSuccessful;
+
+  constructor(public payload: MetricGroup) {}
+}
+
+export class CreateMetricGroupFailure implements Action {
+  readonly type = MetricActionTypes.CreateGroupFailure;
+
+  constructor(public payload: any) {}
 }
 
 export class SelectMetricGroup implements Action {
@@ -72,5 +88,7 @@ export type MetricsActionsUnion =
   | LoadMetricsSuccessful
   | LoadMetricsFailure
   | CreateMetricGroup
+  | CreateMetricGroupSuccessful
+  | CreateMetricGroupFailure
   | SelectMetricGroup
   | CreateMetric;

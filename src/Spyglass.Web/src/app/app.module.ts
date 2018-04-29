@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
@@ -70,8 +70,13 @@ import {MetricService} from './metrics/services/metric.service';
 import { NotFoundComponent } from './core/components/not-found.component';
 import { MetricPageComponent } from './metrics/containers/metric-page.component';
 import { LayoutComponent } from './core/components/layout.component';
+import { MetricGroupEditorComponent } from './metrics/components/metric-group-editor.component';
+import { MetricGroupEditorDialogComponent } from './metrics/containers/metric-group-editor-dialog.component';
 
 @NgModule({
+  entryComponents: [
+    MetricGroupEditorDialogComponent
+  ],
   declarations: [
     AppComponent,
     HomeComponent,
@@ -82,7 +87,9 @@ import { LayoutComponent } from './core/components/layout.component';
     MetricDetailsComponent,
     NotFoundComponent,
     MetricPageComponent,
-    LayoutComponent
+    LayoutComponent,
+    MetricGroupEditorComponent,
+    MetricGroupEditorDialogComponent
   ],
   imports: [
     AppRouteModule,
@@ -90,8 +97,12 @@ import { LayoutComponent } from './core/components/layout.component';
     BrowserAnimationsModule,
     RouterModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     MatCardModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
     MatSidenavModule,
     MatToolbarModule,
     MatListModule,

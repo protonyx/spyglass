@@ -5,18 +5,18 @@ import {MetricGroup} from "../models/metricGroup";
 import {Observable} from "../../../../node_modules/rxjs";
 import * as fromMetrics from "../reducers";
 import {Metric} from "../models/metric";
+import {MatDialog} from "@angular/material";
+import {MetricGroupEditorDialogComponent} from "./metric-group-editor-dialog.component";
 
 @Component({
   selector: 'sg-metric-page',
   template: `
     <mat-sidenav-container>
       <mat-sidenav mode="side" [opened]="true">
-        <sg-group-list [groups]="groups$ | async"></sg-group-list>
-        
-
-        <a mat-fab color="accent" [routerLink]="['/metrics/new']">
-          <mat-icon>add</mat-icon>
-        </a>
+        <sg-group-list [groups]="groups$ | async"
+          (createGroup)="handleCreateGroup()">
+          
+        </sg-group-list>
       </mat-sidenav>
       <mat-sidenav-content>
         <sg-metric-group-details [group]="selectedGroup$ | async"></sg-metric-group-details>
@@ -31,7 +31,10 @@ export class MetricPageComponent implements OnInit {
   metrics$: Observable<Metric[]>;
   loading$: Observable<boolean>;
 
-  constructor(private store: Store<fromMetrics.State>) {
+  constructor(
+    public dialog: MatDialog,
+    private store: Store<fromMetrics.State>
+  ) {
     this.groups$ = store.pipe(
       select(fromMetrics.getAllGroups)
     );
@@ -49,7 +52,13 @@ export class MetricPageComponent implements OnInit {
   }
 
   handleCreateGroup() {
-    this.store.dispatch(new MetricActions.CreateMetricGroup())
+    const dialogRef = this.dialog.open(MetricGroupEditorDialogComponent, {
+      data: { group: new MetricGroup() }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.store.dispatch(new MetricActions.CreateMetricGroup(result));
+    });
   }
 
   ngOnInit() {

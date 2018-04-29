@@ -14,12 +14,12 @@ const appRoutes: Routes = [
   {
     path: 'metrics',
     children: [
+      { path: '', component: MetricPageComponent },
       {
         path: ':id',
         component: MetricGroupDetailsPageComponent,
         canActivate: [GroupExistsGuard]
-      },
-      { path: '', component: MetricPageComponent }
+      }
     ]
   },
   { path: '**', component: NotFoundComponent }

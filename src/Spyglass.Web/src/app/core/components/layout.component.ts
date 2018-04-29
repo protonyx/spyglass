@@ -1,5 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NavItem} from "../models/navItem";
+import {Observable} from "rxjs/Observable";
+import {select, Store} from "@ngrx/store";
+import * as fromRoot from '../../reducers';
+import * as LayoutActions from '../../core/actions/layout.actions';
 
 @Component({
   selector: 'sg-layout',
@@ -9,7 +13,7 @@ import {NavItem} from "../models/navItem";
       <mat-toolbar class="sg-header mat-elevation-z6" color="primary">
         <button mat-icon-button
                 class="sg-toolbar-icon"
-                (click)="sidenav.toggle()">
+                (click)="toggleSidenav()">
           <mat-icon>menu</mat-icon>
         </button>
 
@@ -18,9 +22,8 @@ import {NavItem} from "../models/navItem";
       </mat-toolbar>
 
       <mat-sidenav-container class="sg-container">
-        <mat-sidenav #sidenav
-                     mode="side"
-                     [opened]="true"
+        <mat-sidenav mode="side"
+                     [opened]="showSidenav$ | async"
                      [fixedInViewport]="false"
                      role="navigation"
                      class="sg-sidenav">
@@ -90,9 +93,30 @@ import {NavItem} from "../models/navItem";
 export class LayoutComponent implements OnInit {
   @Input() navItems: NavItem[];
 
-  constructor() { }
+  showSidenav$: Observable<boolean>;
+
+  constructor(private store: Store<fromRoot.State>) {
+    this.showSidenav$ = this.store.pipe(select(fromRoot.getShowSidenav));
+  }
 
   ngOnInit() {
   }
 
+  closeSidenav() {
+    /**
+     * All state updates are handled through dispatched actions in 'container'
+     * components. This provides a clear, reproducible history of state
+     * updates and user interaction through the life of our
+     * application.
+     */
+    this.store.dispatch(new LayoutActions.CloseSidenav());
+  }
+
+  openSidenav() {
+    this.store.dispatch(new LayoutActions.OpenSidenav());
+  }
+
+  toggleSidenav() {
+    this.store.dispatch(new LayoutActions.ToggleSidenav());
+  }
 }

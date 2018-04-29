@@ -8,7 +8,7 @@ import * as fromMetrics from '../reducers';
 @Component({
   template: `
     <mat-sidenav-container>
-      <mat-sidenav>
+      <mat-sidenav style="display: flex">
         <sg-group-list 
           [groups]="groups$ | async" 
           (selectGroup)="handleSelectGroup($event)"
@@ -38,10 +38,10 @@ export class MetricGroupListPageComponent implements OnInit {
   }
 
   handleCreateGroup() {
-    this.store.dispatch(new MetricGroupActions.CreateMetricGroup())
+    // this.store.dispatch(new MetricGroupActions.CreateMetricGroup())
   }
 
   ngOnInit() {
-    this.store.dispatch(new MetricGroupActions.LoadMetricGroups())
+    this.store.dispatch(new MetricGroupActions.LoadGroups())
   }
 }

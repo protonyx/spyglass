@@ -11,11 +11,18 @@ import {MetricGroup} from '../models/metricGroup';
         <p matLine>{{ group.description }}</p>
         <mat-divider inset></mat-divider>
       </a>
+      <a mat-list-item (click)="createGroup.emit()">
+        <mat-icon matLine>add</mat-icon>
+        <h3 matLine>Create group</h3>
+      </a>
     </mat-nav-list>
   `
 })
 export class MetricGroupListComponent {
   @Input() groups: MetricGroup[];
+  @Output() createGroup: EventEmitter<any>;
 
-  constructor() { }
+  constructor() {
+    this.createGroup = new EventEmitter<any>();
+  }
 }

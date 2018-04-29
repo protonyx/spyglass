@@ -5,8 +5,8 @@ import {MetricGroup} from '../models/metricGroup';
   selector: 'sg-metric-group-details',
   template: `
     <mat-card>
-      <mat-card-title>{{ group.name }}</mat-card-title>
-      <mat-card-subtitle>{{ group.description }}</mat-card-subtitle>
+      <mat-card-title>{{ group?.name }}</mat-card-title>
+      <mat-card-subtitle>{{ group?.description }}</mat-card-subtitle>
     </mat-card>
   `,
   styles: []

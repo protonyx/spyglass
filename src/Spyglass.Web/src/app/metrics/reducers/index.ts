@@ -1,6 +1,8 @@
 import {
-  LoadGroupsSuccessful, LoadMetricsSuccessful,
-  LoadSuccessful,
+  CreateMetricGroup,
+  CreateMetricGroupSuccessful,
+  LoadGroupsSuccessful,
+  LoadMetricsSuccessful,
   MetricActionTypes,
   MetricsActionsUnion,
   SelectMetricGroup
@@ -71,14 +73,20 @@ export function reducer(
         ...state,
         loading: false
       };
-    case MetricActionTypes.CreateGroup:
-      return state;
+    case MetricActionTypes.CreateGroupSuccessful:
+      return {
+        ...state,
+        groups: groupAdapter.addOne((action as CreateMetricGroupSuccessful).payload, {...state.groups})
+      };
     case MetricActionTypes.SelectGroup:
       return {
         ...state,
         selectedGroupId: (action as SelectMetricGroup).payload
       };
     case MetricActionTypes.CreateMetric:
+      return state;
+
+    default:
       return state;
   }
 }
