@@ -28,6 +28,7 @@
     "@ngrx/schematics": "^5.2.0",
     "@ngrx/store": "^5.2.0",
     "@ngrx/store-devtools": "^5.2.0",
+    "@ngrx/router-store": "^5.2.0",
     "core-js": "^2.4.1",
     "rxjs": "^5.5.0",
     "rxjs-tslint": "^0.1.0",

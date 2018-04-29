@@ -72,6 +72,8 @@ import { MetricPageComponent } from './metrics/containers/metric-page.component'
 import { LayoutComponent } from './core/components/layout.component';
 import { MetricGroupEditorComponent } from './metrics/components/metric-group-editor.component';
 import { MetricGroupEditorDialogComponent } from './metrics/containers/metric-group-editor-dialog.component';
+import {RouterStateSerializer, StoreRouterConnectingModule} from '@ngrx/router-store';
+import {CustomRouterStateSerializer} from './shared/utils';
 
 @NgModule({
   entryComponents: [
@@ -110,10 +112,20 @@ import { MetricGroupEditorDialogComponent } from './metrics/containers/metric-gr
     MatIconModule,
     MatButtonModule,
     StoreModule.forRoot(reducers, { metaReducers }),
+    StoreRouterConnectingModule.forRoot({
+      /*
+        They stateKey defines the name of the state used by the router-store reducer.
+        This matches the key defined in the map of reducers
+      */
+      stateKey: 'router',
+    }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([AppEffects, MetricsEffects])
   ],
-  providers: [MetricService],
+  providers: [
+    MetricService,
+    { provide: RouterStateSerializer, useClass: CustomRouterStateSerializer }
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
