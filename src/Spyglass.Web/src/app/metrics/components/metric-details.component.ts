@@ -6,7 +6,7 @@ import {Metric} from '../models/metric';
   template: `
     <mat-card>
       <mat-card-title>{{ metric.name }}</mat-card-title>
-      <mat-card-subtitle>{{ metric.key }}</mat-card-subtitle>
+      <mat-card-subtitle>{{ metric.description }}</mat-card-subtitle>
       <mat-list>
         <mat-list-item>
           <h3 matLine>{{ metric.providerType }}</h3>

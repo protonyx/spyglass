@@ -14,10 +14,11 @@ namespace Spyglass.SDK.Models
 
         [Display(Order = 0)]
         [Required]
+        [RegularExpression("[a-zA-Z_:][a-zA-Z0-9_:]*")]
         public string Name { get; set; }
 
         [Required]
-        public string Key { get; set; }
+        public string Description { get; set; }
 
         [Required]
         public string ProviderType { get; set; }

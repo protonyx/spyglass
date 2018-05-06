@@ -4,7 +4,7 @@ import {
   LoadGroupsSuccessful,
   LoadMetricsSuccessful,
   MetricActionTypes,
-  MetricsActionsUnion,
+  MetricsActionsUnion, SelectMetric,
   SelectMetricGroup
 } from '../actions/metrics.actions';
 import {createEntityAdapter, EntityAdapter, EntityState} from '@ngrx/entity'
@@ -13,10 +13,12 @@ import {createFeatureSelector, createSelector} from "@ngrx/store";
 import {Metric} from "../models/metric";
 
 export interface State {
-  loading: boolean,
+  groupsLoading: boolean,
   groups: EntityState<MetricGroup>,
   selectedGroupId: string | null,
-  metrics: EntityState<Metric>
+  metricsLoading: boolean,
+  metrics: EntityState<Metric>,
+  selectedMetricId: string | null
 }
 
 export const groupAdapter: EntityAdapter<MetricGroup> = createEntityAdapter<MetricGroup>({
@@ -30,10 +32,12 @@ export const metricAdapter: EntityAdapter<Metric> = createEntityAdapter<Metric>(
 });
 
 export const initialState: State = {
-  loading: false,
+  groupsLoading: false,
   groups: groupAdapter.getInitialState(),
   selectedGroupId: null,
+  metricsLoading: false,
   metrics: metricAdapter.getInitialState()
+  selectedMetricId: null
 };
 
 export function reducer(
@@ -44,34 +48,34 @@ export function reducer(
     case MetricActionTypes.LoadGroups:
       return {
         ...state,
-        loading: true
+        groupsLoading: true
       };
     case MetricActionTypes.LoadGroupsSuccessful:
       return {
         ...state,
         groups: groupAdapter.addMany((action as LoadGroupsSuccessful).payload, {...state.groups}),
-        loading: false
+        groupsLoading: false
       };
     case MetricActionTypes.LoadGroupsFailure:
       return {
         ...state,
-        loading: false
+        groupsLoading: false
       };
     case MetricActionTypes.LoadMetrics:
       return {
         ...state,
-        loading: true
+        metricsLoading: true
       };
     case MetricActionTypes.LoadMetricsSuccessful:
       return {
         ...state,
         metrics: metricAdapter.addMany((action as LoadMetricsSuccessful).payload, {...state.metrics}),
-        loading: false
+        metricsLoading: false
       };
     case MetricActionTypes.LoadMetricsFailure:
       return {
         ...state,
-        loading: false
+        metricsLoading: false
       };
     case MetricActionTypes.CreateGroupSuccessful:
       return {
@@ -85,6 +89,11 @@ export function reducer(
       };
     case MetricActionTypes.CreateMetric:
       return state;
+    case MetricActionTypes.SelectMetric:
+      return {
+        ...state,
+        selectedMetricId: (action as SelectMetric).payload
+      };
 
     default:
       return state;
@@ -93,9 +102,9 @@ export function reducer(
 
 export const getMetricState = createFeatureSelector<State>('metrics');
 
-export const getLoading = createSelector(
+export const getGroupsLoading = createSelector(
   getMetricState,
-  (state: State) => state.loading
+  (state: State) => state.groupsLoading
 );
 
 export const getGroupEntitiesState =
@@ -104,7 +113,11 @@ export const getGroupEntitiesState =
     (state: State) => state.groups
   );
 
-export const getSelectedGroupId = (state: State) => state.selectedGroupId;
+export const getSelectedGroupId =
+  createSelector(
+    getMetricState,
+    (state: State) => state.selectedGroupId
+  );
 
 export const {
   selectIds: getGroupIds,
@@ -116,6 +129,38 @@ export const {
 export const getSelectedGroup = createSelector(
   getGroupEntities,
   getSelectedGroupId,
+  (entities, selectedId) => {
+    return selectedId && entities[selectedId]
+  }
+);
+
+export const getMetricsLoading = createSelector(
+  getMetricState,
+  (state: State) => state.metricsLoading
+)
+
+export const getMetricEntitiesState =
+  createSelector(
+    getMetricState,
+    (state: State) => state.metrics
+  );
+
+export const {
+  selectIds: getMetricIds,
+  selectEntities: getMetricEntities,
+  selectAll: getAllMetrics,
+  selectTotal: getTotalMetrics
+} = metricAdapter.getSelectors(getMetricEntitiesState);
+
+export const getSelectedMetricId =
+  createSelector(
+    getMetricState,
+    (state: State) => state.selectedMetricId
+  );
+
+export const getSelectedMetric = createSelector(
+  getMetricEntities,
+  getSelectedMetricId,
   (entities, selectedId) => {
     return selectedId && entities[selectedId]
   }

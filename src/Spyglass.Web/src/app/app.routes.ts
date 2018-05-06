@@ -5,6 +5,8 @@ import {NotFoundComponent} from './core/components/not-found.component';
 import {MetricGroupDetailsPageComponent} from "./metrics/containers/metric-group-details-page.component";
 import {GroupExistsGuard} from "./metrics/guards/group-exists.guard";
 import {MetricPageComponent} from "./metrics/containers/metric-page.component";
+import {MetricExistsGuard} from './metrics/guards/metric-exists.guard';
+import {MetricDetailsPageComponent} from './metrics/containers/metric-details-page.component';
 
 const appRoutes: Routes = [
   {
@@ -17,8 +19,8 @@ const appRoutes: Routes = [
       { path: '', component: MetricPageComponent },
       {
         path: ':id',
-        component: MetricGroupDetailsPageComponent,
-        canActivate: [GroupExistsGuard]
+        component: MetricDetailsPageComponent,
+        canActivate: [MetricExistsGuard]
       }
     ]
   },

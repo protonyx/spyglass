@@ -6,14 +6,17 @@ export enum MetricActionTypes {
   LoadGroups = '[Metrics Page] Load Groups',
   LoadGroupsSuccessful = '[Metric Group API] Load Successful',
   LoadGroupsFailure = '[Metric Group API] Load Failure',
-  LoadMetrics = '[Metrics Page] Load Metrics',
-  LoadMetricsSuccessful = '[Metrics API] Load Successful',
-  LoadMetricsFailure = '[Metrics API] Load Failure',
   CreateGroup = '[Metrics Page] Create Group',
   CreateGroupSuccessful = '[Metric Group API] Create Group Successful',
   CreateGroupFailure = '[Metric Group API] Create Group Failure',
   SelectGroup = '[Metrics Page] Select Group',
+  LoadMetrics = '[Metrics Page] Load Metrics',
+  LoadMetricsSuccessful = '[Metrics API] Load Successful',
+  LoadMetricsFailure = '[Metrics API] Load Failure',
   CreateMetric = '[Metrics Page] Create Metric',
+  CreateMetricSuccessful = '[Metrics API] Create Metric Successful',
+  CreateMetricFailure = '[Metrics API] Create Metric Failure',
+  SelectMetric = '[Metric Details Page] Select Metric'
 }
 
 export class LoadGroups implements Action {
@@ -78,17 +81,38 @@ export class CreateMetric implements Action {
   constructor(public payload: Metric) {}
 }
 
+export class CreateMetricSuccessful implements Action {
+  readonly type = MetricActionTypes.CreateMetricSuccessful;
+
+  constructor(public payload: Metric) {}
+}
+
+export class CreateMetricFailure implements Action {
+  readonly type = MetricActionTypes.CreateMetricFailure;
+
+  constructor(public payload: any) {}
+}
+
+export class SelectMetric implements Action {
+  readonly type = MetricActionTypes.SelectMetric;
+
+  constructor(public payload: string) {}
+}
+
 
 
 export type MetricsActionsUnion =
   | LoadGroups
   | LoadGroupsSuccessful
   | LoadGroupsFailure
-  | LoadMetrics
-  | LoadMetricsSuccessful
-  | LoadMetricsFailure
   | CreateMetricGroup
   | CreateMetricGroupSuccessful
   | CreateMetricGroupFailure
   | SelectMetricGroup
-  | CreateMetric;
+  | LoadMetrics
+  | LoadMetricsSuccessful
+  | LoadMetricsFailure
+  | CreateMetric
+  | CreateMetricSuccessful
+  | CreateMetricFailure
+  | SelectMetric;

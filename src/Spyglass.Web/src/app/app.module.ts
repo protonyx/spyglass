@@ -74,6 +74,10 @@ import { MetricGroupEditorComponent } from './metrics/components/metric-group-ed
 import { MetricGroupEditorDialogComponent } from './metrics/containers/metric-group-editor-dialog.component';
 import {RouterStateSerializer, StoreRouterConnectingModule} from '@ngrx/router-store';
 import {CustomRouterStateSerializer} from './shared/utils';
+import { MetricListComponent } from './metrics/components/metric-list.component';
+import { MetricDetailsPageComponent } from './metrics/containers/metric-details-page.component';
+import {GroupExistsGuard} from './metrics/guards/group-exists.guard';
+import {MetricExistsGuard} from './metrics/guards/metric-exists.guard';
 
 @NgModule({
   entryComponents: [
@@ -91,7 +95,9 @@ import {CustomRouterStateSerializer} from './shared/utils';
     MetricPageComponent,
     LayoutComponent,
     MetricGroupEditorComponent,
-    MetricGroupEditorDialogComponent
+    MetricGroupEditorDialogComponent,
+    MetricListComponent,
+    MetricDetailsPageComponent
   ],
   imports: [
     AppRouteModule,
@@ -124,6 +130,8 @@ import {CustomRouterStateSerializer} from './shared/utils';
   ],
   providers: [
     MetricService,
+    GroupExistsGuard,
+    MetricExistsGuard,
     { provide: RouterStateSerializer, useClass: CustomRouterStateSerializer }
     ],
   bootstrap: [AppComponent]

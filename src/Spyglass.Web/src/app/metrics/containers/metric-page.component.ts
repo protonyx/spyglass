@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as MetricActions from "../actions/metrics.actions";
 import {select, Store} from "@ngrx/store";
 import {MetricGroup} from "../models/metricGroup";
-import {Observable} from "../../../../node_modules/rxjs";
+import {Observable} from "rxjs";
 import * as fromMetrics from "../reducers";
 import {Metric} from "../models/metric";
 import {MatDialog} from "@angular/material";
@@ -19,7 +19,8 @@ import {MetricGroupEditorDialogComponent} from "./metric-group-editor-dialog.com
         </sg-group-list>
       </mat-sidenav>
       <mat-sidenav-content>
-        <sg-metric-group-details [group]="selectedGroup$ | async"></sg-metric-group-details>
+        <sg-metric-list [metrics]="metrics$ | async"
+          (createMetric)="handleCreateMetric()"></sg-metric-list>
       </mat-sidenav-content>
     </mat-sidenav-container>
   `,
@@ -41,10 +42,10 @@ export class MetricPageComponent implements OnInit {
     this.selectedGroup$ = store.pipe(
       select(fromMetrics.getSelectedGroup)
     );
-    // this.metrics$ = store.pipe(
-    //   select(fromMetrics.getAllMetrics)
-    // );
-    this.loading$ = store.pipe(select(fromMetrics.getLoading));
+    this.metrics$ = store.pipe(
+      select(fromMetrics.getAllMetrics)
+    );
+    this.loading$ = store.pipe(select(fromMetrics.getMetricsLoading));
   }
 
   handleSelectGroup(selection: MetricGroup) {
@@ -61,8 +62,12 @@ export class MetricPageComponent implements OnInit {
     });
   }
 
+  handleCreateMetric() {
+
+  }
+
   ngOnInit() {
     this.store.dispatch(new MetricActions.LoadGroups());
-    //this.store.dispatch(new MetricActions.LoadMetrics());
+    this.store.dispatch(new MetricActions.LoadMetrics());
   }
 }

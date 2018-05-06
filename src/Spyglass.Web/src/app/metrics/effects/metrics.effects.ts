@@ -10,7 +10,13 @@ import {
   LoadGroupsFailure,
   LoadMetrics,
   LoadMetricsSuccessful,
-  LoadMetricsFailure, CreateMetricGroup, CreateMetricGroupSuccessful, CreateMetricGroupFailure
+  LoadMetricsFailure,
+  CreateMetricGroup,
+  CreateMetricGroupSuccessful,
+  CreateMetricGroupFailure,
+  CreateMetric,
+  CreateMetricSuccessful,
+  CreateMetricFailure
 } from '../actions/metrics.actions';
 import {map, switchMap, catchError} from 'rxjs/operators';
 import {MetricService} from '../services/metric.service';
@@ -50,6 +56,17 @@ export class MetricsEffects {
         map((metrics: Metric[]) => new LoadMetricsSuccessful(metrics)),
         catchError(error => Observable.of(new LoadMetricsFailure(error)))
       )
+    })
+  );
+
+  @Effect()
+  createMetric$: Observable<Action> = this.actions$.pipe(
+    ofType<CreateMetric>(MetricActionTypes.CreateMetric),
+    switchMap(action => {
+      return this.metricService.createMetric(action.payload).pipe(
+        map((metric: Metric) => new CreateMetricSuccessful(metric)),
+        catchError(error => Observable.of(new CreateMetricFailure(error)))
+      );
     })
   );
 
