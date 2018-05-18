@@ -36,7 +36,7 @@ export const initialState: State = {
   groups: groupAdapter.getInitialState(),
   selectedGroupId: null,
   metricsLoading: false,
-  metrics: metricAdapter.getInitialState()
+  metrics: metricAdapter.getInitialState(),
   selectedMetricId: null
 };
 
