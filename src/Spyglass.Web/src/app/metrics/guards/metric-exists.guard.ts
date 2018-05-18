@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import {filter, take, map, switchMap} from 'rxjs/operators';
 import * as fromMetrics from '../reducers';
 import {select, Store} from "@ngrx/store";
-import {filter, take, map, switchMap} from 'rxjs/operators';
 
 @Injectable()
 export class MetricExistsGuard implements CanActivate {
