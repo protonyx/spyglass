@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import {Action} from '@ngrx/store';
-import {Observable} from 'rxjs';
-import 'rxjs/add/observable/of';
+import {Observable, of} from 'rxjs';
 import {
   MetricActionTypes,
   LoadGroups,
@@ -32,7 +31,7 @@ export class MetricsEffects {
     switchMap(action => {
       return this.metricService.getGroups().pipe(
         map((groups: MetricGroup[]) => new LoadGroupsSuccessful(groups)),
-        catchError(error => Observable.of(new LoadGroupsFailure(error)))
+        catchError(error => of(new LoadGroupsFailure(error)))
       );
     })
   );
@@ -43,7 +42,7 @@ export class MetricsEffects {
     switchMap(action => {
       return this.metricService.createGroup(action.payload).pipe(
         map((group: MetricGroup) => new CreateMetricGroupSuccessful(group)),
-        catchError(error => Observable.of(new CreateMetricGroupFailure(error)))
+        catchError(error => of(new CreateMetricGroupFailure(error)))
       );
     })
   );
@@ -54,7 +53,7 @@ export class MetricsEffects {
     switchMap(action => {
       return this.metricService.getMetrics().pipe(
         map((metrics: Metric[]) => new LoadMetricsSuccessful(metrics)),
-        catchError(error => Observable.of(new LoadMetricsFailure(error)))
+        catchError(error => of(new LoadMetricsFailure(error)))
       )
     })
   );
@@ -65,7 +64,7 @@ export class MetricsEffects {
     switchMap(action => {
       return this.metricService.createMetric(action.payload).pipe(
         map((metric: Metric) => new CreateMetricSuccessful(metric)),
-        catchError(error => Observable.of(new CreateMetricFailure(error)))
+        catchError(error => of(new CreateMetricFailure(error)))
       );
     })
   );

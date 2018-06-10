@@ -30,7 +30,7 @@ export class MetricGroupListPageComponent implements OnInit {
     this.groups$ = store.pipe(
       select(fromMetrics.getAllGroups)
     );
-    this.loading$ = store.pipe(select(fromMetrics.getLoading));
+    this.loading$ = store.pipe(select(fromMetrics.getGroupsLoading));
   }
 
   handleSelectGroup(selection: MetricGroup) {

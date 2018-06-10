@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NavItem} from "../models/navItem";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 import {select, Store} from "@ngrx/store";
 import * as fromRoot from '../../reducers';
 import * as LayoutActions from '../../core/actions/layout.actions';

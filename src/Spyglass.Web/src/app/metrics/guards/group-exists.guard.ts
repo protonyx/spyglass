@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot} from "@angular/router";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
+import {filter, take, map, switchMap} from 'rxjs/operators';
 import * as fromMetrics from '../reducers';
 import {select, Store} from "@ngrx/store";
-import {filter, take, map, switchMap} from 'rxjs/operators';
 
 @Injectable()
 export class GroupExistsGuard implements CanActivate {
@@ -12,7 +12,7 @@ export class GroupExistsGuard implements CanActivate {
 
   waitForLoading(): Observable<boolean> {
     return this.store.pipe(
-      select(fromMetrics.getLoading),
+      select(fromMetrics.getGroupsLoading),
       filter(loaded => loaded),
       take(1)
     );
