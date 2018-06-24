@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Spyglass.SDK.Data;
 using Spyglass.SDK.Services;
 using MongoDB.Driver;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using Spyglass.Data.MongoDb.Repository;
 
@@ -40,9 +41,10 @@ namespace Spyglass.Data.MongoDb
           this.Logger = logger;
           
             var cs = configuration.GetConnectionString("MongoDb");
-            this.Logger.LogInformation(cs);
+            var settings = MongoClientSettings.FromUrl(new MongoUrl(cs));
+            settings.GuidRepresentation = GuidRepresentation.Standard;
 
-            this.Client = new MongoClient(cs);
+            this.Client = new MongoClient(settings);
             //this.Client.Settings.ConnectTimeout = TimeSpan.FromSeconds(10);
             this.Database = this.Client.GetDatabase("spyglass");
         }

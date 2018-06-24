@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 import {Metric} from '../models/metric';
 import {MetricGroup} from '../models/metricGroup';
+import {MetricProvider} from '../models/metricProvider';
 
 export enum MetricActionTypes {
   LoadGroups = '[Metrics Page] Load Groups',
@@ -16,7 +17,10 @@ export enum MetricActionTypes {
   CreateMetric = '[Metrics Page] Create Metric',
   CreateMetricSuccessful = '[Metrics API] Create Metric Successful',
   CreateMetricFailure = '[Metrics API] Create Metric Failure',
-  SelectMetric = '[Metric Details Page] Select Metric'
+  SelectMetric = '[Metric Details Page] Select Metric',
+  LoadProviders = '[Metrics Page] Load Providers',
+  LoadProvidersSuccessful = '[Provider API] Load Successful',
+  LoadProvidersFailure = '[Provider API] Load Failure'
 }
 
 export class LoadGroups implements Action {
@@ -99,6 +103,21 @@ export class SelectMetric implements Action {
   constructor(public payload: string) {}
 }
 
+export class LoadProviders implements Action {
+  readonly type = MetricActionTypes.LoadProviders;
+}
+
+export class LoadProvidersSuccessful implements Action {
+  readonly type = MetricActionTypes.LoadProvidersSuccessful;
+
+  constructor(public payload: MetricProvider[]) {}
+}
+
+export class LoadProvidersFailure implements Action {
+  readonly type = MetricActionTypes.LoadProvidersFailure;
+
+  constructor(public payload: any) {}
+}
 
 
 export type MetricsActionsUnion =
@@ -115,4 +134,7 @@ export type MetricsActionsUnion =
   | CreateMetric
   | CreateMetricSuccessful
   | CreateMetricFailure
-  | SelectMetric;
+  | SelectMetric
+  | LoadProviders
+  | LoadProvidersSuccessful
+  | LoadProvidersFailure;

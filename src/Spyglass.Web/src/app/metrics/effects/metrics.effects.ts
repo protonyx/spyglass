@@ -15,12 +15,13 @@ import {
   CreateMetricGroupFailure,
   CreateMetric,
   CreateMetricSuccessful,
-  CreateMetricFailure
+  CreateMetricFailure, LoadProviders, LoadProvidersSuccessful, LoadProvidersFailure
 } from '../actions/metrics.actions';
 import {map, switchMap, catchError} from 'rxjs/operators';
 import {MetricService} from '../services/metric.service';
 import {MetricGroup} from '../models/metricGroup';
 import {Metric} from "../models/metric";
+import {MetricProvider} from '../models/metricProvider';
 
 
 @Injectable()
@@ -65,6 +66,17 @@ export class MetricsEffects {
       return this.metricService.createMetric(action.payload).pipe(
         map((metric: Metric) => new CreateMetricSuccessful(metric)),
         catchError(error => of(new CreateMetricFailure(error)))
+      );
+    })
+  );
+
+  @Effect()
+  loadProviders$: Observable<Action> = this.actions$.pipe(
+    ofType<LoadProviders>(MetricActionTypes.LoadProviders),
+    switchMap(action => {
+      return this.metricService.getProviderMetadata().pipe(
+        map((providers: MetricProvider[]) => new LoadProvidersSuccessful(providers)),
+        catchError(error => of(new LoadProvidersFailure(error)))
       );
     })
   );

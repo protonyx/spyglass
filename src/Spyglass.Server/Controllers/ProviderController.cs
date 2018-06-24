@@ -35,7 +35,7 @@ namespace Spyglass.Server.Controllers
         /// </summary>
         /// <returns>Provider metadata</returns>
         [HttpGet]
-        [ProducesResponseType(typeof(ICollection<SDK.Models.ModelMetadata>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ICollection<SDK.Models.MetricProviderMetadata>), (int)HttpStatusCode.OK)]
         public IActionResult GetProviders()
         {
             var descriptors = ProviderService.GetProviders()
@@ -51,7 +51,7 @@ namespace Spyglass.Server.Controllers
         /// <param name="name">Provider type</param>
         /// <returns>Provider metadata</returns>
         [HttpGet("{name}")]
-        [ProducesResponseType(typeof(SDK.Models.ModelMetadata), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(SDK.Models.MetricProviderMetadata), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public IActionResult GetProvider(string name)
         {

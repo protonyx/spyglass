@@ -5,6 +5,7 @@ import {Metric} from '../models/metric';
 
 import {environment} from '../../../environments/environment';
 import {MetricGroup} from '../models/metricGroup';
+import {MetricProvider} from '../models/metricProvider';
 
 @Injectable()
 export class MetricService {
@@ -63,5 +64,11 @@ export class MetricService {
     const url = `${environment.apiUrl}/api/Metric/${id}`;
 
     return this.http.delete(url);
+  }
+
+  getProviderMetadata(): Observable<MetricProvider> {
+    const url = `${environment.apiUrl}/api/Provider`;
+
+    return this.http.get<MetricProvider>(url);
   }
 }

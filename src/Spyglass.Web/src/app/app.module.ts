@@ -78,6 +78,8 @@ import { MetricListComponent } from './metrics/components/metric-list.component'
 import { MetricDetailsPageComponent } from './metrics/containers/metric-details-page.component';
 import {GroupExistsGuard} from './metrics/guards/group-exists.guard';
 import {MetricExistsGuard} from './metrics/guards/metric-exists.guard';
+import { MetricEditorPageComponent } from './metrics/containers/metric-editor-page.component';
+import { MetricEditorComponent } from './metrics/components/metric-editor.component';
 
 @NgModule({
   entryComponents: [
@@ -97,7 +99,9 @@ import {MetricExistsGuard} from './metrics/guards/metric-exists.guard';
     MetricGroupEditorComponent,
     MetricGroupEditorDialogComponent,
     MetricListComponent,
-    MetricDetailsPageComponent
+    MetricDetailsPageComponent,
+    MetricEditorPageComponent,
+    MetricEditorComponent
   ],
   imports: [
     AppRouteModule,
@@ -111,6 +115,7 @@ import {MetricExistsGuard} from './metrics/guards/metric-exists.guard';
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     MatSidenavModule,
     MatToolbarModule,
     MatListModule,

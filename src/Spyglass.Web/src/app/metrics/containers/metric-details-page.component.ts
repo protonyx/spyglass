@@ -22,7 +22,9 @@ export class MetricDetailsPageComponent implements OnDestroy {
     private store: Store<fromMetrics.State>,
     private route: ActivatedRoute) {
     this.actionsSubscription = route.params
-      .pipe(map(params => new MetricActions.SelectMetric(params.id)))
+      .pipe(
+        map(params => new MetricActions.SelectMetric(params.id))
+      )
       .subscribe(store);
 
     this.metric$ = store.pipe(

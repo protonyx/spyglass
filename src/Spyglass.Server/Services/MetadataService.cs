@@ -18,12 +18,12 @@ namespace Spyglass.Server.Services
             Mapper = mapper;
         }
 
-        public Spyglass.SDK.Models.ModelMetadata GetMetadata(Type providerType)
+        public Spyglass.SDK.Models.MetricProviderMetadata GetMetadata(Type providerType)
         {
             var modelExplorer = new EmptyModelMetadataProvider();
             var properties = modelExplorer.GetMetadataForProperties(providerType);
 
-            return new SDK.Models.ModelMetadata
+            return new SDK.Models.MetricProviderMetadata
             {
                 Name = providerType.GetTypeInfo().Name,
                 Properties = properties.Select(this.Mapper.Map<ModelPropertyMetadata>)

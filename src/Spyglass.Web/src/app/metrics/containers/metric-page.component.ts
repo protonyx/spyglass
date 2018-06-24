@@ -7,6 +7,7 @@ import * as fromMetrics from "../reducers";
 import {Metric} from "../models/metric";
 import {MatDialog} from "@angular/material";
 import {MetricGroupEditorDialogComponent} from "./metric-group-editor-dialog.component";
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'sg-metric-page',
@@ -34,7 +35,8 @@ export class MetricPageComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    private store: Store<fromMetrics.State>
+    private store: Store<fromMetrics.State>,
+    private router: Router
   ) {
     this.groups$ = store.pipe(
       select(fromMetrics.getAllGroups)
@@ -63,11 +65,12 @@ export class MetricPageComponent implements OnInit {
   }
 
   handleCreateMetric() {
-
+    this.router.navigate(['metrics', 'new']);
   }
 
   ngOnInit() {
     this.store.dispatch(new MetricActions.LoadGroups());
     this.store.dispatch(new MetricActions.LoadMetrics());
+    this.store.dispatch(new MetricActions.LoadProviders());
   }
 }
