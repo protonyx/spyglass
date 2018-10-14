@@ -109,11 +109,11 @@ namespace Spyglass.Server.Controllers
             if (group == null)
                 return NotFound();
 
-            var metrics = this.MetricRepository
-                .FindBy(t => t.MetricGroupId.Equals(group.Id))
-                .ToList();
+            // var metrics = this.MetricRepository
+            //     .FindBy(t => t.MetricGroupId.Equals(group.Id))
+            //     .ToList();
 
-            return Ok(metrics);
+            return Ok();
         }
 
         /// <summary>
@@ -131,9 +131,9 @@ namespace Spyglass.Server.Controllers
             if (group == null)
                 return NotFound();
 
-            var metrics = this.MetricRepository
-                .FindBy(t => t.MetricGroupId.Equals(group.Id))
-                .ToList();
+            // var metrics = this.MetricRepository
+            //     .FindBy(t => t.MetricGroupId.Equals(group.Id))
+            //     .ToList();
 
             return Ok();
         }

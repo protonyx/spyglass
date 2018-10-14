@@ -12,24 +12,12 @@ import {Router} from '@angular/router';
 @Component({
   selector: 'sg-metric-page',
   template: `
-    <mat-sidenav-container>
-      <mat-sidenav mode="side" [opened]="true">
-        <sg-group-list [groups]="groups$ | async"
-          (createGroup)="handleCreateGroup()">
-          
-        </sg-group-list>
-      </mat-sidenav>
-      <mat-sidenav-content>
-        <sg-metric-list [metrics]="metrics$ | async"
-          (createMetric)="handleCreateMetric()"></sg-metric-list>
-      </mat-sidenav-content>
-    </mat-sidenav-container>
+    <sg-metric-list [metrics]="metrics$ | async"
+                    (createMetric)="handleCreateMetric()"></sg-metric-list>
   `,
   styles: []
 })
 export class MetricPageComponent implements OnInit {
-  groups$: Observable<MetricGroup[]>;
-  selectedGroup$: Observable<MetricGroup>;
   metrics$: Observable<Metric[]>;
   loading$: Observable<boolean>;
 
@@ -38,30 +26,10 @@ export class MetricPageComponent implements OnInit {
     private store: Store<fromMetrics.State>,
     private router: Router
   ) {
-    this.groups$ = store.pipe(
-      select(fromMetrics.getAllGroups)
-    );
-    this.selectedGroup$ = store.pipe(
-      select(fromMetrics.getSelectedGroup)
-    );
     this.metrics$ = store.pipe(
       select(fromMetrics.getAllMetrics)
     );
     this.loading$ = store.pipe(select(fromMetrics.getMetricsLoading));
-  }
-
-  handleSelectGroup(selection: MetricGroup) {
-    this.store.dispatch(new MetricActions.SelectMetricGroup(selection.id));
-  }
-
-  handleCreateGroup() {
-    const dialogRef = this.dialog.open(MetricGroupEditorDialogComponent, {
-      data: { group: new MetricGroup() }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      this.store.dispatch(new MetricActions.CreateMetricGroup(result));
-    });
   }
 
   handleCreateMetric() {
@@ -69,7 +37,6 @@ export class MetricPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.dispatch(new MetricActions.LoadGroups());
     this.store.dispatch(new MetricActions.LoadMetrics());
     this.store.dispatch(new MetricActions.LoadProviders());
   }

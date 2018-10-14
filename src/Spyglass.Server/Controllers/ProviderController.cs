@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -16,7 +18,8 @@ namespace Spyglass.Server.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
-    public class ProviderController : Controller
+    [ApiController]
+    public class ProviderController : ControllerBase
     {
         protected IMapper Mapper { get; }
 
@@ -71,12 +74,30 @@ namespace Spyglass.Server.Controllers
         /// <param name="name">Provider type</param>
         /// <param name="config">Configuration parameters</param>
         /// <returns>Metric values</returns>
-        [HttpPost("{name}")]
+        [HttpPost("{name}/Test")]
         [ProducesResponseType(typeof(ICollection<MetricValue>), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(object), (int)HttpStatusCode.BadRequest)]
-        public IActionResult TestProvider(string name, [FromBody] IDictionary<string, string> config)
+        public async Task<IActionResult> TestProviderAsync(string name, [FromBody] IDictionary<string, string> config)
         {
-            return Ok();
+            var providerType = ProviderService.GetProvider(name);
+
+            if (providerType == null)
+                return NotFound();
+
+            var provider = (IMetricValueProvider)Activator.CreateInstance(providerType);
+
+            var providerProperties = providerType.GetProperties();
+            foreach (var prop in providerProperties)
+            {
+                if (config.TryGetValue(prop.Name, out var value))
+                {
+                    prop.SetValue(provider, value);
+                }
+            }
+
+            var val = await provider.GetValueAsync();
+
+            return Ok(val);
         }
     }
 }

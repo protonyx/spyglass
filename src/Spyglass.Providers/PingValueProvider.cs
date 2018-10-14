@@ -40,15 +40,27 @@ namespace Spyglass.SDK.Providers
 
             bool pingable = false;
 
-            try
+            int tries = 3;
+            while (tries > 0)
             {
-                var reply = await ping.SendPingAsync(Hostname, timeout, buffer, options);
+                try
+                {
+                    var reply = await ping.SendPingAsync(Hostname, timeout, buffer, options);
 
-                pingable = reply.Status == IPStatus.Success;
-            }
-            catch (Exception e)
-            {
-                //
+                    if (reply.Status == IPStatus.Success)
+                    {
+                        pingable = true;
+                        break;
+                    }
+                }
+                catch (Exception e)
+                {
+                    //
+                }
+                finally
+                {
+                    tries--;
+                }
             }
 
             metrics.Add(new MetricValue

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Spyglass.SDK.Data;
 using Spyglass.SDK.Models;
@@ -8,7 +9,8 @@ namespace Spyglass.Server.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
-    public class MetricController : Controller
+    [ApiController]
+    public class MetricController : ControllerBase
     {
         protected IRepository<Metric> MetricRepository { get; }
 
@@ -38,7 +40,7 @@ namespace Spyglass.Server.Controllers
         }
 
         [HttpGet("{id}/Value")]
-        public IActionResult GetMetricValue(Guid id)
+        public async Task<IActionResult> GetMetricValueAsync(Guid id)
         {
             var entity = this.MetricRepository
                 .FindBy(t => t.Id.Equals(id))
@@ -48,9 +50,9 @@ namespace Spyglass.Server.Controllers
                 return NotFound();
 
             var provider = entity.Provider;
-            var value = provider.GetValueAsync();
+            var value = await provider.GetValueAsync();
             
-            return Ok(value.Result);
+            return Ok(value);
         }
 
         [HttpPost]

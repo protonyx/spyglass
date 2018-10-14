@@ -66,9 +66,9 @@ export class MetricService {
     return this.http.delete(url);
   }
 
-  getProviderMetadata(): Observable<MetricProvider> {
+  getProviderMetadata(): Observable<MetricProvider[]> {
     const url = `${environment.apiUrl}/api/Provider`;
 
-    return this.http.get<MetricProvider>(url);
+    return this.http.get<MetricProvider[]>(url);
   }
 }

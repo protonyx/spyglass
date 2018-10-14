@@ -1,4 +1,5 @@
-#tool nuget:?package=GitVersion.CommandLine&version=4.0.0-beta0012
+#tool nuget:?package=Cake.CoreCLR
+#tool nuget:?package=GitVersion.CommandLine&version=4.0.0-beta0014
 #addin "Cake.Incubator"
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -45,6 +46,7 @@ Task("Restore")
 
 Task("Build")
     .IsDependentOn("Restore")
+    .IsDependentOn("GitVersion")
     .Does(() =>
 {
     var msbuild = new DotNetCoreMSBuildSettings();
@@ -102,12 +104,25 @@ Task("Test")
         DotNetCorePack(sln, settings);
     });
 
+  Task("Publish")
+    .IsDependentOn("Build")
+    .Does(() =>
+    {
+        DotNetCorePublish("./src/Spyglass.Server/Spyglass.Server.csproj",
+          new DotNetCorePublishSettings()
+          {
+              Configuration = configuration,
+              OutputDirectory = distDirectory,
+              NoBuild = true
+          });
+    });
+
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("Run-Unit-Tests");
+    .IsDependentOn("Publish");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION

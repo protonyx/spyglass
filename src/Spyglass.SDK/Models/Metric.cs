@@ -10,8 +10,6 @@ namespace Spyglass.SDK.Models
         [Display(AutoGenerateField = false)]
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        public Guid? MetricGroupId { get; set; }
-
         [Display(Order = 0)]
         [Required]
         [RegularExpression("[a-zA-Z_:][a-zA-Z0-9_:]*")]

@@ -35,7 +35,7 @@ namespace Spyglass.Data.MongoDb
         protected IMongoDatabase Database { get; set; }
 
         public SpyglassMongoContext(
-          IConfigurationRoot configuration,
+          IConfiguration configuration,
           ILogger<SpyglassMongoContext> logger)
         {
           this.Logger = logger;

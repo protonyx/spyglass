@@ -18,23 +18,16 @@ namespace Spyglass.Server
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+
+        public IConfiguration Configuration { get; }
+
+        public IHostingEnvironment HostingEnvironment { get; }
+
+        public Startup(IConfiguration config, IHostingEnvironment env)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-
-            if (env.IsDevelopment())
-            {
-              builder.AddUserSecrets<Startup>();
-            }
-
-            Configuration = builder.Build();
+            this.Configuration = config;
+            this.HostingEnvironment = env;
         }
-
-        public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -68,8 +61,7 @@ namespace Spyglass.Server
                     Version = "v1"
                 });
 
-                var filePath = Path.Combine(AppContext.BaseDirectory, "Spyglass.Server.xml");
-                c.IncludeXmlComments(filePath);
+                c.IncludeXmlComments(Path.ChangeExtension(Assembly.GetEntryAssembly().Location, "xml"));
 
                 c.MapType<Guid>(() => new Schema() { Type = "string (Guid)"});
             });
