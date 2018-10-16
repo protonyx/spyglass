@@ -18,6 +18,7 @@ export enum MetricActionTypes {
   CreateMetricSuccessful = '[Metrics API] Create Metric Successful',
   CreateMetricFailure = '[Metrics API] Create Metric Failure',
   SelectMetric = '[Metric Details Page] Select Metric',
+  SelectNewMetric = '[New Metric Page] New Metric',
   LoadProviders = '[Metrics Page] Load Providers',
   LoadProvidersSuccessful = '[Provider API] Load Successful',
   LoadProvidersFailure = '[Provider API] Load Failure'
@@ -103,6 +104,10 @@ export class SelectMetric implements Action {
   constructor(public payload: string) {}
 }
 
+export class SelectNewMetric implements Action {
+  readonly type = MetricActionTypes.SelectNewMetric;
+}
+
 export class LoadProviders implements Action {
   readonly type = MetricActionTypes.LoadProviders;
 }
@@ -135,6 +140,7 @@ export type MetricsActionsUnion =
   | CreateMetricSuccessful
   | CreateMetricFailure
   | SelectMetric
+  | SelectNewMetric
   | LoadProviders
   | LoadProvidersSuccessful
   | LoadProvidersFailure;

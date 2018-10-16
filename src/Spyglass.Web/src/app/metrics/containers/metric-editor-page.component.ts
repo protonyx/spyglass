@@ -12,7 +12,10 @@ import {ActivatedRoute} from '@angular/router';
 @Component({
   selector: 'sg-metric-editor-page',
   template: `
-    <sg-metric-editor [metric]="metric$ | async" [providers]="providers$ | async"></sg-metric-editor>
+    <sg-metric-editor 
+      [metric]="metric$ | async" 
+      [providers]="providers$ | async">
+    </sg-metric-editor>
   `
 })
 export class MetricEditorPageComponent implements OnInit, OnDestroy {
@@ -26,7 +29,13 @@ export class MetricEditorPageComponent implements OnInit, OnDestroy {
   ) {
     this.actionsSubscription = route.params
       .pipe(
-        map(params => new MetricActions.SelectMetric(params.id))
+        map(params => {
+          if (params.id) {
+            return new MetricActions.SelectMetric(params.id);
+          } else {
+            return new MetricActions.SelectNewMetric();
+          }
+        })
       )
       .subscribe(store);
     this.providers$ = store.pipe(

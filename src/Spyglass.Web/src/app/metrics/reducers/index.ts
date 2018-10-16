@@ -1,22 +1,24 @@
 import {
-  CreateMetricGroup,
   CreateMetricGroupSuccessful,
   LoadGroupsSuccessful,
-  LoadMetricsSuccessful, LoadProvidersSuccessful,
+  LoadMetricsSuccessful,
+  LoadProvidersSuccessful,
   MetricActionTypes,
-  MetricsActionsUnion, SelectMetric,
+  MetricsActionsUnion,
+  SelectMetric,
   SelectMetricGroup
 } from '../actions/metrics.actions';
 import {createEntityAdapter, EntityAdapter, EntityState} from '@ngrx/entity'
 import {MetricGroup} from '../models/metricGroup';
-import {createFeatureSelector, createSelector} from "@ngrx/store";
-import {Metric} from "../models/metric";
+import {createFeatureSelector, createSelector} from '@ngrx/store';
+import {Metric} from '../models/metric';
 import {MetricProvider} from '../models/metricProvider';
 
 export interface State {
   groupsLoading: boolean,
   groups: EntityState<MetricGroup>,
   selectedGroupId: string | null,
+  newMetric: Metric | null,
   metricsLoading: boolean,
   metrics: EntityState<Metric>,
   selectedMetricId: string | null,
@@ -37,6 +39,7 @@ export const initialState: State = {
   groupsLoading: false,
   groups: groupAdapter.getInitialState(),
   selectedGroupId: null,
+  newMetric: null,
   metricsLoading: false,
   metrics: metricAdapter.getInitialState(),
   selectedMetricId: null,
@@ -97,6 +100,11 @@ export function reducer(
         ...state,
         selectedMetricId: (action as SelectMetric).payload
       };
+    case MetricActionTypes.SelectNewMetric:
+      return {
+        ...state,
+        newMetric: new Metric()
+      };
     case MetricActionTypes.LoadProvidersSuccessful:
       return {
         ...state,
@@ -152,6 +160,11 @@ export const getMetricEntitiesState = createSelector(
     (state: State) => state.metrics
   );
 
+export const getNewMetric = createSelector(
+  getMetricState,
+  (state: State) => state.newMetric
+);
+
 export const {
   selectIds: getMetricIds,
   selectEntities: getMetricEntities,
@@ -168,8 +181,9 @@ export const getSelectedMetricId =
 export const getSelectedMetric = createSelector(
   getMetricEntities,
   getSelectedMetricId,
-  (entities, selectedId) => {
-    return selectedId && entities[selectedId]
+  getNewMetric,
+  (entities, selectedId, newMetric) => {
+    return selectedId ? entities[selectedId] : newMetric;
   }
 );
 
