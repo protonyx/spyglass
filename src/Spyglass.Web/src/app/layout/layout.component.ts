@@ -8,42 +8,23 @@ import * as LayoutActions from './layout.actions';
 @Component({
   selector: 'sg-layout',
   template: `
-    <ng-container>
-      <!-- Primary Toolbar -->
-      <mat-toolbar class="sg-header mat-elevation-z6" color="primary">
-        <button mat-icon-button
-                class="sg-toolbar-icon"
-                (click)="toggleSidenav()">
-          <mat-icon>menu</mat-icon>
-        </button>
-
-        <span>Spyglass</span>
-        <span class="sg-fill-remaining"></span>
-      </mat-toolbar>
-
-      <mat-sidenav-container class="sg-container">
-        <mat-sidenav mode="side"
-                     [opened]="showSidenav$ | async"
-                     [fixedInViewport]="false"
-                     role="navigation"
-                     class="sg-sidenav">
-          <!-- sidenav content -->
-          <mat-nav-list>
-            <a mat-list-item
-               *ngFor="let navItem of navItems"
-               [routerLink]="[navItem.route]">
-              <mat-icon matListIcon>{{ navItem.icon }}</mat-icon>
-              <span matLine>{{ navItem.name }}</span>
-            </a>
-          </mat-nav-list>
-        </mat-sidenav>
-
-        <mat-sidenav-content>
-          <!-- main content -->
+    <div class="main-container">
+      <!--<div class="alert alert-app-level">
+        ...
+      </div>-->
+      <sg-header></sg-header>
+      
+      <nav class="subnav">
+        ...
+      </nav>
+      <div class="content-container">
+        <div class="content-area">
           <router-outlet></router-outlet>
-        </mat-sidenav-content>
-      </mat-sidenav-container>
-    </ng-container>
+        </div>
+        
+        <sg-sidenav></sg-sidenav>
+      </div>
+    </div>
   `,
   styles: [`
     .sg-header {
@@ -122,4 +103,40 @@ export class LayoutComponent implements OnInit {
   toggleSidenav() {
     this.store.dispatch(new LayoutActions.ToggleSidenav());
   }
+}
+
+@Component({
+  selector: 'sg-header',
+  template: `
+    <header class="header header-6">
+      <div class="branding">
+        
+      </div>
+      <div class="header-nav">
+        
+      </div>
+      <div class="header-actions">
+        <a href="javascript://" class="nav-link nav-icon">
+          <clr-icon shape="cog"></clr-icon>
+        </a>
+      </div>
+    </header>
+  `
+})
+export class HeaderComponent {
+
+}
+
+@Component({
+  selector: 'sg-sidenav',
+  template: `
+    <nav class="sidenav">
+      <section class="sidenav-content">
+        
+      </section>
+    </nav>
+  `
+})
+export class SideNavComponent {
+  @Input() navItems: any[];
 }
