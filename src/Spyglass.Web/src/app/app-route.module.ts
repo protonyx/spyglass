@@ -1,7 +1,7 @@
 import {RouterModule, Routes} from '@angular/router';
 import {NgModule} from '@angular/core';
 import {HomeComponent} from './home/home.component';
-import {NotFoundComponent} from './core/components/not-found.component';
+import {NotFoundComponent} from './layout/not-found.component';
 import {MetricGroupDetailsPageComponent} from "./metrics/containers/metric-group-details-page.component";
 import {GroupExistsGuard} from "./metrics/guards/group-exists.guard";
 import {MetricPageComponent} from "./metrics/containers/metric-page.component";
@@ -9,7 +9,7 @@ import {MetricExistsGuard} from './metrics/guards/metric-exists.guard';
 import {MetricDetailsPageComponent} from './metrics/containers/metric-details-page.component';
 import {MetricEditorPageComponent} from './metrics/containers/metric-editor-page.component';
 
-const appRoutes: Routes = [
+const appRouteModule: Routes = [
   {
     path: '',
     component: HomeComponent
@@ -39,7 +39,7 @@ const appRoutes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRouteModule)
   ]
 })
 export class AppRouteModule { }

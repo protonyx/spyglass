@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {NavItem} from "../models/navItem";
+import {NavItem} from "./navItem";
 import {Observable} from "rxjs";
 import {select, Store} from "@ngrx/store";
-import * as fromRoot from '../../reducers';
-import * as LayoutActions from '../../core/actions/layout.actions';
+import * as fromRoot from '../reducers/index';
+import * as LayoutActions from './layout.actions';
 
 @Component({
   selector: 'sg-layout',
@@ -91,6 +91,9 @@ import * as LayoutActions from '../../core/actions/layout.actions';
   `]
 })
 export class LayoutComponent implements OnInit {
+
+  @Input() appName: string;
+
   @Input() navItems: NavItem[];
 
   showSidenav$: Observable<boolean>;

@@ -4,7 +4,7 @@ import {
   createSelector,
   MetaReducer
 } from '@ngrx/store';
-import * as fromLayout from '../core/reducers/layout.reducer';
+import * as fromLayout from '../layout/layout.reducer';
 import * as fromMetrics from '../metrics/reducers';
 import * as fromRouter from '@ngrx/router-store';
 import {RouterStateUrl} from '../shared/utils';

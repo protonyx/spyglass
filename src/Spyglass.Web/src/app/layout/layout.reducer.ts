@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import {LayoutActionsUnion, LayoutActionTypes} from "../actions/layout.actions";
+import {LayoutActionsUnion, LayoutActionTypes} from "./layout.actions";
 
 
 export interface State {

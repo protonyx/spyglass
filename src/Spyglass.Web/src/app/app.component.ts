@@ -1,20 +1,17 @@
 import { Component } from '@angular/core';
+import { navigationConfig } from './nav.config';
 
 @Component({
   selector: 'sg-app',
   template: `
-    <sg-layout [navItems]="navItems"></sg-layout>`,
+    <sg-layout [appName]="appName" [navItems]="navItems"></sg-layout>`,
   styles: [`
     
   `]
 })
 export class AppComponent {
-  navItems = [
-    {name: 'Home', route: '', icon: 'home'},
-    {name: 'Dashboard', route: '/dashboard', icon: 'dashboard'},
-    {name: 'Metrics', route: '/metrics', icon: 'assessment'},
-    {name: 'Credentials', route: '/credentials', icon: 'lock outline'}
-  ];
+  appName = 'Spyglass';
+  navItems = navigationConfig;
 
   constructor() {}
 }

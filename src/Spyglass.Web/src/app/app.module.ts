@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
+import { ClarityModule } from '@clr/angular';
 import {
   MatAutocompleteModule,
   // MatBadgeModule,
@@ -46,7 +47,7 @@ import {
   // MatTreeModule
 } from '@angular/material';
 import { HomeComponent } from './home/home.component'
-import {AppRouteModule} from './app.routes';
+import {AppRouteModule} from './app-route.module';
 
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -67,9 +68,9 @@ import { MetricDetailsComponent } from './metrics/components/metric-details.comp
 
 // Services
 import {MetricService} from './metrics/services/metric.service';
-import { NotFoundComponent } from './core/components/not-found.component';
+import { NotFoundComponent } from './layout/not-found.component';
 import { MetricPageComponent } from './metrics/containers/metric-page.component';
-import { LayoutComponent } from './core/components/layout.component';
+import { LayoutComponent } from './layout/layout.component';
 import { MetricGroupEditorComponent } from './metrics/components/metric-group-editor.component';
 import { MetricGroupEditorDialogComponent } from './metrics/containers/metric-group-editor-dialog.component';
 import {RouterStateSerializer, StoreRouterConnectingModule} from '@ngrx/router-store';
@@ -82,31 +83,11 @@ import { MetricEditorPageComponent } from './metrics/containers/metric-editor-pa
 import { MetricEditorComponent } from './metrics/components/metric-editor.component';
 
 @NgModule({
-  entryComponents: [
-    MetricGroupEditorDialogComponent
-  ],
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    MetricGroupListPageComponent,
-    MetricGroupDetailsPageComponent,
-    MetricGroupListComponent,
-    MetricGroupDetailsComponent,
-    MetricDetailsComponent,
-    NotFoundComponent,
-    MetricPageComponent,
-    LayoutComponent,
-    MetricGroupEditorComponent,
-    MetricGroupEditorDialogComponent,
-    MetricListComponent,
-    MetricDetailsPageComponent,
-    MetricEditorPageComponent,
-    MetricEditorComponent
-  ],
   imports: [
     AppRouteModule,
     BrowserModule,
     BrowserAnimationsModule,
+    ClarityModule,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
@@ -133,12 +114,33 @@ import { MetricEditorComponent } from './metrics/components/metric-editor.compon
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([AppEffects, MetricsEffects])
   ],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    MetricGroupListPageComponent,
+    MetricGroupDetailsPageComponent,
+    MetricGroupListComponent,
+    MetricGroupDetailsComponent,
+    MetricDetailsComponent,
+    NotFoundComponent,
+    MetricPageComponent,
+    LayoutComponent,
+    MetricGroupEditorComponent,
+    MetricGroupEditorDialogComponent,
+    MetricListComponent,
+    MetricDetailsPageComponent,
+    MetricEditorPageComponent,
+    MetricEditorComponent
+  ],
   providers: [
     MetricService,
     GroupExistsGuard,
     MetricExistsGuard,
     { provide: RouterStateSerializer, useClass: CustomRouterStateSerializer }
-    ],
+  ],
+  entryComponents: [
+    MetricGroupEditorDialogComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

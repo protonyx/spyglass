@@ -225,6 +225,25 @@
   dependencies:
     tslib "^1.9.0"
 
+"@clr/angular@^0.13.7":
+  version "0.13.7"
+  resolved "https://registry.yarnpkg.com/@clr/angular/-/angular-0.13.7.tgz#ce2fad9b4c1d804460ca834af6ae0635866195dc"
+  integrity sha512-6z3EGONdbO2yniqq3I8CCqVqyTaUjcOiTrucOU4kYhGJNABYmgEpYKrcqsuyoFfcSbD+W8zMua+ORuSwIGMK9w==
+  dependencies:
+    tslib "^1.9.0"
+
+"@clr/icons@^0.13.7":
+  version "0.13.7"
+  resolved "https://registry.yarnpkg.com/@clr/icons/-/icons-0.13.7.tgz#4a9b333ff00cdbcf1e7ab1899e4700989d16b825"
+  integrity sha512-CykIpNjeKnc074Q0ouXbkALSgvYgdjgkmkm6gpIe3IJwYMuLEG9QhShvaKi10AZoD3GH2fNK+1tZGdEFice/CA==
+
+"@clr/ui@^0.13.7":
+  version "0.13.7"
+  resolved "https://registry.yarnpkg.com/@clr/ui/-/ui-0.13.7.tgz#0c86cc4146f158bd8e195bd1ab2d9983debc59d9"
+  integrity sha512-2J7jLIFLh0LR3DUgarMfpiTMrK77S7fNRHLf81wwHRCsuim1jF+mlb/I1nycnM9ScVa1a3cAX8qDaeQ2VZlBwQ==
+  optionalDependencies:
+    bootstrap "4.0.0-alpha.5"
+
 "@ngrx/effects@^6.0.0-beta.3":
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/@ngrx/effects/-/effects-6.1.0.tgz#3c1e1ab1e5a86c6d9c29d4f3771e42cc9bd8576c"
@@ -440,6 +459,11 @@
     "@webassemblyjs/ast" "1.4.3"
     "@webassemblyjs/wast-parser" "1.4.3"
     long "^3.2.0"
+
+"@webcomponents/custom-elements@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@webcomponents/custom-elements/-/custom-elements-1.0.0.tgz#b1726e12074b556aa31b93f36ff6a03a435259c4"
+  integrity sha1-sXJuEgdLVWqjG5Pzb/agOkNSWcQ=
 
 abbrev@1:
   version "1.1.1"
@@ -1086,6 +1110,14 @@ boom@2.x.x:
   integrity sha1-OciRjO/1eZ+D+UkqhI9iWt0Mdm8=
   dependencies:
     hoek "2.x.x"
+
+bootstrap@4.0.0-alpha.5:
+  version "4.0.0-alpha.5"
+  resolved "http://registry.npmjs.org/bootstrap/-/bootstrap-4.0.0-alpha.5.tgz#a126b648c3bd2f52b8fad4bbc5e2d0ad2abf7064"
+  integrity sha1-oSa2SMO9L1K4+tS7xeLQrSq/cGQ=
+  dependencies:
+    jquery "1.9.1 - 3"
+    tether "^1.3.7"
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -4190,6 +4222,11 @@ jasminewd2@^2.1.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/jasminewd2/-/jasminewd2-2.2.0.tgz#e37cf0b17f199cce23bea71b2039395246b4ec4e"
   integrity sha1-43zwsX8ZnM4jvqcbIDk5Uka07E4=
+
+"jquery@1.9.1 - 3":
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
+  integrity sha512-Ubldcmxp5np52/ENotGxlLe6aGMvmF4R8S6tZjsP6Knsaxd/xp3Zrh50cG93lR6nPXyUFwzN3ZSOQI0wRJNdGg==
 
 js-base64@^2.1.8:
   version "2.4.5"
@@ -7393,6 +7430,11 @@ tar@^4:
     mkdirp "^0.5.0"
     safe-buffer "^5.1.2"
     yallist "^3.0.2"
+
+tether@^1.3.7:
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/tether/-/tether-1.4.5.tgz#8efd7b35572767ba502259ba9b1cc167fcf6f2c1"
+  integrity sha512-fysT1Gug2wbRi7a6waeu39yVDwiNtvwj5m9eRD+qZDSHKNghLo6KqP/U3yM2ap6TNUL2skjXGJaJJTJqoC31vw==
 
 through2@^2.0.0:
   version "2.0.3"
