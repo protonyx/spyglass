@@ -4,37 +4,14 @@ import {Observable} from 'rxjs';
 import {Metric} from '../models/metric';
 
 import {environment} from '../../../environments/environment';
-import {MetricGroup} from '../models/metricGroup';
 import {MetricProvider} from '../models/metricProvider';
+import {ModelPropertyMetadata} from "../models/modelPropertyMetadata";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Injectable()
 export class MetricService {
 
   constructor(private http: HttpClient) { }
-
-  getGroups(): Observable<MetricGroup[]> {
-    const url = `${environment.apiUrl}/api/MetricGroup`;
-
-    return this.http.get<MetricGroup[]>(url);
-  }
-
-  getGroup(id: string): Observable<MetricGroup> {
-    const url = `${environment.apiUrl}/api/MetricGroup/${id}`;
-
-    return this.http.get<MetricGroup>(url);
-  }
-
-  createGroup(data: MetricGroup): Observable<MetricGroup> {
-    const url = `${environment.apiUrl}/api/MetricGroup`;
-
-    return this.http.post<MetricGroup>(url, data);
-  }
-
-  deleteGroup(id: string): Observable<any> {
-    const url = `${environment.apiUrl}/api/MetricGroup/${id}`;
-
-    return this.http.delete(url);
-  }
 
   getMetrics(): Observable<Metric[]> {
     const url = `${environment.apiUrl}/api/Metric`;
@@ -70,5 +47,16 @@ export class MetricService {
     const url = `${environment.apiUrl}/api/Provider`;
 
     return this.http.get<MetricProvider[]>(url);
+  }
+
+  toFormGroup(config: ModelPropertyMetadata[]) {
+    let group: any = {};
+
+    config.forEach(c => {
+      group[c.name] = c.isRequired ? new FormControl('', Validators.required)
+                                   : new FormControl('');
+    });
+
+    return new FormGroup(group);
   }
 }

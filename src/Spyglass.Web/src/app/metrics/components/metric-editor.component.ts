@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {Metric} from '../models/metric';
 import {MetricProvider} from '../models/metricProvider';
@@ -6,49 +6,50 @@ import {MetricProvider} from '../models/metricProvider';
 @Component({
   selector: 'sg-metric-editor',
   template: `
-    <mat-card>
-      <mat-card-title>
-        Metric
-      </mat-card-title>
+    <form clrForm 
+          class="metric-form"
+          [formGroup]="metricForm"
+          (submit)="handleFormSubmit($event)">
+      <clr-input-container>
+        <label for="name">Name</label>
+        <input clrInput
+               required
+               formControlName="name"
+               placeholder="Name">
+      </clr-input-container>
       
-      <mat-card-content>
-        <form class="metric-form" [formGroup]="metricForm">
-          <mat-form-field class="full-width">
-            <input matInput
-                   formControlName="name"
-                   placeholder="Name">
-          </mat-form-field>
-          <mat-form-field class="full-width">
-          <textarea matInput
-                    formControlName="description"
-                    placeholder="Description"></textarea>
-          </mat-form-field>
-          <mat-form-field class="full-width">
-            <mat-select formControlName="description"
-                        placeholder="Metric Type">
-              <mat-option *ngFor="let provider of providers"
-                          [value]="provider.name">{{ provider.name }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <!-- Dynamic Provider Properties -->
-          <div *ngIf="currentProvider">
-            {{ currentProvider | json }}
-            <ng-container *ngFor="let prop of currentProvider.properties">
-              <mat-form-field class="full-width">
-                <input matInput
-                       [name]="prop.name"
-                       [(ngModel)]="metric.provider[prop.name]"
-                       [placeholder]="prop.name">
-              </mat-form-field>
-            </ng-container>
-          </div>
-        </form>
-      </mat-card-content>
+      <clr-input-container>
+        <label for="description">Description</label>
+        <textarea clrInput
+                  formControlName="description"
+                  placeholder="Description"></textarea>
+      </clr-input-container>
       
-      <mat-card-actions>
-        <button (click)="save.emit(metric)" class="btn btn-outline-primary">Save</button>
-      </mat-card-actions>
-    </mat-card>
+      <clr-select-container>
+        <label for="metricType">Metric Type</label>
+        
+        <select clrSelect
+                formControlName="providerType">
+          <option *ngFor="let provider of providers" [value]="provider.name">{{ provider.name }}</option>
+        </select>
+      </clr-select-container>
+
+      <div *ngIf="currentProvider">
+        <ng-container *ngFor="let prop of currentProvider.properties">
+          <clr-input-container>
+            <label>{{prod.name}}</label>
+            <input clrInput
+                   [name]="prop.name"
+                   [(ngModel)]="metric.provider[prop.name]"
+                   [placeholder]="prop.name">
+          </clr-input-container>
+        </ng-container>
+      </div>
+
+      <button type="submit" 
+              class="btn btn-primary"
+              [disabled]="!metricForm.valid">Save</button>
+    </form>
   `,
   styles: [
     `
@@ -64,7 +65,7 @@ import {MetricProvider} from '../models/metricProvider';
     `
   ]
 })
-export class MetricEditorComponent implements OnInit {
+export class MetricEditorComponent implements OnInit, OnChanges {
   @Input() providers: MetricProvider[];
   @Input() metric: Metric;
   @Output() save = new EventEmitter<Metric>();
@@ -82,6 +83,12 @@ export class MetricEditorComponent implements OnInit {
   ngOnInit() {
   }
 
+  handleFormSubmit(event: any) {
+    this.save.emit(this.metricForm.value);
+  }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
+  }
 
 }

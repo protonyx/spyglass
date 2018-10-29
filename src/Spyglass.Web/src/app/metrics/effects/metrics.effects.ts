@@ -4,50 +4,21 @@ import {Action} from '@ngrx/store';
 import {Observable, of} from 'rxjs';
 import {
   MetricActionTypes,
-  LoadGroups,
-  LoadGroupsSuccessful,
-  LoadGroupsFailure,
   LoadMetrics,
   LoadMetricsSuccessful,
   LoadMetricsFailure,
-  CreateMetricGroup,
-  CreateMetricGroupSuccessful,
-  CreateMetricGroupFailure,
-  CreateMetric,
-  CreateMetricSuccessful,
-  CreateMetricFailure, LoadProviders, LoadProvidersSuccessful, LoadProvidersFailure
+  SaveMetric,
+  SaveMetricSuccessful,
+  SaveMetricFailure, LoadProviders, LoadProvidersSuccessful, LoadProvidersFailure
 } from '../actions/metrics.actions';
 import {map, switchMap, catchError} from 'rxjs/operators';
 import {MetricService} from '../services/metric.service';
-import {MetricGroup} from '../models/metricGroup';
 import {Metric} from "../models/metric";
 import {MetricProvider} from '../models/metricProvider';
 
 
 @Injectable()
 export class MetricsEffects {
-  @Effect()
-  loadGroups$: Observable<Action> = this.actions$.pipe(
-    ofType<LoadGroups>(MetricActionTypes.LoadGroups),
-    switchMap(action => {
-      return this.metricService.getGroups().pipe(
-        map((groups: MetricGroup[]) => new LoadGroupsSuccessful(groups)),
-        catchError(error => of(new LoadGroupsFailure(error)))
-      );
-    })
-  );
-
-  @Effect()
-  createGroup$: Observable<Action> = this.actions$.pipe(
-    ofType<CreateMetricGroup>(MetricActionTypes.CreateGroup),
-    switchMap(action => {
-      return this.metricService.createGroup(action.payload).pipe(
-        map((group: MetricGroup) => new CreateMetricGroupSuccessful(group)),
-        catchError(error => of(new CreateMetricGroupFailure(error)))
-      );
-    })
-  );
-
   @Effect()
   loadMetrics$: Observable<Action> = this.actions$.pipe(
     ofType<LoadMetrics>(MetricActionTypes.LoadMetrics),
@@ -61,11 +32,11 @@ export class MetricsEffects {
 
   @Effect()
   createMetric$: Observable<Action> = this.actions$.pipe(
-    ofType<CreateMetric>(MetricActionTypes.CreateMetric),
+    ofType<SaveMetric>(MetricActionTypes.SaveMetric),
     switchMap(action => {
       return this.metricService.createMetric(action.payload).pipe(
-        map((metric: Metric) => new CreateMetricSuccessful(metric)),
-        catchError(error => of(new CreateMetricFailure(error)))
+        map((metric: Metric) => new SaveMetricSuccessful(metric)),
+        catchError(error => of(new SaveMetricFailure(error)))
       );
     })
   );

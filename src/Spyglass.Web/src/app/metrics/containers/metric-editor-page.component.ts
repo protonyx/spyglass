@@ -12,14 +12,20 @@ import {ActivatedRoute} from '@angular/router';
 @Component({
   selector: 'sg-metric-editor-page',
   template: `
+    <h1>Metric</h1>
+    <div *ngIf="providersLoading$ | async">
+      <span class="spinner">Loading...</span>
+    </div>
     <sg-metric-editor 
       [metric]="metric$ | async" 
-      [providers]="providers$ | async">
+      [providers]="providers$ | async"
+      (save)="handleSave($event)">
     </sg-metric-editor>
   `
 })
 export class MetricEditorPageComponent implements OnInit, OnDestroy {
   actionsSubscription: Subscription;
+  providersLoading$: Observable<boolean>;
   providers$: Observable<MetricProvider[]>;
   metric$: Observable<Metric>;
 
@@ -38,8 +44,12 @@ export class MetricEditorPageComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe(store);
+    this.providersLoading$ = store.pipe(
+      select(fromMetrics.getProvidersLoading)
+    );
     this.providers$ = store.pipe(
-      select(fromMetrics.getProviders)
+      select(fromMetrics.getProviders),
+      tap(t => console.log(t))
     );
     this.metric$ = store.pipe(
       select(fromMetrics.getSelectedMetric)
@@ -52,5 +62,9 @@ export class MetricEditorPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.actionsSubscription.unsubscribe();
+  }
+
+  handleSave(metric: Metric) {
+    this.store.dispatch(new MetricActions.SaveMetric(metric));
   }
 }

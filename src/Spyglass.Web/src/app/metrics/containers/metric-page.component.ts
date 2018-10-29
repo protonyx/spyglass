@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import * as MetricActions from "../actions/metrics.actions";
 import {select, Store} from "@ngrx/store";
-import {MetricGroup} from "../models/metricGroup";
 import {Observable} from "rxjs";
 import * as fromMetrics from "../reducers";
 import {Metric} from "../models/metric";
-import {MatDialog} from "@angular/material";
-import {MetricGroupEditorDialogComponent} from "./metric-group-editor-dialog.component";
 import {Router} from '@angular/router';
 
 @Component({
   selector: 'sg-metric-page',
   template: `
+    <h1>Metrics</h1>
+    <button class="btn btn-outline" (click)="handleCreateMetric()">Create Metric</button>
     <sg-metric-list [metrics]="metrics$ | async"
                     (createMetric)="handleCreateMetric()"></sg-metric-list>
   `,
@@ -22,7 +21,6 @@ export class MetricPageComponent implements OnInit {
   loading$: Observable<boolean>;
 
   constructor(
-    public dialog: MatDialog,
     private store: Store<fromMetrics.State>,
     private router: Router
   ) {

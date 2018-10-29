@@ -4,16 +4,20 @@ import {Metric} from '../models/metric';
 @Component({
   selector: 'sg-metric-details',
   template: `
-    <mat-card>
-      <mat-card-title>{{ metric.name }}</mat-card-title>
-      <mat-card-subtitle>{{ metric.description }}</mat-card-subtitle>
-      <mat-list>
-        <mat-list-item>
-          <h3 matLine>{{ metric.providerType }}</h3>
-          <p matLine>Metric Type</p>
-        </mat-list-item>
-      </mat-list>
-    </mat-card>
+    <div class="card">
+      <div class="card-header">
+        {{ metric.name }}
+      </div>
+      <div class="card-block">
+        <div class="card-title">
+          {{ metric.description }}
+        </div>
+        <div class="card-text">
+          <h3>{{ metric.providerType }}</h3>
+          <p>Metric Type</p>
+        </div>
+      </div>
+    </div>
   `,
   styles: []
 })
