@@ -48,8 +48,7 @@ export class MetricEditorPageComponent implements OnInit, OnDestroy {
       select(fromMetrics.getProvidersLoading)
     );
     this.providers$ = store.pipe(
-      select(fromMetrics.getProviders),
-      tap(t => console.log(t))
+      select(fromMetrics.getProviders)
     );
     this.metric$ = store.pipe(
       select(fromMetrics.getSelectedMetric)
@@ -65,6 +64,7 @@ export class MetricEditorPageComponent implements OnInit, OnDestroy {
   }
 
   handleSave(metric: Metric) {
+    console.log(metric);
     this.store.dispatch(new MetricActions.SaveMetric(metric));
   }
 }

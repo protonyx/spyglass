@@ -1,0 +1,55 @@
+<form clrForm
+      class="metric-form"
+      [formGroup]="metricForm"
+      (submit)="handleFormSubmit($event)">
+  <clr-input-container>
+    <label for="name">Name</label>
+    <input clrInput
+           required
+           formControlName="name"
+           placeholder="Name">
+  </clr-input-container>
+
+  <clr-input-container>
+    <label for="description">Description</label>
+    <textarea clrInput
+              formControlName="description"
+              placeholder="Description"></textarea>
+  </clr-input-container>
+
+  <clr-select-container>
+    <label for="metricType">Metric Type</label>
+    <select clrSelect
+            formControlName="providerType">
+      <option *ngFor="let provider of providers" [value]="provider.name">{{ provider.name }}</option>
+    </select>
+  </clr-select-container>
+
+  {{ metricForm?.value | json }}
+</form>
+
+<form clrForm
+  [formGroup]="providerForm">
+
+  {{ currentProvider | json }}
+
+  <div *ngIf="currentProvider">
+    <ng-container *ngFor="let prop of currentProvider.properties">
+      <clr-input-container>
+        <label [attr.for]="prop.propertyName">{{prop.propertyName}}</label>
+        <input clrInput
+               [name]="prop.propertyName"
+               [formControlName]="prop.propertyName"
+               [placeholder]="prop.placeholder">
+      </clr-input-container>
+    </ng-container>
+  </div>
+
+  {{ providerForm?.value | json }}
+</form>
+
+  <button type="button"
+          class="btn btn-primary"
+          (click)="handleFormSubmit($event)"
+          [disabled]="!metricForm.valid || !providerForm.valid">Save</button>
+

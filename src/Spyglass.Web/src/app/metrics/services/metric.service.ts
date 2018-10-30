@@ -53,7 +53,7 @@ export class MetricService {
     let group: any = {};
 
     config.forEach(c => {
-      group[c.name] = c.isRequired ? new FormControl('', Validators.required)
+      group[c.propertyName] = c.isRequired ? new FormControl('', Validators.required)
                                    : new FormControl('');
     });
 

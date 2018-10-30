@@ -1,56 +1,13 @@
-import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
-import {FormBuilder, Validators} from '@angular/forms';
+import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnDestroy} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Metric} from '../models/metric';
 import {MetricProvider} from '../models/metricProvider';
+import {Subscription} from 'rxjs';
+import {MetricService} from '../services/metric.service';
 
 @Component({
   selector: 'sg-metric-editor',
-  template: `
-    <form clrForm 
-          class="metric-form"
-          [formGroup]="metricForm"
-          (submit)="handleFormSubmit($event)">
-      <clr-input-container>
-        <label for="name">Name</label>
-        <input clrInput
-               required
-               formControlName="name"
-               placeholder="Name">
-      </clr-input-container>
-      
-      <clr-input-container>
-        <label for="description">Description</label>
-        <textarea clrInput
-                  formControlName="description"
-                  placeholder="Description"></textarea>
-      </clr-input-container>
-      
-      <clr-select-container>
-        <label for="metricType">Metric Type</label>
-        
-        <select clrSelect
-                formControlName="providerType">
-          <option *ngFor="let provider of providers" [value]="provider.name">{{ provider.name }}</option>
-        </select>
-      </clr-select-container>
-
-      <div *ngIf="currentProvider">
-        <ng-container *ngFor="let prop of currentProvider.properties">
-          <clr-input-container>
-            <label>{{prod.name}}</label>
-            <input clrInput
-                   [name]="prop.name"
-                   [(ngModel)]="metric.provider[prop.name]"
-                   [placeholder]="prop.name">
-          </clr-input-container>
-        </ng-container>
-      </div>
-
-      <button type="submit" 
-              class="btn btn-primary"
-              [disabled]="!metricForm.valid">Save</button>
-    </form>
-  `,
+  templateUrl: './metric-editor.component.html',
   styles: [
     `
     .metric-form {
@@ -65,7 +22,7 @@ import {MetricProvider} from '../models/metricProvider';
     `
   ]
 })
-export class MetricEditorComponent implements OnInit, OnChanges {
+export class MetricEditorComponent implements OnInit, OnChanges, OnDestroy {
   @Input() providers: MetricProvider[];
   @Input() metric: Metric;
   @Output() save = new EventEmitter<Metric>();
@@ -78,17 +35,45 @@ export class MetricEditorComponent implements OnInit, OnChanges {
     providerType: ['', Validators.required]
   });
 
-  constructor(private fb: FormBuilder) { }
+  providerForm = this.fb.group({});
+
+  providerTypeSubscription: Subscription;
+
+  constructor(
+    private fb: FormBuilder,
+    private metricService: MetricService
+  ) { }
 
   ngOnInit() {
-  }
-
-  handleFormSubmit(event: any) {
-    this.save.emit(this.metricForm.value);
+    this.providerTypeSubscription = this.metricForm.get('providerType')
+      .valueChanges.subscribe(val => {
+        console.log(val);
+        this.currentProvider = this.providers.find(t => t.name === val);
+        console.log(this.currentProvider);
+        this.providerForm = this.buildProviderForm(val);
+        console.log(this.providerForm);
+    })
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
+    if (changes['metric']) {
+      this.metricForm.setValue(this.metric);
+    }
   }
 
+  ngOnDestroy(): void {
+    this.providerTypeSubscription.unsubscribe();
+  }
+
+  buildProviderForm(providerType: string) {
+    const providerConfig = this.providers.find(t => t.name === providerType);
+    return this.metricService.toFormGroup(providerConfig.properties);
+  }
+
+  handleFormSubmit(event: any) {
+    let metric = Object.assign(new Metric(), this.metricForm.value);
+    metric.provider = this.providerForm.value;
+
+    this.save.emit(metric);
+  }
 }
