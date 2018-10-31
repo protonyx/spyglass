@@ -26,6 +26,7 @@ export class MetricEditorComponent implements OnInit, OnChanges, OnDestroy {
   @Input() providers: MetricProvider[];
   @Input() metric: Metric;
   @Output() save = new EventEmitter<Metric>();
+  @Output() cancel = new EventEmitter();
 
   public currentProvider: MetricProvider;
 
@@ -47,11 +48,8 @@ export class MetricEditorComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit() {
     this.providerTypeSubscription = this.metricForm.get('providerType')
       .valueChanges.subscribe(val => {
-        console.log(val);
         this.currentProvider = this.providers.find(t => t.name === val);
-        console.log(this.currentProvider);
         this.providerForm = this.buildProviderForm(val);
-        console.log(this.providerForm);
     })
   }
 
@@ -75,5 +73,9 @@ export class MetricEditorComponent implements OnInit, OnChanges, OnDestroy {
     metric.provider = this.providerForm.value;
 
     this.save.emit(metric);
+  }
+
+  handleCancel(event: any) {
+    this.cancel.emit();
   }
 }

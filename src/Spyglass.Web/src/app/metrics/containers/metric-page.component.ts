@@ -11,6 +11,7 @@ import {Router} from '@angular/router';
   template: `
     <h1>Metrics</h1>
     <button class="btn btn-outline" (click)="handleCreateMetric()">Create Metric</button>
+    <button class="btn btn-link" (click)="refreshMetrics()">Refresh</button>
     <sg-metric-list [metrics]="metrics$ | async"
                     (createMetric)="handleCreateMetric()"></sg-metric-list>
   `,
@@ -35,7 +36,11 @@ export class MetricPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.dispatch(new MetricActions.LoadMetrics());
     this.store.dispatch(new MetricActions.LoadProviders());
+    this.refreshMetrics();
+  }
+
+  refreshMetrics() {
+    this.store.dispatch(new MetricActions.LoadMetrics());
   }
 }

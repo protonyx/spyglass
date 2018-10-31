@@ -1,13 +1,15 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable} from 'rxjs/internal/Observable';
-import {MetricProvider} from '../models/metricProvider';
-import * as fromMetrics from "../reducers";
-import {select, Store} from "@ngrx/store";
-import {Metric} from '../models/metric';
+import {ActivatedRoute, Router} from '@angular/router';
+import {select, Store} from '@ngrx/store';
+import {Actions, ofType} from '@ngrx/effects';
 import {map, tap} from 'rxjs/operators';
+import {Observable, Subscription} from 'rxjs';
+import {MetricProvider} from '../models/metricProvider';
+import * as fromMetrics from '../reducers';
+import {Metric} from '../models/metric';
 import * as MetricActions from '../actions/metrics.actions';
-import {Subscription} from 'rxjs/index';
-import {ActivatedRoute} from '@angular/router';
+import {LoadMetrics, SaveMetricSuccessful} from '../actions/metrics.actions';
+import {MetricActionTypes} from '../actions/metrics.actions';
 
 @Component({
   selector: 'sg-metric-editor-page',
@@ -19,21 +21,26 @@ import {ActivatedRoute} from '@angular/router';
     <sg-metric-editor 
       [metric]="metric$ | async" 
       [providers]="providers$ | async"
-      (save)="handleSave($event)">
+      (save)="handleSave($event)"
+      (cancel)="handleCancel()">
     </sg-metric-editor>
   `
 })
 export class MetricEditorPageComponent implements OnInit, OnDestroy {
+  paramsSubscription: Subscription;
   actionsSubscription: Subscription;
+
   providersLoading$: Observable<boolean>;
   providers$: Observable<MetricProvider[]>;
   metric$: Observable<Metric>;
 
   constructor(
     private store: Store<fromMetrics.State>,
-    private route: ActivatedRoute
+    private router: Router,
+    private route: ActivatedRoute,
+    private actions$: Actions
   ) {
-    this.actionsSubscription = route.params
+    this.paramsSubscription = route.params
       .pipe(
         map(params => {
           if (params.id) {
@@ -44,6 +51,15 @@ export class MetricEditorPageComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe(store);
+    this.actionsSubscription = actions$.pipe(
+        ofType<SaveMetricSuccessful>(MetricActionTypes.SaveMetricSuccessful),
+        tap(t => {
+          this.router.navigate(['..'], {
+            relativeTo: this.route
+          });
+        })
+      )
+      .subscribe();
     this.providersLoading$ = store.pipe(
       select(fromMetrics.getProvidersLoading)
     );
@@ -60,11 +76,17 @@ export class MetricEditorPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.paramsSubscription.unsubscribe();
     this.actionsSubscription.unsubscribe();
   }
 
   handleSave(metric: Metric) {
-    console.log(metric);
     this.store.dispatch(new MetricActions.SaveMetric(metric));
+  }
+
+  handleCancel() {
+    this.router.navigate(['..'], {
+      relativeTo: this.route
+    });
   }
 }

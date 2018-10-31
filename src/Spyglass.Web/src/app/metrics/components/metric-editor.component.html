@@ -48,8 +48,13 @@
   {{ providerForm?.value | json }}
 </form>
 
-  <button type="button"
-          class="btn btn-primary"
-          (click)="handleFormSubmit($event)"
-          [disabled]="!metricForm.valid || !providerForm.valid">Save</button>
+<button type="button"
+        class="btn btn-primary"
+        (click)="handleFormSubmit($event)"
+        [disabled]="!metricForm.valid || !providerForm.valid">Save</button>
 
+<button type="button"
+        class="btn btn-outline"
+        (click)="handleCancel($event)">
+  Cancel
+</button>
