@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { navigationConfig } from './nav.config';
+import * as MetricActions from './metrics/actions/metrics.actions';
+import {Store} from '@ngrx/store';
 
 @Component({
   selector: 'sg-app',
@@ -9,10 +11,16 @@ import { navigationConfig } from './nav.config';
     
   `]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   appName = 'Spyglass';
   navItems = navigationConfig;
 
-  constructor() {}
+  constructor(
+    private store: Store
+  ) {}
+
+  ngOnInit() {
+    this.store.dispatch(new MetricActions.LoadProviders());
+  }
 }
 

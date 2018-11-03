@@ -14,7 +14,7 @@ import {Metric} from '../models/metric';
       </thead>
       <tbody>
         <tr *ngFor="let metric of metrics">
-          <td>{{metric.name}}</td>
+          <td><a [routerLink]="['/metrics', metric.id]">{{metric.name}}</a></td>
           <td>{{metric.description}}</td>
           <td>{{metric.providerType}}</td>
         </tr>

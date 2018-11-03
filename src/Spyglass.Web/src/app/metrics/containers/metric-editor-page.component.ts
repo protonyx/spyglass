@@ -14,6 +14,10 @@ import {MetricActionTypes} from '../actions/metrics.actions';
 @Component({
   selector: 'sg-metric-editor-page',
   template: `
+    <a [routerLink]="['/metrics']">
+      <clr-icon shape="caret" dir="left"></clr-icon>
+      Return to Metrics
+    </a>
     <h1>Metric</h1>
     <div *ngIf="providersLoading$ | async">
       <span class="spinner">Loading...</span>
@@ -72,7 +76,6 @@ export class MetricEditorPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.dispatch(new MetricActions.LoadProviders());
   }
 
   ngOnDestroy() {

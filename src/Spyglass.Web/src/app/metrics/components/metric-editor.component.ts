@@ -55,7 +55,13 @@ export class MetricEditorComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['metric']) {
-      this.metricForm.setValue(this.metric);
+      this.metricForm.setValue({
+        name: this.metric.name,
+        description: this.metric.description,
+        providerType: this.metric.providerType
+      });
+      this.buildProviderForm(this.metric.providerType);
+      this.providerForm.setValue(this.metric.provider);
     }
   }
 
@@ -69,7 +75,7 @@ export class MetricEditorComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   handleFormSubmit(event: any) {
-    let metric = Object.assign(new Metric(), this.metricForm.value);
+    let metric = Object.assign(this.metric, this.metricForm.value);
     metric.provider = this.providerForm.value;
 
     this.save.emit(metric);

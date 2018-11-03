@@ -52,6 +52,8 @@ export class MetricsEffects {
     })
   );
 
-  constructor(private actions$: Actions,
-              private metricService: MetricService) {}
+  constructor(
+    private actions$: Actions,
+    private metricService: MetricService
+  ) {}
 }
