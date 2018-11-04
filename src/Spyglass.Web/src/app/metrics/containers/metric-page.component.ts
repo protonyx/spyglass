@@ -10,8 +10,10 @@ import {Router} from '@angular/router';
   selector: 'sg-metric-page',
   template: `
     <h1>Metrics</h1>
-    <button class="btn btn-outline" (click)="handleCreateMetric()">Create Metric</button>
-    <button class="btn btn-link" (click)="refreshMetrics()">Refresh</button>
+    <div>
+      <button class="btn btn-outline" (click)="handleCreateMetric()">Create Metric</button>
+      <button class="btn btn-link" (click)="refreshMetrics()">Refresh</button>
+    </div>
     <sg-metric-list [metrics]="metrics$ | async"
                     (createMetric)="handleCreateMetric()"></sg-metric-list>
   `,

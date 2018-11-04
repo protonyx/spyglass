@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Spyglass.SDK.Data;
 using Spyglass.SDK.Models;
+using Spyglass.SDK.Services;
 
 namespace Spyglass.Server.Controllers
 {
@@ -49,7 +50,7 @@ namespace Spyglass.Server.Controllers
             if (entity == null)
                 return NotFound();
 
-            var provider = entity.Provider;
+            var provider = ProviderService.BuildProvider(entity.ProviderType, entity.Provider);
             var value = await provider.GetValueAsync();
             
             return Ok(value);

@@ -9,7 +9,11 @@ import {
   LoadMetricsFailure,
   SaveMetric,
   SaveMetricSuccessful,
-  SaveMetricFailure, LoadProviders, LoadProvidersSuccessful, LoadProvidersFailure
+  SaveMetricFailure,
+  DeleteMetric,
+  LoadProviders,
+  LoadProvidersSuccessful,
+  LoadProvidersFailure, DeleteMetricSuccessful, DeleteMetricFailure,
 } from '../actions/metrics.actions';
 import {map, switchMap, catchError} from 'rxjs/operators';
 import {MetricService} from '../services/metric.service';
@@ -38,6 +42,28 @@ export class MetricsEffects {
         map((metric: Metric) => new SaveMetricSuccessful(metric)),
         catchError(error => of(new SaveMetricFailure(error)))
       );
+    })
+  );
+
+  @Effect()
+  saveMetric$: Observable<Action> = this.actions$.pipe(
+    ofType<SaveMetric>(MetricActionTypes.SaveMetric),
+    switchMap(action => {
+      return this.metricService.updateMetric(action.payload).pipe(
+        map((metric: Metric) => new SaveMetricSuccessful(metric)),
+        catchError(error => of(new SaveMetricFailure(error)))
+      )
+    })
+  );
+
+  @Effect()
+  deleteMetric$: Observable<Action> = this.actions$.pipe(
+    ofType<DeleteMetric>(MetricActionTypes.DeleteMetric),
+    switchMap(action => {
+      return this.metricService.deleteMetric(action.id).pipe(
+        map((metric: Metric) => new DeleteMetricSuccessful(action.id)),
+        catchError(error => of(new DeleteMetricFailure(error)))
+      )
     })
   );
 

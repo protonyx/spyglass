@@ -43,7 +43,7 @@ namespace Spyglass.Server.Converters
                     serializer.Populate(subReader, metric);
                 }
 
-                metric.Provider = (IMetricValueProvider)provider.ToObject(providerType);
+                //metric.Provider = (IMetricValueProvider)provider.ToObject(providerType);
             }
 
             return metric;
@@ -51,7 +51,8 @@ namespace Spyglass.Server.Converters
 
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(Metric);
+            return false;
+            //return objectType == typeof(Metric);
         }
     }
 }

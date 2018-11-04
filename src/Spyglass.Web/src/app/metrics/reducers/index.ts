@@ -1,8 +1,9 @@
 import {
+  DeleteMetricSuccessful,
   LoadMetricsSuccessful,
   LoadProvidersSuccessful,
   MetricActionTypes,
-  MetricsActionsUnion,
+  MetricsActionsUnion, SaveMetricSuccessful,
   SelectMetric
 } from '../actions/metrics.actions';
 import {createEntityAdapter, EntityAdapter, EntityState} from '@ngrx/entity'
@@ -63,6 +64,16 @@ export function reducer(
       return {
         ...state,
         newMetric: new Metric()
+      };
+    case MetricActionTypes.SaveMetricSuccessful:
+      return {
+        ...state,
+        metrics: metricAdapter.upsertOne((action as SaveMetricSuccessful).payload, {...state.metrics})
+      }
+    case MetricActionTypes.DeleteMetricSuccessful:
+      return {
+        ...state,
+        metrics: metricAdapter.removeOne((action as DeleteMetricSuccessful).id, {...state.metrics})
       };
     case MetricActionTypes.LoadProviders:
       return {

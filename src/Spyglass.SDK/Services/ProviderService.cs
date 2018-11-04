@@ -29,5 +29,22 @@ namespace Spyglass.SDK.Services
         {
             return ProviderMap;
         }
+        
+        public static IMetricValueProvider BuildProvider(string typeName, IDictionary<string, object> config)
+        {
+            var pt = GetProvider(typeName);
+            var obj = (IMetricValueProvider)Activator.CreateInstance(pt);
+            var props = pt.GetProperties();
+            
+            foreach (var prop in props)
+            {
+                if (config.ContainsKey(prop.Name))
+                {
+                    prop.SetValue(obj, config[prop.Name]);
+                }
+            }
+
+            return obj;
+        }
     }
 }

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import { navigationConfig } from './nav.config';
 import * as MetricActions from './metrics/actions/metrics.actions';
 import {Store} from '@ngrx/store';
+import * as fromMetrics from "./metrics/reducers";
 
 @Component({
   selector: 'sg-app',
@@ -16,7 +17,7 @@ export class AppComponent implements OnInit {
   navItems = navigationConfig;
 
   constructor(
-    private store: Store
+    private store: Store<fromMetrics.State>
   ) {}
 
   ngOnInit() {

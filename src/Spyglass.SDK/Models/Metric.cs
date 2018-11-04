@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using Spyglass.SDK.Data;
@@ -25,7 +26,7 @@ namespace Spyglass.SDK.Models
         
         public DateTime? ModifiedDate { get; set; }
 
-        public IMetricValueProvider Provider { get; set; }
+        public Dictionary<string, object> Provider { get; set; }
 
         public object GetKey()
         {

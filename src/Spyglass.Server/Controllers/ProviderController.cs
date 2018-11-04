@@ -77,23 +77,14 @@ namespace Spyglass.Server.Controllers
         [HttpPost("{name}/Test")]
         [ProducesResponseType(typeof(ICollection<MetricValue>), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(object), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> TestProviderAsync(string name, [FromBody] IDictionary<string, string> config)
+        public async Task<IActionResult> TestProviderAsync(string name, [FromBody] Dictionary<string, object> config)
         {
             var providerType = ProviderService.GetProvider(name);
 
             if (providerType == null)
                 return NotFound();
 
-            var provider = (IMetricValueProvider)Activator.CreateInstance(providerType);
-
-            var providerProperties = providerType.GetProperties();
-            foreach (var prop in providerProperties)
-            {
-                if (config.TryGetValue(prop.Name, out var value))
-                {
-                    prop.SetValue(provider, value);
-                }
-            }
+            var provider = ProviderService.BuildProvider(name, config);
 
             var val = await provider.GetValueAsync();
 

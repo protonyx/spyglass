@@ -15,13 +15,22 @@ import {MetricProvider} from '../models/metricProvider';
       </div>
       <div class="card-block">
         <div class="card-title">
-          <button type="button"
-                  class="btn btn-outline"
-                  (click)="handleEdit()">
-            <clr-icon shape="pencil"></clr-icon>
-            Edit Metric
-          </button>
-          {{ metric.description }}
+          <div>
+            <button type="button"
+                    class="btn btn-outline"
+                    (click)="handleEdit()">
+              <clr-icon shape="pencil"></clr-icon>
+              Edit
+            </button>
+            <button type="button"
+                    *ngIf="!isNew"
+                    class="btn btn-danger-outline"
+                    (click)="handleDelete()">
+              <clr-icon shape="trash"></clr-icon>
+              Delete
+            </button>
+          </div>
+          <span>{{ metric.description }}</span>
         </div>
         <div class="card-text">
           <h3>{{ metric.providerType }}</h3>
@@ -48,8 +57,10 @@ import {MetricProvider} from '../models/metricProvider';
 export class MetricDetailsComponent implements OnInit, OnChanges {
   @Input() metric: Metric;
   @Input() providers: MetricProvider[];
-  @Output() edit: EventEmitter = new EventEmitter();
+  @Output() edit: EventEmitter<string> = new EventEmitter();
+  @Output() delete: EventEmitter<string> = new EventEmitter();
 
+  isNew: boolean;
   currentProvider: MetricProvider;
 
   constructor() { }
@@ -59,12 +70,17 @@ export class MetricDetailsComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['metric'] || changes['providers']) {
+      this.isNew = !this.metric.id;
       this.currentProvider = this.providers.find(t => t.name === this.metric.providerType);
     }
   }
 
   handleEdit() {
-    this.edit.emit();
+    this.edit.emit(this.metric.id);
+  }
+
+  handleDelete() {
+    this.delete.emit(this.metric.id);
   }
 
 }

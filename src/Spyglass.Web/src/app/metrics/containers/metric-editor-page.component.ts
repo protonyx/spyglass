@@ -8,7 +8,7 @@ import {MetricProvider} from '../models/metricProvider';
 import * as fromMetrics from '../reducers';
 import {Metric} from '../models/metric';
 import * as MetricActions from '../actions/metrics.actions';
-import {LoadMetrics, SaveMetricSuccessful} from '../actions/metrics.actions';
+import {DeleteMetricSuccessful, LoadMetrics, SaveMetricSuccessful} from '../actions/metrics.actions';
 import {MetricActionTypes} from '../actions/metrics.actions';
 
 @Component({
@@ -56,14 +56,15 @@ export class MetricEditorPageComponent implements OnInit, OnDestroy {
       )
       .subscribe(store);
     this.actionsSubscription = actions$.pipe(
-        ofType<SaveMetricSuccessful>(MetricActionTypes.SaveMetricSuccessful),
-        tap(t => {
-          this.router.navigate(['..'], {
-            relativeTo: this.route
-          });
-        })
+        ofType<SaveMetricSuccessful>(
+          MetricActionTypes.SaveMetricSuccessful
+        )
       )
-      .subscribe();
+      .subscribe(a => {
+        this.router.navigate(['..'], {
+          relativeTo: this.route
+        });
+      });
     this.providersLoading$ = store.pipe(
       select(fromMetrics.getProvidersLoading)
     );

@@ -60,7 +60,8 @@ export class MetricEditorComponent implements OnInit, OnChanges, OnDestroy {
         description: this.metric.description,
         providerType: this.metric.providerType
       });
-      this.buildProviderForm(this.metric.providerType);
+      this.currentProvider = this.providers.find(t => t.name === this.metric.providerType);
+      this.providerForm = this.buildProviderForm(this.metric.providerType);
       this.providerForm.setValue(this.metric.provider);
     }
   }
@@ -71,6 +72,9 @@ export class MetricEditorComponent implements OnInit, OnChanges, OnDestroy {
 
   buildProviderForm(providerType: string) {
     const providerConfig = this.providers.find(t => t.name === providerType);
+    if (!providerConfig) {
+      return;
+    }
     return this.metricService.toFormGroup(providerConfig.properties);
   }
 
