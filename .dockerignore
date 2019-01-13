@@ -1,0 +1,9 @@
+.env
+node_modules/
+dist/
+tools/
+bin/
+obj/
+out/
+TestResults/
+**/.toolstarget

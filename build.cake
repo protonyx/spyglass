@@ -1,20 +1,30 @@
-#tool nuget:?package=Cake.CoreCLR
-#tool nuget:?package=GitVersion.CommandLine&version=4.0.0-beta0014
+// Install modules
+#module nuget:?package=Cake.DotNetTool.Module&version=0.1.0
+
+// Addins
 #addin "Cake.Incubator"
+#addin "Cake.Yarn"
+#addin "Cake.Npm"
+
+// .NET Core Global tools.
+#tool dotnet:?package=GitVersion.Tool&version=4.0.1-beta1-58
+
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
+var output = Argument("output", "./dist");
 
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
 //////////////////////////////////////////////////////////////////////
 
 // Define directories.
-var distDirectory = Directory("./dist");
+var distDirectory = Directory(output);
 var sln = File("./src/Spyglass.sln");
+var web = Directory("./src/Spyglass.Web");
 
 GitVersion version;
 
@@ -30,29 +40,29 @@ Task("GitVersion")
         Information(version.Dump());
     });
 
-Task("Clean")
+Task("Clean-Solution")
     .Does(() =>
-{
-    CleanDirectory(distDirectory);
-    DotNetCoreClean(sln);
-});
+    {
+        CleanDirectory(distDirectory);
+        DotNetCoreClean(sln);
+    });
 
-Task("Restore")
-    .IsDependentOn("Clean")
+Task("Restore-Solution")
     .Does(() =>
     {
         DotNetCoreRestore(sln);
     });
 
-Task("Build")
-    .IsDependentOn("Restore")
+Task("Build-Solution")
+    .IsDependentOn("Clean-Solution")
+    .IsDependentOn("Restore-Solution")
     .IsDependentOn("GitVersion")
     .Does(() =>
-{
-    var msbuild = new DotNetCoreMSBuildSettings();
+    {
+        var msbuild = new DotNetCoreMSBuildSettings();
         msbuild = msbuild
             .SetVersion(version.AssemblySemVer)
-            .SetFileVersion(version.SemVer)
+            .SetFileVersion(version.AssemblySemFileVer)
             .SetInformationalVersion(version.InformationalVersion);
 
         DotNetCoreBuild(sln, new DotNetCoreBuildSettings()
@@ -61,18 +71,17 @@ Task("Build")
             NoRestore = true,
             MSBuildSettings = msbuild
         });
-});
+    });
 
-Task("Test")
-    .IsDependentOn("Build")
+Task("Test-Solution")
+    .IsDependentOn("Build-Solution")
     .Does(() =>
     {
         var projects = GetFiles("./src/*.Tests/*.csproj");
         var settings = new DotNetCoreTestSettings()
         {
             Configuration = configuration,
-            NoBuild = true,
-            ArgumentCustomization = args => args.Append("--no-restore")
+            NoBuild = true
         };
 
         foreach (var project in projects)
@@ -83,8 +92,21 @@ Task("Test")
         }
     });
 
-  Task("Package")
-    .IsDependentOn("Build")
+Task("Publish-Solution")
+    .IsDependentOn("Build-Solution")
+    .Does(() =>
+    {
+        DotNetCorePublish("./src/Spyglass.Server/Spyglass.Server.csproj",
+            new DotNetCorePublishSettings()
+            {
+                Configuration = configuration,
+                OutputDirectory = distDirectory,
+                NoBuild = true
+            });
+    });
+
+Task("Package-Solution")
+    .IsDependentOn("Build-Solution")
     .Does(() =>
     {
         var msbuild = new DotNetCoreMSBuildSettings();
@@ -104,18 +126,70 @@ Task("Test")
         DotNetCorePack(sln, settings);
     });
 
-  Task("Publish")
-    .IsDependentOn("Build")
+Task("Clean-Web")
     .Does(() =>
     {
-        DotNetCorePublish("./src/Spyglass.Server/Spyglass.Server.csproj",
-          new DotNetCorePublishSettings()
-          {
-              Configuration = configuration,
-              OutputDirectory = distDirectory,
-              NoBuild = true
-          });
+        CleanDirectory($"{web.Path}/dist");
     });
+
+Task("Restore-Web")
+    .Does(() =>
+    {
+        Yarn.FromPath(web).Install();
+    });
+
+Task("Build-Web")
+    .IsDependentOn("Clean-Web")
+    .IsDependentOn("Restore-Web")
+    .Does(() =>
+    {
+        NpmRunScript("build", opt =>
+        {
+            opt.Arguments.Add("--prod");
+            opt.Arguments.Add("--progress false");
+            opt.FromPath(web);
+        });
+    });
+
+Task("Test-Web")
+    .IsDependentOn("Build-Web")
+    .Does(() =>
+    {
+        NpmRunScript("test", opt =>
+        {
+            opt.FromPath(web);
+        });
+    });
+
+Task("Publish-Web")
+    .IsDependentOn("Build-Web")
+    .Does(() =>
+    {
+        var webFiles = GetFiles($"{web.Path}/dist/*");
+        CreateDirectory($"{distDirectory.Path}/wwwroot");
+        CopyFiles(webFiles, $"{distDirectory.Path}/wwwroot");
+        // CopyDirectory($"{web.Path}/dist/assets/", $"{distDirectory.Path}/wwwroot/assets");
+    });
+
+Task("Clean")
+    .IsDependentOn("Clean-Solution")
+    .IsDependentOn("Clean-Web");
+
+Task("Restore")
+    .IsDependentOn("Restore-Solution")
+    .IsDependentOn("Restore-Web");
+
+Task("Build")
+    .IsDependentOn("Build-Solution")
+    .IsDependentOn("Build-Web");
+
+Task("Test")
+    .IsDependentOn("Test-Solution")
+    .IsDependentOn("Test-Web");
+
+Task("Publish")
+    .IsDependentOn("Publish-Solution")
+    .IsDependentOn("Publish-Web");
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS

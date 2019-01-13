@@ -4,6 +4,7 @@ using System.Reflection;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -60,7 +61,8 @@ namespace Spyglass.Server
                     Title = "Spyglass API",
                     Version = "v1"
                 });
-
+                c.DescribeAllEnumsAsStrings();
+                c.DescribeStringEnumsInCamelCase();
                 c.IncludeXmlComments(Path.ChangeExtension(Assembly.GetEntryAssembly().Location, "xml"));
 
                 c.MapType<Guid>(() => new Schema() { Type = "string (Guid)"});
@@ -79,11 +81,17 @@ namespace Spyglass.Server
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
 
             app.UseCors(builder => builder
                         .AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader());
+
+            app.UseMvc();
 
             app.UseSwagger();
             app.UseSwaggerUI(c => 
@@ -91,7 +99,10 @@ namespace Spyglass.Server
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Spyglass v1");
             });
 
-            app.UseMvc();
+            app.UseRewriter(new RewriteOptions()
+                .Add(new RedirectNonFileRequestRule()));
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
         }
     }
 }

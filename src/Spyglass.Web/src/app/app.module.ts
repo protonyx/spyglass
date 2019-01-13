@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import {ClarityModule, ClrFormsNextModule} from '@clr/angular';
+import {ClarityModule} from '@clr/angular';
 import { HomeComponent } from './home/home.component'
 import {AppRouteModule} from './app-route.module';
 
@@ -43,7 +43,6 @@ import { MetricEditorComponent } from './metrics/components/metric-editor.compon
     BrowserModule,
     BrowserAnimationsModule,
     ClarityModule,
-    ClrFormsNextModule,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
