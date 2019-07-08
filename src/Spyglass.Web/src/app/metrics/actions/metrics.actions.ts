@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
-import {Metric} from '../models/metric';
-import {MetricProvider} from '../models/metricProvider';
+
+import { Metric } from '../models/metric';
+import { MetricProvider } from '../models/metricProvider';
 
 export enum MetricActionTypes {
   LoadMetrics = '[Metrics Page] Load Metrics',

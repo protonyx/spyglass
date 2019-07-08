@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import * as MetricActions from "../actions/metrics.actions";
-import {select, Store} from "@ngrx/store";
-import {Observable} from "rxjs";
-import * as fromMetrics from "../reducers";
-import {Metric} from "../models/metric";
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+
+import * as MetricActions from '../actions/metrics.actions';
+import { Metric } from '../models/metric';
+import * as fromMetrics from '../reducers';
 
 @Component({
   selector: 'sg-metric-page',

@@ -1,9 +1,11 @@
-import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
-import {NavItem} from "./navItem";
-import {Observable} from "rxjs";
-import {select, Store} from "@ngrx/store";
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+
 import * as fromRoot from '../reducers/index';
+
 import * as LayoutActions from './layout.actions';
+import { NavItem } from './navItem';
 
 @Component({
   selector: 'sg-layout',
@@ -15,12 +17,12 @@ import * as LayoutActions from './layout.actions';
       <sg-header
         [appName]="appName">
       </sg-header>
-      
+
       <div class="content-container">
         <div class="content-area">
           <router-outlet></router-outlet>
         </div>
-        
+
         <sg-sidenav></sg-sidenav>
       </div>
     </clr-main-container>
@@ -70,11 +72,11 @@ export class LayoutComponent implements OnInit {
           <span class="clr-icon brand-logo">
             <clr-icon shape="search"></clr-icon>
           </span>
-          <span class="title">{{appName}}</span>
+          <span class="title">{{ appName }}</span>
         </a>
       </div>
       <div class="header-nav">
-        
+
       </div>
       <div class="header-actions">
         <a href="javascript://" class="nav-link nav-icon">

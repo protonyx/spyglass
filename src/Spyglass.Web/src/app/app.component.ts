@@ -1,15 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import { navigationConfig } from './nav.config';
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+
 import * as MetricActions from './metrics/actions/metrics.actions';
-import {Store} from '@ngrx/store';
-import * as fromMetrics from "./metrics/reducers";
+import * as fromMetrics from './metrics/reducers';
+import { navigationConfig } from './nav.config';
 
 @Component({
   selector: 'sg-app',
   template: `
     <sg-layout [appName]="appName" [navItems]="navItems"></sg-layout>`,
   styles: [`
-    
+
   `]
 })
 export class AppComponent implements OnInit {

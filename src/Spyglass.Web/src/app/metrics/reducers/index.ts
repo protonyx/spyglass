@@ -1,3 +1,6 @@
+import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
+
 import {
   DeleteMetricSuccessful,
   LoadMetricsSuccessful,
@@ -6,23 +9,21 @@ import {
   MetricsActionsUnion, SaveMetricSuccessful,
   SelectMetric
 } from '../actions/metrics.actions';
-import {createEntityAdapter, EntityAdapter, EntityState} from '@ngrx/entity'
-import {createFeatureSelector, createSelector} from '@ngrx/store';
-import {Metric} from '../models/metric';
-import {MetricProvider} from '../models/metricProvider';
+import { Metric } from '../models/metric';
+import { MetricProvider } from '../models/metricProvider';
 
 export interface State {
-  newMetric: Metric | null,
-  metricsLoading: boolean,
-  metrics: EntityState<Metric>,
-  selectedMetricId: string | null,
-  providersLoading: boolean,
-  providers: MetricProvider[]
+  newMetric: Metric | null;
+  metricsLoading: boolean;
+  metrics: EntityState<Metric>;
+  selectedMetricId: string | null;
+  providersLoading: boolean;
+  providers: MetricProvider[];
 }
 
 export const metricAdapter: EntityAdapter<Metric> = createEntityAdapter<Metric>({
   selectId: (group: Metric) => group.id,
-  sortComparer: false,
+  sortComparer: false
 });
 
 export const initialState: State = {
@@ -69,7 +70,7 @@ export function reducer(
       return {
         ...state,
         metrics: metricAdapter.upsertOne((action as SaveMetricSuccessful).payload, {...state.metrics})
-      }
+      };
     case MetricActionTypes.DeleteMetricSuccessful:
       return {
         ...state,

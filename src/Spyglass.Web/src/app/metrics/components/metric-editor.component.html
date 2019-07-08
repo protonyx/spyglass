@@ -37,7 +37,7 @@
   <div *ngIf="currentProvider">
     <ng-container *ngFor="let prop of currentProvider.properties">
       <clr-input-container>
-        <label [attr.for]="prop.propertyName">{{prop.propertyName}}</label>
+        <label [attr.for]="prop.propertyName">{{ prop.propertyName }}</label>
         <input clrInput
                [name]="prop.propertyName"
                [formControlName]="prop.propertyName"

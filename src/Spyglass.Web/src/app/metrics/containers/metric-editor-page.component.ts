@@ -1,15 +1,16 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {select, Store} from '@ngrx/store';
-import {Actions, ofType} from '@ngrx/effects';
-import {map, tap} from 'rxjs/operators';
-import {Observable, Subscription} from 'rxjs';
-import {MetricProvider} from '../models/metricProvider';
-import * as fromMetrics from '../reducers';
-import {Metric} from '../models/metric';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Actions, ofType } from '@ngrx/effects';
+import { select, Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+
 import * as MetricActions from '../actions/metrics.actions';
-import {DeleteMetricSuccessful, LoadMetrics, SaveMetricSuccessful} from '../actions/metrics.actions';
-import {MetricActionTypes} from '../actions/metrics.actions';
+import { DeleteMetricSuccessful, LoadMetrics, SaveMetricSuccessful } from '../actions/metrics.actions';
+import { MetricActionTypes } from '../actions/metrics.actions';
+import { Metric } from '../models/metric';
+import { MetricProvider } from '../models/metricProvider';
+import * as fromMetrics from '../reducers';
 
 @Component({
   selector: 'sg-metric-editor-page',
@@ -22,8 +23,8 @@ import {MetricActionTypes} from '../actions/metrics.actions';
     <div *ngIf="providersLoading$ | async">
       <span class="spinner">Loading...</span>
     </div>
-    <sg-metric-editor 
-      [metric]="metric$ | async" 
+    <sg-metric-editor
+      [metric]="metric$ | async"
       [providers]="providers$ | async"
       (save)="handleSave($event)"
       (cancel)="handleCancel()">

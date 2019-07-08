@@ -1,11 +1,12 @@
-import {RouterModule, Routes} from '@angular/router';
-import {NgModule} from '@angular/core';
-import {HomeComponent} from './home/home.component';
-import {NotFoundComponent} from './layout/not-found.component';
-import {MetricPageComponent} from "./metrics/containers/metric-page.component";
-import {MetricExistsGuard} from './metrics/guards/metric-exists.guard';
-import {MetricDetailsPageComponent} from './metrics/containers/metric-details-page.component';
-import {MetricEditorPageComponent} from './metrics/containers/metric-editor-page.component';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+import { HomeComponent } from './home/home.component';
+import { NotFoundComponent } from './layout/not-found.component';
+import { MetricDetailsPageComponent } from './metrics/containers/metric-details-page.component';
+import { MetricEditorPageComponent } from './metrics/containers/metric-editor-page.component';
+import { MetricPageComponent } from './metrics/containers/metric-page.component';
+import { MetricExistsGuard } from './metrics/guards/metric-exists.guard';
 
 const appRouteModule: Routes = [
   {

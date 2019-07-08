@@ -1,21 +1,22 @@
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable, Subscription} from 'rxjs';
-import {Metric} from '../models/metric';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Actions, ofType } from '@ngrx/effects';
+import { select, Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import * as MetricActions from '../actions/metrics.actions';
+import { SaveMetricSuccessful } from '../actions/metrics.actions';
+import { DeleteMetricSuccessful } from '../actions/metrics.actions';
+import { MetricActionTypes } from '../actions/metrics.actions';
+import { Metric } from '../models/metric';
+import { MetricProvider } from '../models/metricProvider';
 import * as fromMetrics from '../reducers';
-import {select, Store} from '@ngrx/store';
-import {ActivatedRoute, Router} from '@angular/router';
-import {map} from 'rxjs/operators';
-import {MetricProvider} from '../models/metricProvider';
-import {Actions, ofType} from '@ngrx/effects';
-import {SaveMetricSuccessful} from '../actions/metrics.actions';
-import {DeleteMetricSuccessful} from '../actions/metrics.actions';
-import {MetricActionTypes} from '../actions/metrics.actions';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <sg-metric-details 
+    <sg-metric-details
       [metric]="metric$ | async"
       [providers]="providers$ | async"
       (edit)="handleEdit($event)"
@@ -69,7 +70,7 @@ export class MetricDetailsPageComponent implements OnDestroy {
   handleEdit(id: string) {
     this.router.navigate(['edit'], {
       relativeTo: this.route
-    })
+    });
   }
 
   handleDelete(id: string) {

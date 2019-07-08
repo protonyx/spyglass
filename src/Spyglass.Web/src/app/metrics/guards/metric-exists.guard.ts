@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angular/router';
+import { select, Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
-import {filter, take, map, switchMap, tap, catchError} from 'rxjs/operators';
+import { catchError, filter, map, switchMap, take, tap } from 'rxjs/operators';
+
 import { LoadMetricsSuccessful } from '../actions/metrics.actions';
 import * as fromMetrics from '../reducers';
-import {select, Store} from "@ngrx/store";
-import {MetricService} from '../services/metric.service';
+import { MetricService } from '../services/metric.service';
 
 @Injectable()
 export class MetricExistsGuard implements CanActivate {
@@ -27,7 +28,7 @@ export class MetricExistsGuard implements CanActivate {
       select(fromMetrics.getMetricEntities),
       map(entities => !!entities[id]),
       take(1)
-    )
+    );
   }
 
   hasMetricInApi(id: string): Observable<boolean> {
@@ -38,19 +39,19 @@ export class MetricExistsGuard implements CanActivate {
       catchError(() => {
         return of(false);
       })
-    )
+    );
   }
 
   hasMetric(id: string): Observable<boolean> {
     return this.hasMetricInStore(id).pipe(
-      switchMap((inStore) => {
+      switchMap(inStore => {
         if (inStore) {
           return of(inStore);
         }
 
         return this.hasMetricInApi(id);
       })
-    )
+    );
   }
 
   canActivate(

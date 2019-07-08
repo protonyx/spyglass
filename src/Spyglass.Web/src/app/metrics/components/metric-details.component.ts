@@ -1,6 +1,7 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {Metric} from '../models/metric';
-import {MetricProvider} from '../models/metricProvider';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+
+import { Metric } from '../models/metric';
+import { MetricProvider } from '../models/metricProvider';
 
 @Component({
   selector: 'sg-metric-details',

@@ -1,9 +1,9 @@
-import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnDestroy} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Metric} from '../models/metric';
-import {MetricProvider} from '../models/metricProvider';
-import {Subscription} from 'rxjs';
-import {MetricService} from '../services/metric.service';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } frr, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
+
+import { Metric } from '../models/metric';
+import { MetricProvider } from '../models/metricProvider';
+import { MetricService } from '../services/metric.service';
 
 @Component({
   selector: 'sg-metric-editor',
@@ -15,7 +15,7 @@ import {MetricService} from '../services/metric.service';
       max-width: 500px;
       width: 100%;
     }
-      
+
     .full-width {
       width: 100%;
     }
@@ -28,7 +28,7 @@ export class MetricEditorComponent implements OnInit, OnChanges, OnDestroy {
   @Output() save = new EventEmitter<Metric>();
   @Output() cancel = new EventEmitter();
 
-  public currentProvider: MetricProvider;
+  currentProvider: MetricProvider;
 
   metricForm = this.fb.group({
     name: ['', Validators.required],
@@ -50,7 +50,7 @@ export class MetricEditorComponent implements OnInit, OnChanges, OnDestroy {
       .valueChanges.subscribe(val => {
         this.currentProvider = this.providers.find(t => t.name === val);
         this.providerForm = this.buildProviderForm(val);
-    })
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -75,11 +75,12 @@ export class MetricEditorComponent implements OnInit, OnChanges, OnDestroy {
     if (!providerConfig) {
       return;
     }
+
     return this.metricService.toFormGroup(providerConfig.properties);
   }
 
   handleFormSubmit(event: any) {
-    let metric = Object.assign(this.metric, this.metricForm.value);
+    const metric = {...this.metric, ...this.metricForm.value};
     metric.provider = this.providerForm.value;
 
     this.save.emit(metric);

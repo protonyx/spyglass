@@ -1,12 +1,12 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {Metric} from '../models/metric';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 
-import {environment} from '../../../environments/environment';
-import {MetricProvider} from '../models/metricProvider';
-import {ModelPropertyMetadata} from "../models/modelPropertyMetadata";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import { environment } from '../../../environments/environment';
+import { Metric } from '../models/metric';
+import { MetricProvider } from '../models/metricProvider';
+import { ModelPropertyMetadata } from '../models/modelPropertyMetadata';
 
 @Injectable()
 export class MetricService {
@@ -50,7 +50,7 @@ export class MetricService {
   }
 
   toFormGroup(config: ModelPropertyMetadata[]) {
-    let group: any = {};
+    const group: any = {};
 
     config.forEach(c => {
       group[c.propertyName] = c.isRequired ? new FormControl('', Validators.required)
