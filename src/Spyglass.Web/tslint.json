@@ -296,6 +296,6 @@
     "use-output-property-decorator": true,
 
     "directive-selector": [true, "attribute", ["sg"], "camelCase"],
-    "component-selector": [true, "element", ["sg"], "kebab-case"],
+    "component-selector": [true, "element", ["sg"], "kebab-case"]
   }
 }
