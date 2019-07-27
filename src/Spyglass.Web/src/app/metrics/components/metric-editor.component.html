@@ -1,61 +1,62 @@
-<form clrForm
-      class="metric-form"
-      [formGroup]="metricForm"
-      (submit)="handleFormSubmit($event)">
-  <clr-input-container>
-    <label for="name">Name</label>
-    <input clrInput
-           required
-           formControlName="name"
-           placeholder="Name">
-  </clr-input-container>
+<form clrForm class="metric-form" [formGroup]="metricForm" (submit)="handleFormSubmit($event)">
+    <clr-input-container>
+        <label for="name">Name</label>
+        <input clrInput required formControlName="name" placeholder="Name" />
+    </clr-input-container>
 
-  <clr-input-container>
-    <label for="description">Description</label>
-    <textarea clrInput
-              formControlName="description"
-              placeholder="Description"></textarea>
-  </clr-input-container>
+    <clr-input-container>
+        <label for="description">Description</label>
+        <textarea clrInput formControlName="description" placeholder="Description"></textarea>
+    </clr-input-container>
 
-  <clr-select-container>
-    <label for="metricType">Metric Type</label>
-    <select clrSelect
-            formControlName="providerType">
-      <option *ngFor="let provider of providers" [value]="provider.name">{{ provider.name }}</option>
-    </select>
-  </clr-select-container>
+    <clr-select-container>
+        <label for="metricType">Metric Type</label>
+        <select clrSelect formControlName="providerType">
+            <option *ngFor="let provider of providers" [value]="provider.name">{{ provider.name }}</option>
+        </select>
+    </clr-select-container>
 
-  {{ metricForm?.value | json }}
+    <h2>Options</h2>
+
+    <div *ngIf="currentProvider" formGroupName="provider">
+        <ng-container *ngFor="let prop of currentProvider.properties">
+            <clr-input-container>
+                <label [attr.for]="prop.propertyName">{{ prop.propertyName }}</label>
+                <input
+                    clrInput
+                    [name]="prop.propertyName"
+                    [formControlName]="prop.propertyName"
+                    [placeholder]="prop.placeholder"
+                />
+            </clr-input-container>
+        </ng-container>
+    </div>
 </form>
 
-<form clrForm
-  [formGroup]="providerForm">
-  <h2>Provider</h2>
+<div *ngIf="testResults && testResults.length > 0">
+    <h2>Test Results</h2>
 
-  {{ currentProvider | json }}
+    <clr-datagrid>
+        <clr-dg-column [clrDgField]="'name'">Name</clr-dg-column>
+        <clr-dg-column [clrDgField]="'value'">Value</clr-dg-column>
+        <clr-dg-column [clrDgField]="'units'">Units</clr-dg-column>
 
-  <div *ngIf="currentProvider">
-    <ng-container *ngFor="let prop of currentProvider.properties">
-      <clr-input-container>
-        <label [attr.for]="prop.propertyName">{{ prop.propertyName }}</label>
-        <input clrInput
-               [name]="prop.propertyName"
-               [formControlName]="prop.propertyName"
-               [placeholder]="prop.placeholder">
-      </clr-input-container>
-    </ng-container>
-  </div>
+        <clr-dg-row *ngFor="let tr of testResults">
+            <clr-dg-cell>{{ tr.name }}</clr-dg-cell>
+            <clr-dg-cell>{{ tr.value }}</clr-dg-cell>
+            <clr-dg-cell>{{ tr.units }}</clr-dg-cell>
+        </clr-dg-row>
+    </clr-datagrid>
+</div>
 
-  {{ providerForm?.value | json }}
-</form>
+<button type="button" class="btn btn-primary" (click)="handleFormSubmit($event)" [disabled]="!metricForm.valid">
+    Save
+</button>
 
-<button type="button"
-        class="btn btn-primary"
-        (click)="handleFormSubmit($event)"
-        [disabled]="!metricForm.valid || !providerForm.valid">Save</button>
+<button type="button" class="btn btn-secondary" (click)="handleTestMetric()">
+    Test
+</button>
 
-<button type="button"
-        class="btn btn-outline"
-        (click)="handleCancel($event)">
-  Cancel
+<button type="button" class="btn btn-outline" (click)="handleCancel($event)">
+    Cancel
 </button>

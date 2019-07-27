@@ -1,8 +1,8 @@
 import { ModelPropertyMetadata } from './modelPropertyMetadata';
 
 export class MetricProvider {
-  name: string;
-  description: string;
+    name: string;
+    description: string;
 
-  properties: ModelPropertyMetadata[];
+    properties: ModelPropertyMetadata[];
 }

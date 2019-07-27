@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
@@ -8,42 +8,43 @@ import { Metric } from '../models/metric';
 import * as fromMetrics from '../reducers';
 
 @Component({
-  selector: 'sg-metric-page',
-  template: `
-    <h1>Metrics</h1>
-    <div>
-      <button class="btn btn-outline" (click)="handleCreateMetric()">Create Metric</button>
-      <button class="btn btn-link" (click)="refreshMetrics()">Refresh</button>
-    </div>
-    <sg-metric-list [metrics]="metrics$ | async"
-                    (createMetric)="handleCreateMetric()"></sg-metric-list>
-  `,
-  styles: []
+    selector: 'sg-metric-page',
+    template: `
+        <h1>Metrics</h1>
+        <div>
+            <button class="btn btn-primary" (click)="handleCreateMetric()">
+                <clr-icon shape="plus"></clr-icon>
+                Create Metric
+            </button>
+            <button class="btn btn-secondary" (click)="refreshMetrics()">
+                <clr-icon shape="refresh"></clr-icon>
+                Refresh
+            </button>
+        </div>
+        <sg-metric-list [metrics]="metrics$ | async"></sg-metric-list>
+    `
 })
 export class MetricPageComponent implements OnInit {
-  metrics$: Observable<Metric[]>;
-  loading$: Observable<boolean>;
+    metrics$: Observable<Metric[]>;
+    loading$: Observable<boolean>;
 
-  constructor(
-    private store: Store<fromMetrics.State>,
-    private router: Router
-  ) {
-    this.metrics$ = store.pipe(
-      select(fromMetrics.getAllMetrics)
-    );
-    this.loading$ = store.pipe(select(fromMetrics.getMetricsLoading));
-  }
+    constructor(private store: Store<fromMetrics.State>, private router: Router, private route: ActivatedRoute) {
+        this.metrics$ = store.pipe(select(fromMetrics.getAllMetrics));
+        this.loading$ = store.pipe(select(fromMetrics.getMetricsLoading));
+    }
 
-  handleCreateMetric() {
-    this.router.navigate(['metrics', 'new']);
-  }
+    handleCreateMetric(): void {
+        this.router.navigate(['new'], {
+            relativeTo: this.route
+        });
+    }
 
-  ngOnInit() {
-    this.store.dispatch(new MetricActions.LoadProviders());
-    this.refreshMetrics();
-  }
+    ngOnInit(): void {
+        this.store.dispatch(new MetricActions.LoadProviders());
+        this.refreshMetrics();
+    }
 
-  refreshMetrics() {
-    this.store.dispatch(new MetricActions.LoadMetrics());
-  }
+    refreshMetrics(): void {
+        this.store.dispatch(new MetricActions.LoadMetrics());
+    }
 }

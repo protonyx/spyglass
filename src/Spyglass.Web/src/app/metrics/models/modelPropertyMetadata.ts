@@ -1,9 +1,9 @@
 export class ModelPropertyMetadata {
-  propertyName: string;
-  displayName: string;
-  description: string;
-  isRequired: boolean;
-  modelType: string;
-  placeholder: string;
-  order: number;
+    propertyName: string;
+    displayName: string;
+    description: string;
+    isRequired: boolean;
+    modelType: string;
+    placeholder: string;
+    order: number;
 }

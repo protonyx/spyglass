@@ -37,46 +37,46 @@ import { CustomRouterStateSerializer } from './shared/utils';
 // Services
 
 @NgModule({
-  imports: [
-    AppRouteModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    ClarityModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    StoreModule.forRoot(reducers, { metaReducers }),
-    StoreRouterConnectingModule.forRoot({
-      /*
+    imports: [
+        AppRouteModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        ClarityModule,
+        RouterModule,
+        FormsModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        StoreModule.forRoot(reducers, { metaReducers }),
+        StoreRouterConnectingModule.forRoot({
+            /*
         They stateKey defines the name of the state used by the router-store reducer.
         This matches the key defined in the map of reducers
       */
-      stateKey: 'router'
-    }),
-    !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([AppEffects, MetricsEffects])
-  ],
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    MetricDetailsComponent,
-    NotFoundComponent,
-    MetricPageComponent,
-    LayoutComponent,
-    HeaderComponent,
-    SideNavComponent,
-    MetricListComponent,
-    MetricDetailsPageComponent,
-    MetricEditorPageComponent,
-    MetricEditorComponent
-  ],
-  providers: [
-    MetricService,
-    MetricExistsGuard,
-    { provide: RouterStateSerializer, useClass: CustomRouterStateSerializer }
-  ],
-  entryComponents: [ ],
-  bootstrap: [AppComponent]
+            stateKey: 'router'
+        }),
+        !environment.production ? StoreDevtoolsModule.instrument() : [],
+        EffectsModule.forRoot([AppEffects, MetricsEffects])
+    ],
+    declarations: [
+        AppComponent,
+        HomeComponent,
+        MetricDetailsComponent,
+        NotFoundComponent,
+        MetricPageComponent,
+        LayoutComponent,
+        HeaderComponent,
+        SideNavComponent,
+        MetricListComponent,
+        MetricDetailsPageComponent,
+        MetricEditorPageComponent,
+        MetricEditorComponent
+    ],
+    providers: [
+        MetricService,
+        MetricExistsGuard,
+        { provide: RouterStateSerializer, useClass: CustomRouterStateSerializer }
+    ],
+    entryComponents: [],
+    bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

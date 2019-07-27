@@ -2,41 +2,37 @@ import { Action } from '@ngrx/store';
 
 import { LayoutActionsUnion, LayoutActionTypes } from './layout.actions';
 
-
 export interface State {
-  showSidenav: boolean;
+    showSidenav: boolean;
 }
 
 export const initialState: State = {
-  showSidenav: true
+    showSidenav: true
 };
 
-export function reducer(
-  state = initialState,
-  action: LayoutActionsUnion
-): State {
-  switch (action.type) {
-    case LayoutActionTypes.CloseSidenav:
-      return {
-        ...state,
-        showSidenav: false
-      };
+export function reducer(state = initialState, action: LayoutActionsUnion): State {
+    switch (action.type) {
+        case LayoutActionTypes.CloseSidenav:
+            return {
+                ...state,
+                showSidenav: false
+            };
 
-    case LayoutActionTypes.OpenSidenav:
-      return {
-        ...state,
-        showSidenav: true
-      };
+        case LayoutActionTypes.OpenSidenav:
+            return {
+                ...state,
+                showSidenav: true
+            };
 
-    case LayoutActionTypes.ToggleSidenav:
-      return {
-        ...state,
-        showSidenav: !state.showSidenav
-      };
+        case LayoutActionTypes.ToggleSidenav:
+            return {
+                ...state,
+                showSidenav: !state.showSidenav
+            };
 
-    default:
-      return state;
-  }
+        default:
+            return state;
+    }
 }
 
 export const getShowSidenav = (state: State) => state.showSidenav;

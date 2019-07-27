@@ -5,21 +5,18 @@ import { Observable } from 'rxjs';
 import { MetricsEffects } from './metrics.effects';
 
 describe('MetricsService', () => {
-  const actions$: Observable<any>;
-  const effects: MetricsEffects;
+    const actions$: Observable<any>;
+    const effects: MetricsEffects;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        MetricsEffects,
-        provideMockActions(() => actions$)
-      ]
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [MetricsEffects, provideMockActions(() => actions$)]
+        });
+
+        effects = TestBed.get(MetricsEffects);
     });
 
-    effects = TestBed.get(MetricsEffects);
-  });
-
-  it('should be created', () => {
-    expect(effects).toBeTruthy();
-  });
+    it('should be created', () => {
+        expect(effects).toBeTruthy();
+    });
 });

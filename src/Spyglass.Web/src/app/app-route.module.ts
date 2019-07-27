@@ -9,36 +9,34 @@ import { MetricPageComponent } from './metrics/containers/metric-page.component'
 import { MetricExistsGuard } from './metrics/guards/metric-exists.guard';
 
 const appRouteModule: Routes = [
-  {
-    path: '',
-    component: HomeComponent
-  },
-  {
-    path: 'metrics',
-    children: [
-      { path: '', component: MetricPageComponent },
-      {
-        path: 'new',
-        component: MetricEditorPageComponent
-      },
-      {
-        path: ':id/edit',
-        component: MetricEditorPageComponent,
-        canActivate: [MetricExistsGuard]
-      },
-      {
-        path: ':id',
-        component: MetricDetailsPageComponent,
-        canActivate: [MetricExistsGuard]
-      }
-    ]
-  },
-  { path: '**', component: NotFoundComponent }
+    {
+        path: '',
+        component: HomeComponent
+    },
+    {
+        path: 'metrics',
+        children: [
+            { path: '', component: MetricPageComponent },
+            {
+                path: 'new',
+                component: MetricEditorPageComponent
+            },
+            {
+                path: ':id/edit',
+                component: MetricEditorPageComponent,
+                canActivate: [MetricExistsGuard]
+            },
+            {
+                path: ':id',
+                component: MetricDetailsPageComponent,
+                canActivate: [MetricExistsGuard]
+            }
+        ]
+    },
+    { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forRoot(appRouteModule)
-  ]
+    imports: [RouterModule.forRoot(appRouteModule)]
 })
-export class AppRouteModule { }
+export class AppRouteModule {}
