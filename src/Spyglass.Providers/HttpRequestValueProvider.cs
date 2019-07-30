@@ -52,7 +52,7 @@ namespace Spyglass.SDK.Providers
             metrics.Add(new MetricValue
             {
               Name = "Status Code",
-              Value = response.StatusCode
+              Value = (float) response.StatusCode
             });
             return metrics;
         }

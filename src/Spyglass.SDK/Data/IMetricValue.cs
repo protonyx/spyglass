@@ -6,7 +6,7 @@ namespace Spyglass.SDK.Data
     {
         string Name { get; set; }
 
-        object Value { get; set; }
+        double Value { get; set; }
 
         string Units { get; set; }
     }

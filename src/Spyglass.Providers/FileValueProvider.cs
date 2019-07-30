@@ -33,7 +33,7 @@ namespace Spyglass.SDK.Providers
             yield return new MetricValue
             {
                 Name = "Exists",
-                Value = file.Exists,
+                Value = file.Exists ? 1 : 0,
                 Units = ""
             };
 
@@ -43,7 +43,7 @@ namespace Spyglass.SDK.Providers
             yield return new MetricValue
             {
                 Name = "Since Last Modified",
-                Value = DateTime.Now - file.LastWriteTime,
+                Value = (DateTime.Now - file.LastWriteTime).TotalSeconds,
                 Units = "Seconds"
             };
 

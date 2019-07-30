@@ -66,7 +66,7 @@ namespace Spyglass.SDK.Providers
             metrics.Add(new MetricValue
             {
                 Name = "Pingable",
-                Value = pingable
+                Value = pingable ? 1 : 0
             });
             return metrics;
         }
