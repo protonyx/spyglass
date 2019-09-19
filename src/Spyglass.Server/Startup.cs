@@ -13,6 +13,7 @@ using Spyglass.SDK.Data;
 using Spyglass.Server.Converters;
 using Spyglass.Server.Services;
 using Spyglass.Data.MongoDb;
+using Spyglass.Server.MappingProfiles;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Spyglass.Server
@@ -49,7 +50,7 @@ namespace Spyglass.Server
             // AutoMapper
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.AddProfiles(Assembly.GetEntryAssembly());
+                cfg.AddProfile<ModelMetadataProfile>();
             });
             var mapper = config.CreateMapper();
             services.AddSingleton<IMapper>((sp) => mapper);
@@ -64,8 +65,6 @@ namespace Spyglass.Server
                 c.DescribeAllEnumsAsStrings();
                 c.DescribeStringEnumsInCamelCase();
                 c.IncludeXmlComments(Path.ChangeExtension(Assembly.GetEntryAssembly().Location, "xml"));
-
-                c.MapType<Guid>(() => new Schema() { Type = "string (Guid)"});
             });
             
         }
@@ -73,10 +72,6 @@ namespace Spyglass.Server
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            // Setup logging
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
