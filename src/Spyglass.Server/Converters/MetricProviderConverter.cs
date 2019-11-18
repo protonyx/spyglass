@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Spyglass.SDK.Data;
 using Spyglass.SDK.Models;
@@ -7,51 +8,30 @@ using Spyglass.SDK.Services;
 
 namespace Spyglass.Server.Converters
 {
-    public class MetricProviderConverter : JsonConverter
+    public class MetricProviderConverter : JsonConverter<Metric>
     {
-        public override bool CanWrite => false;
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override Metric Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            throw new NotImplementedException();
+//            var doc = JsonDocument.ParseValue(ref reader);
+//
+//            var props = doc.RootElement.EnumerateObject().ToList();
+//
+//            var typeProperty = props.First(t => t.Name.Equals(nameof(Metric.ProviderType), StringComparison.OrdinalIgnoreCase));
+//            
+//            var typePropertyValue = typeProperty.Value.GetString();
+//            var providerType = ProviderService.GetProvider(typePropertyValue);
+//            
+//            var providerProperty = props.First(t => t.Name.Equals(nameof(Metric.Provider), StringComparison.OrdinalIgnoreCase));
+//
+//            var providerObj = providerProperty.Value;
+//            var obj = JsonSerializer.Deserialize(providerObj.GetRawText(), providerType);
+
+            return JsonSerializer.Deserialize<Metric>(ref reader);
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, Metric value, JsonSerializerOptions options)
         {
-            var metric = new Metric();
-            JObject jsonObject = JObject.Load(reader);
-
-            var typeProperty = jsonObject.Properties()
-                .FirstOrDefault(p => p.Name.Equals(nameof(Metric.ProviderType), StringComparison.OrdinalIgnoreCase));
-
-            if (typeProperty == null)
-                throw new InvalidOperationException($"Property {nameof(Metric.ProviderType)} is required");
-            
-            var typePropertyValue = typeProperty.First.Value<string>();
-            var providerType = ProviderService.GetProvider(typePropertyValue);
-
-            if (providerType == null)
-                throw new InvalidOperationException($"Type {typePropertyValue} could not be resolved");
-
-            JToken provider;
-            if (jsonObject.TryGetValue(nameof(Metric.Provider), StringComparison.OrdinalIgnoreCase, out provider))
-            {
-                ((JProperty)provider.Parent).Remove();
-                using (var subReader = jsonObject.CreateReader())
-                {
-                    serializer.Populate(subReader, metric);
-                }
-
-                //metric.Provider = (IMetricValueProvider)provider.ToObject(providerType);
-            }
-
-            return metric;
-        }
-
-        public override bool CanConvert(Type objectType)
-        {
-            return false;
-            //return objectType == typeof(Metric);
+            JsonSerializer.Serialize<Metric>(writer, value);
         }
     }
 }

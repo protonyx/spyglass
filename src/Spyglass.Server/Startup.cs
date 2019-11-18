@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using Spyglass.SDK.Data;
 using Spyglass.Server.Converters;
 using Spyglass.Server.Services;
@@ -57,7 +58,7 @@ namespace Spyglass.Server
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info()
+                c.SwaggerDoc("v1", new OpenApiInfo()
                 {
                     Title = "Spyglass API",
                     Version = "v1"
@@ -80,20 +81,24 @@ namespace Spyglass.Server
             {
                 app.UseHsts();
             }
-
-            app.UseCors(builder => builder
-                        .AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader());
-
-            app.UseMvc();
-
+            
             app.UseSwagger();
             app.UseSwaggerUI(c => 
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Spyglass v1");
             });
 
+            app.UseRouting();
+
+//            app.UseAuthentication();
+//            app.UseAuthorization();
+            app.UseCors(builder => builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            
             app.UseRewriter(new RewriteOptions()
                 .Add(new RedirectNonFileRequestRule()));
             app.UseDefaultFiles();
