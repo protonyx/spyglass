@@ -1,7 +1,7 @@
 ###########################################################
 ## Build Server
 ###########################################################
-FROM microsoft/dotnet:2.1-sdk as build-api
+FROM microsoft/dotnet:3.0-sdk as build-api
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ RUN ./build.sh --target=Publish-Solution --verbosity=Diagnostic
 ###########################################################
 ## Build Angular App
 ###########################################################
-FROM node:8.12.0 as build-ng
+FROM node:10 as build-ng
 
 WORKDIR /src
 COPY ./src/Spyglass.Web/package.json ./
@@ -23,7 +23,7 @@ RUN npm run build -- --prod --progress false
 ###########################################################
 ## Build Final Image
 ###########################################################
-FROM microsoft/dotnet:2.1-aspnetcore-runtime
+FROM microsoft/dotnet:3.0-aspnetcore-runtime
 
 LABEL author="Protonyx"
 

@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Spyglass.SDK.Data;
 using Spyglass.Server.Converters;
 using Spyglass.Server.Services;
@@ -23,9 +23,9 @@ namespace Spyglass.Server
 
         public IConfiguration Configuration { get; }
 
-        public IHostingEnvironment HostingEnvironment { get; }
+        public IWebHostEnvironment HostingEnvironment { get; }
 
-        public Startup(IConfiguration config, IHostingEnvironment env)
+        public Startup(IConfiguration config, IWebHostEnvironment env)
         {
             this.Configuration = config;
             this.HostingEnvironment = env;
@@ -41,7 +41,7 @@ namespace Spyglass.Server
             services.AddMvc()
                 .AddJsonOptions(opt =>
                 {
-                    opt.SerializerSettings.Converters.Add(new MetricProviderConverter());
+                    opt.JsonSerializerOptions.Converters.Add(new MetricProviderConverter());
                 });
 
             services.AddSingleton<IDataContext, SpyglassMongoContext>();
@@ -70,7 +70,7 @@ namespace Spyglass.Server
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {

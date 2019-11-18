@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Text.Json.Serialization;
 using Spyglass.SDK.Data;
 using Spyglass.SDK.Models;
 using Spyglass.SDK.Services;

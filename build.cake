@@ -1,13 +1,13 @@
 // Install modules
-#module nuget:?package=Cake.DotNetTool.Module&version=0.1.0
+#module nuget:?package=Cake.DotNetTool.Module&version=0.3.1
 
 // Addins
-#addin "Cake.Incubator"
-#addin "Cake.Yarn"
-#addin "Cake.Npm"
+#addin nuget:?package=Cake.Incubator&version=5.1.0
+#addin nuget:?package=Cake.Yarn&version=0.4.6
+#addin nuget:?package=Cake.Npm&version=0.17.0
 
 // .NET Core Global tools.
-#tool dotnet:?package=GitVersion.Tool&version=4.0.1-beta1-58
+#tool dotnet:?package=GitVersion.Tool&version=5.1.2
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
