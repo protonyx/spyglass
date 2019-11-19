@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Text.Json.Serialization;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,6 +43,8 @@ namespace Spyglass.Server
             services.AddMvc()
                 .AddJsonOptions(opt =>
                 {
+                    opt.JsonSerializerOptions.WriteIndented = !this.HostingEnvironment.IsProduction();
+                    opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                     opt.JsonSerializerOptions.Converters.Add(new MetricProviderConverter());
                 });
 
@@ -53,8 +56,11 @@ namespace Spyglass.Server
             {
                 cfg.AddProfile<ModelMetadataProfile>();
             });
-            var mapper = config.CreateMapper();
-            services.AddSingleton<IMapper>((sp) => mapper);
+            if (HostingEnvironment.IsDevelopment())
+            {
+                config.AssertConfigurationIsValid();
+            }
+            services.AddSingleton<IMapper>((sp) => config.CreateMapper());
 
             services.AddSwaggerGen(c =>
             {
