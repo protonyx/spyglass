@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
@@ -39,14 +40,16 @@ namespace Spyglass.Server
             services.AddSingleton(this.Configuration);
 
             services.AddCors();
-          
+
             services.AddMvc()
                 .AddJsonOptions(opt =>
                 {
                     opt.JsonSerializerOptions.WriteIndented = !this.HostingEnvironment.IsProduction();
                     opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                     opt.JsonSerializerOptions.Converters.Add(new MetricProviderConverter());
-                });
+                    opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                })
+                .ConfigureApiBehaviorOptions(opt => { opt.SuppressModelStateInvalidFilter = true; });
 
             services.AddSingleton<IDataContext, SpyglassMongoContext>();
             services.AddSingleton<MetadataService>();
@@ -55,6 +58,7 @@ namespace Spyglass.Server
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<ModelMetadataProfile>();
+                cfg.AddProfile<DTOProfile>();
             });
             if (HostingEnvironment.IsDevelopment())
             {

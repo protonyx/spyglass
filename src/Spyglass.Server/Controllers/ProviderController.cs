@@ -77,7 +77,7 @@ namespace Spyglass.Server.Controllers
         [HttpPost("{name}/Test")]
         [ProducesResponseType(typeof(ICollection<MetricValue>), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(object), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> TestProviderAsync(string name, [FromBody] Dictionary<string, object> config)
+        public async Task<IActionResult> TestProviderAsync(string name, [FromBody] Dictionary<string, string> config)
         {
             var providerType = ProviderService.GetProvider(name);
 

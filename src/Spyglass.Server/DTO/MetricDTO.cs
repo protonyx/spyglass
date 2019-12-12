@@ -1,14 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Spyglass.SDK.Data;
 
-namespace Spyglass.SDK.Models
+namespace Spyglass.Server.DTO
 {
-    public class Metric : IHasKey
+    public class MetricDTO
     {
-        [Display(AutoGenerateField = false)]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        
+        public Guid? Id { get; set; }
 
         [Display(Order = 0)]
         [Required]
@@ -25,11 +24,6 @@ namespace Spyglass.SDK.Models
         
         public DateTime? ModifiedDate { get; set; }
 
-        public IMetricValueProvider Provider { get; set; }
-
-        public object GetKey()
-        {
-            return Id;
-        }
+        public object Provider { get; set; }
     }
 }

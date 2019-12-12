@@ -20,7 +20,7 @@ namespace Spyglass.Server
             var request = context.HttpContext.Request;
 
             var osPath = request.Path.Value.Replace('/', Path.DirectorySeparatorChar);
-            var fullPath = Path.Join(env.ContentRootPath, osPath);
+            var fullPath = Path.Join(env.WebRootPath, osPath);
 
             if (!File.Exists(fullPath))
             {

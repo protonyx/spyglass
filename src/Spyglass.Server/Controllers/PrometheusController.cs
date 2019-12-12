@@ -32,7 +32,7 @@ namespace Spyglass.Server.Controllers
 
             foreach (var metric in metrics)
             {
-                var provider = ProviderService.BuildProvider(metric.ProviderType, metric.Provider);
+                var provider = metric.Provider;
                 var values = await provider.GetValueAsync();
 
                 foreach (var value in values)
