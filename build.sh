@@ -8,7 +8,6 @@
 # Define directories.
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 TOOLS_DIR=$SCRIPT_DIR/tools
-TOOLS_PROJ=$TOOLS_DIR/tools.csproj
 CAKE_VERSION=0.35
 CAKE_EXE=$TOOLS_DIR/dotnet-cake
 CAKE_PATH=$TOOLS_DIR/.store/cake.tool/$CAKE_VERSION
