@@ -30,7 +30,7 @@ namespace Spyglass.SDK.Services
             return ProviderMap;
         }
         
-        public static IMetricValueProvider BuildProvider(string typeName, IDictionary<string, object> config)
+        public static IMetricValueProvider BuildProvider(string typeName, IDictionary<string, string> config)
         {
             var pt = GetProvider(typeName);
             var obj = (IMetricValueProvider)Activator.CreateInstance(pt);

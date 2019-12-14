@@ -1,58 +1,50 @@
 using System;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Spyglass.SDK.Data;
 using Spyglass.SDK.Models;
 using Spyglass.SDK.Services;
+using Spyglass.Server.DTO;
 
 namespace Spyglass.Server.Converters
 {
-    public class MetricProviderConverter : JsonConverter
+    public class MetricProviderConverter : JsonConverter<MetricDTO>
     {
-        public override bool CanWrite => false;
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override MetricDTO Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            throw new NotImplementedException();
-        }
+            var doc = JsonDocument.ParseValue(ref reader);
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            var metric = new Metric();
-            JObject jsonObject = JObject.Load(reader);
+            var props = doc.RootElement.EnumerateObject().ToList();
 
-            var typeProperty = jsonObject.Properties()
-                .FirstOrDefault(p => p.Name.Equals(nameof(Metric.ProviderType), StringComparison.OrdinalIgnoreCase));
-
-            if (typeProperty == null)
-                throw new InvalidOperationException($"Property {nameof(Metric.ProviderType)} is required");
+            var typeProperty = props.First(t => t.Name.Equals(nameof(Metric.ProviderType), StringComparison.OrdinalIgnoreCase));
             
-            var typePropertyValue = typeProperty.First.Value<string>();
+            var typePropertyValue = typeProperty.Value.GetString();
             var providerType = ProviderService.GetProvider(typePropertyValue);
+            
+            var providerProperty = props.First(t => t.Name.Equals(nameof(Metric.Provider), StringComparison.OrdinalIgnoreCase));
 
-            if (providerType == null)
-                throw new InvalidOperationException($"Type {typePropertyValue} could not be resolved");
+            var providerObj = providerProperty.Value;
+            var provider = (IMetricValueProvider)JsonSerializer.Deserialize(providerObj.GetRawText(), providerType, 
+            options);
 
-            JToken provider;
-            if (jsonObject.TryGetValue(nameof(Metric.Provider), StringComparison.OrdinalIgnoreCase, out provider))
+            var metric = JsonSerializer.Deserialize<MetricDTO>(doc.RootElement.GetRawText(), new JsonSerializerOptions()
             {
-                ((JProperty)provider.Parent).Remove();
-                using (var subReader = jsonObject.CreateReader())
-                {
-                    serializer.Populate(subReader, metric);
-                }
-
-                //metric.Provider = (IMetricValueProvider)provider.ToObject(providerType);
-            }
+                PropertyNameCaseInsensitive = options.PropertyNameCaseInsensitive,
+                PropertyNamingPolicy = options.PropertyNamingPolicy
+            });
+            metric.Provider = provider;
 
             return metric;
         }
 
-        public override bool CanConvert(Type objectType)
+        public override void Write(Utf8JsonWriter writer, MetricDTO value, JsonSerializerOptions options)
         {
-            return false;
-            //return objectType == typeof(Metric);
+            JsonSerializer.Serialize<MetricDTO>(writer, value, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = options.PropertyNameCaseInsensitive,
+                PropertyNamingPolicy = options.PropertyNamingPolicy
+            });
         }
     }
 }

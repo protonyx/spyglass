@@ -1,14 +1,17 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using Microsoft.OpenApi.Models;
 using Spyglass.SDK.Data;
 using Spyglass.Server.Converters;
 using Spyglass.Server.Services;
@@ -23,9 +26,9 @@ namespace Spyglass.Server
 
         public IConfiguration Configuration { get; }
 
-        public IHostingEnvironment HostingEnvironment { get; }
+        public IWebHostEnvironment HostingEnvironment { get; }
 
-        public Startup(IConfiguration config, IHostingEnvironment env)
+        public Startup(IConfiguration config, IWebHostEnvironment env)
         {
             this.Configuration = config;
             this.HostingEnvironment = env;
@@ -37,12 +40,17 @@ namespace Spyglass.Server
             services.AddSingleton(this.Configuration);
 
             services.AddCors();
-          
+
             services.AddMvc()
                 .AddJsonOptions(opt =>
                 {
-                    opt.SerializerSettings.Converters.Add(new MetricProviderConverter());
-                });
+                    opt.JsonSerializerOptions.WriteIndented = !this.HostingEnvironment.IsProduction();
+                    opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    opt.JsonSerializerOptions.Converters.Add(new MetricProviderConverter());
+                    opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                    opt.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                })
+                .ConfigureApiBehaviorOptions(opt => { opt.SuppressModelStateInvalidFilter = true; });
 
             services.AddSingleton<IDataContext, SpyglassMongoContext>();
             services.AddSingleton<MetadataService>();
@@ -51,13 +59,17 @@ namespace Spyglass.Server
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<ModelMetadataProfile>();
+                cfg.AddProfile<DTOProfile>();
             });
-            var mapper = config.CreateMapper();
-            services.AddSingleton<IMapper>((sp) => mapper);
+            if (HostingEnvironment.IsDevelopment())
+            {
+                config.AssertConfigurationIsValid();
+            }
+            services.AddSingleton<IMapper>((sp) => config.CreateMapper());
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info()
+                c.SwaggerDoc("v1", new OpenApiInfo()
                 {
                     Title = "Spyglass API",
                     Version = "v1"
@@ -70,7 +82,7 @@ namespace Spyglass.Server
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -80,20 +92,24 @@ namespace Spyglass.Server
             {
                 app.UseHsts();
             }
-
-            app.UseCors(builder => builder
-                        .AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader());
-
-            app.UseMvc();
-
+            
             app.UseSwagger();
             app.UseSwaggerUI(c => 
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Spyglass v1");
             });
 
+            app.UseRouting();
+
+//            app.UseAuthentication();
+//            app.UseAuthorization();
+            app.UseCors(builder => builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            
             app.UseRewriter(new RewriteOptions()
                 .Add(new RedirectNonFileRequestRule()));
             app.UseDefaultFiles();

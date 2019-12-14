@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, filter, map, switchMap } from 'rxjs/operators';
 
 import {
     DeleteMetric,
@@ -37,6 +37,7 @@ export class MetricsEffects {
 
     @Effect() createMetric$: Observable<Action> = this.actions$.pipe(
         ofType<SaveMetric>(MetricActionTypes.SaveMetric),
+        filter(t => !t.payload.id),
         switchMap(action => {
             return this.metricService.createMetric(action.payload).pipe(
                 map((metric: Metric) => new SaveMetricSuccessful(metric)),
@@ -47,6 +48,7 @@ export class MetricsEffects {
 
     @Effect() saveMetric$: Observable<Action> = this.actions$.pipe(
         ofType<SaveMetric>(MetricActionTypes.SaveMetric),
+        filter(t => !!t.payload.id),
         switchMap(action => {
             return this.metricService.updateMetric(action.payload).pipe(
                 map((metric: Metric) => new SaveMetricSuccessful(metric)),

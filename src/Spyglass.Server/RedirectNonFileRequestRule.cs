@@ -16,7 +16,7 @@ namespace Spyglass.Server
 
         public void ApplyRule(RewriteContext context)
         {
-            var env = context.HttpContext.RequestServices.GetService<IHostingEnvironment>();
+            var env = context.HttpContext.RequestServices.GetService<IWebHostEnvironment>();
             var request = context.HttpContext.Request;
 
             var osPath = request.Path.Value.Replace('/', Path.DirectorySeparatorChar);
