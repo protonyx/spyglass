@@ -48,6 +48,7 @@ namespace Spyglass.Server
                     opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                     opt.JsonSerializerOptions.Converters.Add(new MetricProviderConverter());
                     opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                    opt.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
                 })
                 .ConfigureApiBehaviorOptions(opt => { opt.SuppressModelStateInvalidFilter = true; });
 

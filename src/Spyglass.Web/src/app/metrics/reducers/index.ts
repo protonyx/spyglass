@@ -22,9 +22,12 @@ export interface State {
     providers: MetricProvider[];
 }
 
+export function sortByName(a: Metric, b: Metric): number {
+    return a.name.localeCompare(b.name);
+}
+
 export const metricAdapter: EntityAdapter<Metric> = createEntityAdapter<Metric>({
-    selectId: (group: Metric) => group.id,
-    sortComparer: false
+    sortComparer: sortByName
 });
 
 export const initialState: State = {
@@ -99,20 +102,11 @@ export function reducer(state = initialState, action: MetricsActionsUnion): Stat
 
 export const getMetricState = createFeatureSelector<State>('metrics');
 
-export const getMetricsLoading = createSelector(
-    getMetricState,
-    (state: State) => state.metricsLoading
-);
+export const getMetricsLoading = createSelector(getMetricState, (state: State) => state.metricsLoading);
 
-export const getMetricEntitiesState = createSelector(
-    getMetricState,
-    (state: State) => state.metrics
-);
+export const getMetricEntitiesState = createSelector(getMetricState, (state: State) => state.metrics);
 
-export const getNewMetric = createSelector(
-    getMetricState,
-    (state: State) => state.newMetric
-);
+export const getNewMetric = createSelector(getMetricState, (state: State) => state.newMetric);
 
 export const {
     selectIds: getMetricIds,
@@ -121,10 +115,7 @@ export const {
     selectTotal: getTotalMetrics
 } = metricAdapter.getSelectors(getMetricEntitiesState);
 
-export const getSelectedMetricId = createSelector(
-    getMetricState,
-    (state: State) => state.selectedMetricId
-);
+export const getSelectedMetricId = createSelector(getMetricState, (state: State) => state.selectedMetricId);
 
 export const getSelectedMetric = createSelector(
     getMetricEntities,
@@ -135,12 +126,6 @@ export const getSelectedMetric = createSelector(
     }
 );
 
-export const getProvidersLoading = createSelector(
-    getMetricState,
-    (state: State) => state.providersLoading
-);
+export const getProvidersLoading = createSelector(getMetricState, (state: State) => state.providersLoading);
 
-export const getProviders = createSelector(
-    getMetricState,
-    (state: State) => state.providers
-);
+export const getProviders = createSelector(getMetricState, (state: State) => state.providers);

@@ -40,7 +40,11 @@ namespace Spyglass.Server.Converters
 
         public override void Write(Utf8JsonWriter writer, MetricDTO value, JsonSerializerOptions options)
         {
-            JsonSerializer.Serialize<MetricDTO>(writer, value);
+            JsonSerializer.Serialize<MetricDTO>(writer, value, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = options.PropertyNameCaseInsensitive,
+                PropertyNamingPolicy = options.PropertyNamingPolicy
+            });
         }
     }
 }
