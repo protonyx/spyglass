@@ -12,10 +12,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Spyglass.SDK.Data;
-using Spyglass.Server.Converters;
+using Prometheus;
+using Spyglass.Server.Data;
 using Spyglass.Server.Services;
-using Spyglass.Data.MongoDb;
 using Spyglass.Server.MappingProfiles;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -37,8 +36,6 @@ namespace Spyglass.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(this.Configuration);
-
             services.AddCors();
 
             services.AddMvc()
@@ -46,7 +43,6 @@ namespace Spyglass.Server
                 {
                     opt.JsonSerializerOptions.WriteIndented = !this.HostingEnvironment.IsProduction();
                     opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                    opt.JsonSerializerOptions.Converters.Add(new MetricProviderConverter());
                     opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                     opt.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
                 })
@@ -74,8 +70,7 @@ namespace Spyglass.Server
                     Title = "Spyglass API",
                     Version = "v1"
                 });
-                c.DescribeAllEnumsAsStrings();
-                c.DescribeStringEnumsInCamelCase();
+                c.DescribeAllParametersInCamelCase();
                 c.IncludeXmlComments(Path.ChangeExtension(Assembly.GetEntryAssembly().Location, "xml"));
             });
             
@@ -84,6 +79,12 @@ namespace Spyglass.Server
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            Metrics.DefaultRegistry.AddBeforeCollectCallback(async (cancel) =>
+            {
+                var metricsService = app.ApplicationServices.GetService<MetricsService>();
+                await metricsService.UpdateMetricsAsync();
+            });
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -108,7 +109,11 @@ namespace Spyglass.Server
                         .AllowAnyMethod()
                         .AllowAnyHeader());
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapMetrics();
+            });
             
             app.UseRewriter(new RewriteOptions()
                 .Add(new RedirectNonFileRequestRule()));

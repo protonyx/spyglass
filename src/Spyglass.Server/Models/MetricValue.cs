@@ -1,7 +1,6 @@
-using System;
-using Spyglass.SDK.Data;
+using Spyglass.Server.Data;
 
-namespace Spyglass.SDK.Models
+namespace Spyglass.Server.Models
 {
     public class MetricValue : IMetricValue
     {

@@ -1,4 +1,4 @@
-﻿namespace Spyglass.SDK.Data
+﻿namespace Spyglass.Server.Data
 {
     public interface IHasKey
     {

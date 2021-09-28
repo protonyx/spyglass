@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using Spyglass.SDK.Data;
 
 namespace Spyglass.Server.DTO
 {

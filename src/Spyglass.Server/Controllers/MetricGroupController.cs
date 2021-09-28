@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
-using Spyglass.SDK.Data;
-using Spyglass.SDK.Models;
+using Spyglass.Server.Data;
+using Spyglass.Server.Models;
 
 namespace Spyglass.Server.Controllers
 {

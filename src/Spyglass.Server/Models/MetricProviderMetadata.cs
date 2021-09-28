@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Spyglass.SDK.Models
+namespace Spyglass.Server.Models
 {
     public class MetricProviderMetadata
     {

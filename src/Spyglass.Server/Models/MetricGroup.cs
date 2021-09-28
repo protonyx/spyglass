@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Spyglass.SDK.Data;
+using Spyglass.Server.Data;
 
-namespace Spyglass.SDK.Models
+namespace Spyglass.Server.Models
 {
     public class MetricGroup : IHasKey
     {

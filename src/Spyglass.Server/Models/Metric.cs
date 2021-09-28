@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Spyglass.SDK.Data;
+using Spyglass.Server.Data;
 
-namespace Spyglass.SDK.Models
+namespace Spyglass.Server.Models
 {
     public class Metric : IHasKey
     {
@@ -17,15 +16,17 @@ namespace Spyglass.SDK.Models
 
         [Required]
         public string Description { get; set; }
-
-        [Required]
-        public string ProviderType { get; set; }
         
+        public Guid ConnectionId { get; set; }
+
         public DateTime? CreatedDate { get; set; }
         
         public DateTime? ModifiedDate { get; set; }
-
-        public IMetricValueProvider Provider { get; set; }
+        
+        [Required]
+        public string Query { get; set; }
+        
+        public string Units { get; set; }
 
         public object GetKey()
         {

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Spyglass.SDK.Models;
+using Spyglass.Server.Models;
 
 namespace Spyglass.Server.MappingProfiles
 {

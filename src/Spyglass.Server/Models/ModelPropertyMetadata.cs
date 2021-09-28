@@ -1,4 +1,4 @@
-﻿namespace Spyglass.SDK.Models
+﻿namespace Spyglass.Server.Models
 {
     public class ModelPropertyMetadata
     {

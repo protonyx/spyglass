@@ -1,33 +1,12 @@
-﻿using System;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Spyglass.SDK.Data;
-using Spyglass.SDK.Services;
-using MongoDB.Driver;
 using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
-using Spyglass.Data.MongoDb.Repository;
+using MongoDB.Driver;
 
-namespace Spyglass.Data.MongoDb
+namespace Spyglass.Server.Data
 {
     public class SpyglassMongoContext : IDataContext
     {
-        static SpyglassMongoContext()
-        {
-            var providers = ProviderService.GetProviders();
-            foreach (var provider in providers)
-            {
-                var map = new BsonClassMap(provider.Value);
-                map.AutoMap();
-                map.SetDiscriminator(provider.Value.Name);
-
-                if (!BsonClassMap.IsClassMapRegistered(provider.Value))
-                {
-                    BsonClassMap.RegisterClassMap(map);
-                }
-            }
-        }
-
         protected ILogger Logger { get; set; }
       
         protected MongoClient Client { get; }

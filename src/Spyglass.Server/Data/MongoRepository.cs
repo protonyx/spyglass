@@ -5,9 +5,8 @@ using System.Linq.Expressions;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
-using Spyglass.SDK.Data;
 
-namespace Spyglass.Data.MongoDb.Repository
+namespace Spyglass.Server.Data
 {
     public class MongoRepository<TModel> : IRepository<TModel> where TModel : IHasKey
     {
@@ -18,7 +17,7 @@ namespace Spyglass.Data.MongoDb.Repository
             this.InternalCollection = collection;
         }
 
-        public TModel GetSingle(object key)
+        public TModel Get(object key)
         {
             var filter = Builders<TModel>.Filter.Eq("_id", key);
             return this.InternalCollection.Find(filter).FirstOrDefault();

@@ -3,10 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Spyglass.SDK.Data;
-using Spyglass.SDK.Models;
-using Spyglass.SDK.Services;
+using Spyglass.Server.Data;
 using Spyglass.Server.DTO;
+using Spyglass.Server.Models;
+using Spyglass.Server.Services;
 
 namespace Spyglass.Server.Controllers
 {
@@ -17,13 +17,16 @@ namespace Spyglass.Server.Controllers
     {
         private IRepository<Metric> MetricRepository { get; }
         
+        private MetricsService MetricService { get; }
+        
         private IMapper Mapper { get; }
 
         public MetricController(
             IDataContext dataContext,
-            IMapper mapper)
+            IMapper mapper, MetricsService metricService)
         {
             Mapper = mapper;
+            MetricService = metricService;
             MetricRepository = dataContext.Repository<Metric>();
         }
 
@@ -62,8 +65,7 @@ namespace Spyglass.Server.Controllers
             if (entity == null)
                 return NotFound();
 
-            var provider = entity.Provider;
-            var value = await provider.GetValueAsync();
+            var value = await MetricService.GetMetricValue(entity);
             
             return Ok(value);
         }

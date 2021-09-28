@@ -1,6 +1,6 @@
 using AutoMapper;
-using Spyglass.SDK.Models;
 using Spyglass.Server.DTO;
+using Spyglass.Server.Models;
 
 namespace Spyglass.Server.MappingProfiles
 {
@@ -9,6 +9,10 @@ namespace Spyglass.Server.MappingProfiles
         public DTOProfile()
         {
             this.CreateMap<Metric, MetricDTO>()
+                .ReverseMap()
+                .ForMember(t => t.Id, opt => opt.Ignore());
+
+            this.CreateMap<DatabaseConnection, ConnectionDTO>()
                 .ReverseMap()
                 .ForMember(t => t.Id, opt => opt.Ignore());
         }
