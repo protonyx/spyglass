@@ -7,6 +7,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,16 +18,18 @@ using Prometheus;
 using Spyglass.Server.Data;
 using Spyglass.Server.Services;
 using Spyglass.Server.MappingProfiles;
+using Spyglass.Server.Models;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Spyglass.Server
 {
     public class Startup
     {
+        private IConfiguration Configuration { get; }
 
-        public IConfiguration Configuration { get; }
+        private IWebHostEnvironment HostingEnvironment { get; }
 
-        public IWebHostEnvironment HostingEnvironment { get; }
+        private Assembly StartupAssembly { get; set; }
 
         public Startup(IConfiguration config, IWebHostEnvironment env)
         {
@@ -36,6 +40,8 @@ namespace Spyglass.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            StartupAssembly = Assembly.GetEntryAssembly();
+            
             services.AddCors();
 
             services.AddMvc()
@@ -48,21 +54,38 @@ namespace Spyglass.Server
                 })
                 .ConfigureApiBehaviorOptions(opt => { opt.SuppressModelStateInvalidFilter = true; });
 
-            services.AddSingleton<IDataContext, SpyglassMongoContext>();
-            services.AddSingleton<MetadataService>();
-
-            // AutoMapper
-            var config = new MapperConfiguration(cfg =>
+            // services.AddSingleton<IDataContext, SpyglassMongoContext>();
+            services.AddDbContext<SpyglassDbContext>(opt =>
             {
-                cfg.AddProfile<ModelMetadataProfile>();
-                cfg.AddProfile<DTOProfile>();
+                var dataFolder = Configuration.GetValue<string>("DataPath");
+                var path = Path.GetFullPath(dataFolder);
+                var dbPath = Path.Join(path, "spyglass.db");
+                
+                var csb = new SqliteConnectionStringBuilder()
+                {
+                    DataSource = dbPath
+                };
+
+                opt.UseSqlite(csb.ToString());
             });
-            if (HostingEnvironment.IsDevelopment())
+            services.AddScoped<IRepository<DatabaseConnection>>(sp =>
             {
-                config.AssertConfigurationIsValid();
-            }
-            services.AddSingleton<IMapper>((sp) => config.CreateMapper());
+                var context = sp.GetRequiredService<SpyglassDbContext>();
+                return new EntityFrameworkRepository<DatabaseConnection>(context);
+            });
+            services.AddScoped<IRepository<MetricGroup>>(sp =>
+            {
+                var context = sp.GetRequiredService<SpyglassDbContext>();
+                return new EntityFrameworkRepository<MetricGroup>(context);
+            });
+            services.AddScoped<IRepository<Metric>>(sp =>
+            {
+                var context = sp.GetRequiredService<SpyglassDbContext>();
+                return new EntityFrameworkRepository<Metric>(context);
+            });
+            services.AddScoped<MetricsService>();
 
+            // Swagger
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo()
@@ -71,9 +94,14 @@ namespace Spyglass.Server
                     Version = "v1"
                 });
                 c.DescribeAllParametersInCamelCase();
-                c.IncludeXmlComments(Path.ChangeExtension(Assembly.GetEntryAssembly().Location, "xml"));
+                c.IncludeXmlComments(Path.ChangeExtension(StartupAssembly.Location, "xml"));
             });
             
+            // AutoMapper
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile<DTOProfile>();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,8 +109,12 @@ namespace Spyglass.Server
         {
             Metrics.DefaultRegistry.AddBeforeCollectCallback(async (cancel) =>
             {
-                var metricsService = app.ApplicationServices.GetService<MetricsService>();
-                await metricsService.UpdateMetricsAsync();
+                var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+                using (var scope = scopeFactory.CreateScope())
+                {
+                    var metricsService = scope.ServiceProvider.GetRequiredService<MetricsService>();
+                    await metricsService.UpdateMetricsAsync();
+                }
             });
             
             if (env.IsDevelopment())

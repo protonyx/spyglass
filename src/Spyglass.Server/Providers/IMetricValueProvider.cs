@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Spyglass.Server.Data;
 using Spyglass.Server.Models;
 
-namespace Spyglass.Server.Data
+namespace Spyglass.Server.Providers
 {
     public interface IMetricValueProvider
     {

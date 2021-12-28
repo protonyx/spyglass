@@ -3,6 +3,7 @@ using Dapper;
 using Microsoft.Data.SqlClient;
 using Spyglass.Server.Data;
 using Spyglass.Server.Models;
+using Spyglass.Server.ValueObjects;
 
 namespace Spyglass.Server.Providers
 {

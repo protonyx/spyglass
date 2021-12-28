@@ -6,7 +6,7 @@ namespace Spyglass.Server.Models
 {
     public class DatabaseConnection : IHasKey
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         
         [Required]
         public string Name { get; set; }

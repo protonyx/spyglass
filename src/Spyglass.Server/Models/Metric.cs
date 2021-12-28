@@ -6,10 +6,11 @@ namespace Spyglass.Server.Models
 {
     public class Metric : IHasKey
     {
-        [Display(AutoGenerateField = false)]
+        
         public Guid Id { get; set; } = Guid.NewGuid();
+        
+        public Guid? MetricGroupId { get; set; }
 
-        [Display(Order = 0)]
         [Required]
         [RegularExpression("[a-zA-Z_:][a-zA-Z0-9_:]*")]
         public string Name { get; set; }
@@ -27,6 +28,8 @@ namespace Spyglass.Server.Models
         public string Query { get; set; }
         
         public string Units { get; set; }
+        
+        public virtual MetricGroup Group { get; set; }
 
         public object GetKey()
         {

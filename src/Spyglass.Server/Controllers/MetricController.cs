@@ -22,12 +22,13 @@ namespace Spyglass.Server.Controllers
         private IMapper Mapper { get; }
 
         public MetricController(
-            IDataContext dataContext,
-            IMapper mapper, MetricsService metricService)
+            IRepository<Metric> metricRepository,
+            IMapper mapper,
+            MetricsService metricService)
         {
+            MetricRepository = metricRepository;
             Mapper = mapper;
             MetricService = metricService;
-            MetricRepository = dataContext.Repository<Metric>();
         }
 
         [HttpGet]
@@ -43,9 +44,7 @@ namespace Spyglass.Server.Controllers
         [HttpGet("{id}")]
         public IActionResult GetMetric(Guid id)
         {
-            var entity = this.MetricRepository
-                .FindBy(t => t.Id.Equals(id))
-                .FirstOrDefault();
+            var entity = this.MetricRepository.Get(id);
 
             if (entity == null)
                 return NotFound();
@@ -58,9 +57,7 @@ namespace Spyglass.Server.Controllers
         [HttpGet("{id}/Value")]
         public async Task<IActionResult> GetMetricValueAsync(Guid id)
         {
-            var entity = this.MetricRepository
-                .FindBy(t => t.Id.Equals(id))
-                .FirstOrDefault();
+            var entity = this.MetricRepository.Get(id);
 
             if (entity == null)
                 return NotFound();
@@ -73,11 +70,6 @@ namespace Spyglass.Server.Controllers
         [HttpPost]
         public IActionResult CreateMetric([FromBody] MetricDTO dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(this.ModelState);
-            }
-
             var entity = this.Mapper.Map<Metric>(dto);
             
             entity.Id = Guid.NewGuid();
@@ -94,9 +86,7 @@ namespace Spyglass.Server.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateMetric(Guid id, [FromBody] MetricDTO dto)
         {
-            var entity = this.MetricRepository
-                .FindBy(t => t.Id.Equals(id))
-                .FirstOrDefault();
+            var entity = this.MetricRepository.Get(id);
 
             if (entity == null)
                 return NotFound();
@@ -115,9 +105,7 @@ namespace Spyglass.Server.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteMetric(Guid id)
         {
-            var entity = this.MetricRepository
-                .FindBy(t => t.Id.Equals(id))
-                .FirstOrDefault();
+            var entity = this.MetricRepository.Get(id);
 
             if (entity == null)
                 return NotFound();

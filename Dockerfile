@@ -1,23 +1,22 @@
-ARG DOTNET_SDK=3.0
+ARG DOTNET_SDK=3.1
 
 ###########################################################
 ## Build Server
 ###########################################################
-FROM mcr.microsoft.com/dotnet/core/sdk:$DOTNET_SDK as build-api
+FROM mcr.microsoft.com/dotnet/core/sdk:$DOTNET_SDK-buster as build-api
 
 WORKDIR /app
 
-# Workaround for the new sdk images being built with debian 10
-ENV GITVERSION_VERSION=5.1.2
-ENV LD_LIBRARY_PATH=/app/tools/.store/gitversion.tool/${GITVERSION_VERSION}/gitversion.tool/${GITVERSION_VERSION}/tools/netcoreapp3.0/any/runtimes/debian.9-x64/native/
+RUN dotnet tool install Cake.Tool --version 2.0.0 --tool-path ./tools
 
 COPY . ./
-RUN ./build.sh --target=Publish-Solution --verbosity=Diagnostic
+
+RUN ./tools/dotnet-cake --target=Publish-Solution --verbosity=Diagnostic
 
 ###########################################################
 ## Build Angular App
 ###########################################################
-FROM node:10 as build-ng
+FROM node:12 as build-ng
 
 WORKDIR /src
 COPY ./src/Spyglass.Web/package.json ./
@@ -29,14 +28,17 @@ RUN npm run build -- --prod --progress false
 ###########################################################
 ## Build Final Image
 ###########################################################
-FROM mcr.microsoft.com/dotnet/core/aspnet:$DOTNET_SDK
+FROM mcr.microsoft.com/dotnet/core/aspnet:$DOTNET_SDK-buster-slim
 
 LABEL author="Protonyx"
 
 WORKDIR /app
 COPY --from=build-api /app/dist .
 COPY --from=build-ng /src/dist ./wwwroot
-ENV ASPNETCORE_URLS http://*:5000
 
+ENV ASPNETCORE_URLS http://*:5000
 EXPOSE 5000
+
+VOLUME /etc/spyglass
+
 ENTRYPOINT ["dotnet", "Spyglass.Server.dll"]

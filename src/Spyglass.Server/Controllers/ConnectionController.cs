@@ -19,7 +19,9 @@ namespace Spyglass.Server.Controllers
         
         protected IMapper Mapper { get; }
 
-        public ConnectionController(IRepository<DatabaseConnection> connectionRepository, IMapper mapper)
+        public ConnectionController(
+            IRepository<DatabaseConnection> connectionRepository,
+            IMapper mapper)
         {
             ConnectionRepository = connectionRepository;
             Mapper = mapper;
@@ -38,9 +40,7 @@ namespace Spyglass.Server.Controllers
         [HttpGet("{id}")]
         public IActionResult GetConnection(Guid id)
         {
-            var entity = this.ConnectionRepository
-                .FindBy(t => t.Id.Equals(id))
-                .FirstOrDefault();
+            var entity = this.ConnectionRepository.Get(id);
 
             if (entity == null)
                 return NotFound();
@@ -72,9 +72,7 @@ namespace Spyglass.Server.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateConnection(Guid id, [FromBody] MetricDTO dto)
         {
-            var entity = this.ConnectionRepository
-                .FindBy(t => t.Id.Equals(id))
-                .FirstOrDefault();
+            var entity = this.ConnectionRepository.Get(id);
 
             if (entity == null)
                 return NotFound();
@@ -91,9 +89,7 @@ namespace Spyglass.Server.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteConnection(Guid id)
         {
-            var entity = this.ConnectionRepository
-                .FindBy(t => t.Id.Equals(id))
-                .FirstOrDefault();
+            var entity = this.ConnectionRepository.Get(id);
 
             if (entity == null)
                 return NotFound();

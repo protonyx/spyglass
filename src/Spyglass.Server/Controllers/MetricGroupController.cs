@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Spyglass.Server.Data;
+using Spyglass.Server.DTO;
 using Spyglass.Server.Models;
 
 namespace Spyglass.Server.Controllers
@@ -12,25 +14,34 @@ namespace Spyglass.Server.Controllers
     [Route("api/[controller]")]
     public class MetricGroupController : Controller
     {
-        protected IRepository<MetricGroup> MetricGroupRepository { get; }
+        private IRepository<MetricGroup> MetricGroupRepository { get; }
 
-        protected IRepository<Metric> MetricRepository { get; }
+        private IRepository<Metric> MetricRepository { get; }
+        
+        private IMapper Mapper { get; }
 
         public MetricGroupController(
-            IDataContext dataContext)
+            IRepository<MetricGroup> metricGroupRepository,
+            IRepository<Metric> metricRepository,
+            IMapper mapper)
         {
-            this.MetricGroupRepository = dataContext.Repository<MetricGroup>();
-            this.MetricRepository = dataContext.Repository<Metric>();
+            MetricGroupRepository = metricGroupRepository;
+            MetricRepository = metricRepository;
+            Mapper = mapper;
         }
 
         /// <summary>
         /// Get all metric groups
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(ICollection<MetricGroup>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ICollection<MetricGroupDTO>), (int) HttpStatusCode.OK)]
         public IActionResult Get()
         {
-            return Ok(this.MetricGroupRepository.GetAll());
+            var groups = this.MetricGroupRepository.GetAll()
+                .Select(Mapper.Map<MetricGroupDTO>)
+                .ToList();
+            
+            return Ok(groups);
         }
 
         /// <summary>
@@ -42,38 +53,42 @@ namespace Spyglass.Server.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public IActionResult Get(Guid id)
         {
-            var group = GetGroup(id);
+            var group = this.MetricGroupRepository.Get(id);
 
             if (group == null)
                 return NotFound();
 
-            return Ok(group);
+            var dto = Mapper.Map<MetricGroupDTO>(group);
+
+            return Ok(dto);
         }
 
         /// <summary>
         /// Create a metric group
         /// </summary>
-        /// <param name="group">Group definition</param>
+        /// <param name="dto">Group definition</param>
         [HttpPost]
         [ProducesResponseType(typeof(MetricGroup), (int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(object), (int)HttpStatusCode.BadRequest)]
-        public IActionResult Create([FromBody] MetricGroup group)
+        public IActionResult Create([FromBody] MetricGroupDTO dto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             var existing = this.MetricGroupRepository
-                .FindBy(t => t.Name.Equals(group.Name))
+                .FindBy(t => t.Name.Equals(dto.Name))
                 .FirstOrDefault();
-          
+
             if (existing != null)
-                return BadRequest($"Metric group with name {group.Name} already exists");
+            {
+                ModelState.AddModelError(nameof(MetricGroupDTO.Name), $"Metric group with name {dto.Name} already exists");
+                return BadRequest(ModelState);
+            }
 
-            if (!group.Id.HasValue || group.Id == Guid.Empty)
-                group.Id = Guid.NewGuid();
-
+            var group = Mapper.Map<MetricGroup>(dto);
+            group.Id = Guid.NewGuid();
             this.MetricGroupRepository.Add(group);
-            return CreatedAtAction(nameof(Get), new { name = group.Name }, group);
+
+            Mapper.Map(group, dto);
+            
+            return CreatedAtAction(nameof(Get), new { id = group.Id }, dto);
         }
 
         /// <summary>
@@ -85,10 +100,20 @@ namespace Spyglass.Server.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public IActionResult DeleteGroup(Guid id)
         {
-            var group = GetGroup(id);
+            var group = this.MetricGroupRepository.Get(id);
 
             if (group == null)
                 return NotFound();
+
+            var metrics = MetricRepository.FindBy(t => t.MetricGroupId == id);
+
+            if (metrics.Any())
+            {
+                return BadRequest(new
+                {
+                    Message = "Unable to delete group that has associated metrics"
+                });
+            }
 
             this.MetricGroupRepository.Delete(id);
 
@@ -100,51 +125,21 @@ namespace Spyglass.Server.Controllers
         /// </summary>
         /// <param name="id">Metric group ID (Guid)</param>
         [HttpGet("{id}/Metrics")]
-        [ProducesResponseType(typeof(ICollection<Metric>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ICollection<MetricDTO>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public IActionResult GetMetrics(Guid id)
         {
-            var group = GetGroup(id);
+            var group = this.MetricGroupRepository.Get(id);
 
             if (group == null)
                 return NotFound();
 
-            // var metrics = this.MetricRepository
-            //     .FindBy(t => t.MetricGroupId.Equals(group.Id))
-            //     .ToList();
+            var metrics = this.MetricRepository
+                .FindBy(t => t.MetricGroupId.Equals(id))
+                .ToList()
+                .Select(Mapper.Map<MetricDTO>);
 
-            return Ok();
-        }
-
-        /// <summary>
-        /// Get metric values for all metrics in the group
-        /// </summary>
-        /// <param name="id">Metric group ID (Guid)</param>
-        /// <returns></returns>
-        [HttpGet("{id}/Export")]
-        [ProducesResponseType(typeof(ICollection<MetricValue>), (int) HttpStatusCode.OK)]
-        [ProducesResponseType((int) HttpStatusCode.NotFound)]
-        public IActionResult GetGroupValues(Guid id)
-        {
-            var group = GetGroup(id);
-
-            if (group == null)
-                return NotFound();
-
-            // var metrics = this.MetricRepository
-            //     .FindBy(t => t.MetricGroupId.Equals(group.Id))
-            //     .ToList();
-
-            return Ok();
-        }
-
-        private MetricGroup GetGroup(Guid id)
-        {
-            var context = this.MetricGroupRepository
-                .FindBy(t => t.Id == id)
-                .FirstOrDefault();
-
-            return context;
+            return Ok(metrics);
         }
     }
 }

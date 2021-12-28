@@ -8,6 +8,10 @@ namespace Spyglass.Server.MappingProfiles
     {
         public DTOProfile()
         {
+            this.CreateMap<MetricGroup, MetricGroupDTO>()
+                .ReverseMap()
+                .ForMember(t => t.Id, opt => opt.Ignore());
+            
             this.CreateMap<Metric, MetricDTO>()
                 .ReverseMap()
                 .ForMember(t => t.Id, opt => opt.Ignore());
