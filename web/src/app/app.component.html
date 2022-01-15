@@ -1,0 +1,24 @@
+<div class="main-container">
+  <header class="header header-6">
+    <div class="branding">
+      <cds-icon shape="bug"></cds-icon>
+      <span class="title">{{ title }}</span>
+    </div>
+  </header>
+  <div class="content-container">
+    <clr-vertical-nav>
+      <a
+        clrVerticalNavLink
+        *ngFor="let item of navItems"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+      >
+        {{ item.name }}
+      </a>
+    </clr-vertical-nav>
+
+    <div class="content-area">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

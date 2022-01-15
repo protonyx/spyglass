@@ -1,0 +1,13 @@
+<clr-datagrid>
+  <clr-dg-column [clrDgField]="'name'">Name</clr-dg-column>
+  <clr-dg-column [clrDgField]="'description'">Description</clr-dg-column>
+  <clr-dg-column [clrDgField]="'units'">Units</clr-dg-column>
+
+  <clr-dg-row *ngFor="let metric of metrics">
+    <clr-dg-cell>
+      <a [routerLink]="['/metrics', metric.id]">{{ metric.name }}</a>
+    </clr-dg-cell>
+    <clr-dg-cell>{{ metric.description }}</clr-dg-cell>
+    <clr-dg-cell>{{ metric.units }}</clr-dg-cell>
+  </clr-dg-row>
+</clr-datagrid>
