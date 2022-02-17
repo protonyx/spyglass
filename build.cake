@@ -1,13 +1,12 @@
 // Install modules
-#module nuget:?package=Cake.DotNetTool.Module&version=0.3.1
 
 // Addins
-#addin nuget:?package=Cake.Incubator&version=6.0.0
+#addin nuget:?package=Cake.Incubator&version=7.0.0
 #addin nuget:?package=Cake.Yarn&version=0.4.8
-#addin nuget:?package=Cake.Npm&version=1.0.0
+#addin nuget:?package=Cake.Npm&version=2.0.0
 
 // .NET Core Global tools
-#tool dotnet:?package=GitVersion.Tool&version=5.8.1
+#tool dotnet:?package=GitVersion.Tool&version=5.8.2
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -145,7 +144,6 @@ Task("Build-Web")
     {
         NpmRunScript("build", opt =>
         {
-            opt.Arguments.Add("--prod");
             opt.Arguments.Add("--progress false");
             opt.FromPath(web);
         });
