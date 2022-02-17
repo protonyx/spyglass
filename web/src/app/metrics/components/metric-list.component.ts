@@ -6,10 +6,19 @@ import { Metric } from '../../models/metric.model';
   templateUrl: './metric-list.component.html'
 })
 export class MetricListComponent implements OnInit {
-  @Input() metrics: Array<Metric> | null = [];
-  @Output() add = new EventEmitter<Metric>();
+  @Input() metrics: Array<Metric> = [];
+  @Output() edit = new EventEmitter<Metric>();
+  @Output() delete = new EventEmitter<Metric>();
 
   constructor() {}
 
   ngOnInit(): void {}
+
+  onEdit(metric: Metric): void {
+    this.edit.emit(metric);
+  }
+
+  onDelete(metric: Metric): void {
+    this.delete.emit(metric);
+  }
 }

@@ -16,14 +16,14 @@ RUN ./tools/dotnet-cake --target=Publish-Solution --verbosity=Diagnostic
 ###########################################################
 ## Build Angular App
 ###########################################################
-FROM node:12 as build-ng
+FROM node:16 as build-ng
 
 WORKDIR /src
-COPY ./src/Spyglass.Web/package.json ./
-RUN yarn install
+COPY ./web/package.json ./web/package-lock.json ./
+RUN npm install
 
-COPY ./src/Spyglass.Web ./
-RUN npm run build -- --prod --progress false
+COPY ./web ./
+RUN npm run build -- --progress false
 
 ###########################################################
 ## Build Final Image

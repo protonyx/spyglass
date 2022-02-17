@@ -14,7 +14,8 @@ namespace Spyglass.Server.MappingProfiles
             
             this.CreateMap<Metric, MetricDTO>()
                 .ReverseMap()
-                .ForMember(t => t.Id, opt => opt.Ignore());
+                .ForMember(t => t.Id, opt => opt.Ignore())
+                .ForMember(t => t.CreatedDate, opt => opt.Ignore());
 
             this.CreateMap<DatabaseConnection, ConnectionDTO>()
                 .ReverseMap()

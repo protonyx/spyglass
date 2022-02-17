@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
 import '@cds/core/icon/register.js';
-import { ClarityIcons, bugIcon, plusIcon } from '@cds/core/icon';
+import { ClarityIcons, bugIcon, plusIcon, refreshIcon } from '@cds/core/icon';
 
 ClarityIcons.addIcons(bugIcon);
 ClarityIcons.addIcons(plusIcon);
-
-import * as fromMetrics from './metrics/state/metrics.actions';
-import { MetricService } from './services/metric.service';
+ClarityIcons.addIcons(refreshIcon);
 
 @Component({
   selector: 'app-root',

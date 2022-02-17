@@ -1,5 +1,6 @@
-import { MetricState } from '../metrics/state';
+import { ConnectionsState, MetricState } from '../metrics/state';
 
 export interface AppState {
   metrics: MetricState;
+  connections: ConnectionsState;
 }

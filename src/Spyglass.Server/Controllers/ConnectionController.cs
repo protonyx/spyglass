@@ -70,7 +70,7 @@ namespace Spyglass.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateConnection(Guid id, [FromBody] MetricDTO dto)
+        public IActionResult UpdateConnection(Guid id, [FromBody] ConnectionDTO dto)
         {
             var entity = this.ConnectionRepository.Get(id);
 

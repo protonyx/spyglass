@@ -17,10 +17,10 @@ services:
     volumes:
       - "./db:/etc/spyglass"
 
-  mongo:
-    image: mongo:4.1
-    ports:
-      - "27017:27017"
+  # mongo:
+  #   image: mongo:4.1
+  #   ports:
+  #     - "27017:27017"
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2019-latest

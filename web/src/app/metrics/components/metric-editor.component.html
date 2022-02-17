@@ -1,1 +1,56 @@
-<p>metric-editor works!</p>
+<form
+  clrForm
+  class="metric-form"
+  [formGroup]="metricForm"
+  (submit)="handleFormSubmit($event)"
+>
+  <clr-input-container>
+    <label for="name">Name</label>
+    <input
+      clrInput
+      required
+      id="name"
+      formControlName="name"
+      placeholder="Name"
+    />
+  </clr-input-container>
+
+  <clr-input-container>
+    <label for="description">Description</label>
+    <textarea
+      clrInput
+      id="description"
+      formControlName="description"
+      placeholder="Description"
+    ></textarea>
+  </clr-input-container>
+
+  <clr-combobox-container>
+    <label for="connectionId">Connection</label>
+    <clr-combobox required id="connectionId" formControlName="connectionId">
+      <clr-options *ngIf="connections">
+        <clr-option
+          *clrOptionItems="let connection of connections; field: 'name'"
+          [clrValue]="connection"
+        >
+          {{ connection.name }}
+        </clr-option>
+      </clr-options>
+    </clr-combobox>
+  </clr-combobox-container>
+
+  <clr-input-container>
+    <label for="query">SQL Query</label>
+    <textarea clrInput id="query" formControlName="query"></textarea>
+  </clr-input-container>
+
+  <clr-input-container>
+    <label for="units">Units</label>
+    <textarea
+      clrInput
+      id="units"
+      formControlName="units"
+      placeholder="Units"
+    ></textarea>
+  </clr-input-container>
+</form>

@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClarityModule } from '@clr/angular';
@@ -25,10 +26,11 @@ import { MetricEditorComponent } from './metrics/components/metric-editor.compon
     MetricEditorComponent
   ],
   imports: [
+    AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
     ClarityModule,
-    AppRoutingModule,
+    ReactiveFormsModule,
     HttpClientModule,
     StoreModule.forRoot(reducers, {
       metaReducers

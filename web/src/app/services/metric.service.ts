@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Metric } from '../models/metric.model';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
+import { Connection } from '../models/connection.model';
 
 @Injectable({
   providedIn: 'root'
@@ -38,5 +39,11 @@ export class MetricService {
     const url = `${environment.apiUrl}/api/Metric/${id}`;
 
     return this.http.delete(url);
+  }
+
+  getConnections(): Observable<Connection[]> {
+    const url = `${environment.apiUrl}/api/Connection`;
+
+    return this.http.get<Connection[]>(url);
   }
 }

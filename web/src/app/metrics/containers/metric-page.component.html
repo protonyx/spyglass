@@ -1,10 +1,23 @@
 <h1 class="page-header">Metrics</h1>
 
 <div>
-  <button class="btn btn-link btn-icon">
+  <button class="btn btn-link btn-icon" (click)="handleAddNew()">
     <cds-icon shape="plus"></cds-icon>
     Add Metric
   </button>
+
+  <button class="btn btn-link btn-icon" (click)="handleRefresh()">
+    <cds-icon shape="refresh"></cds-icon>
+    Refresh
+  </button>
 </div>
 
-<app-metric-list [metrics]="metrics$ | async"> </app-metric-list>
+<app-metric-list
+  [metrics]="metrics$ | async"
+  (edit)="handleEdit($event)"
+></app-metric-list>
+
+<app-metric-editor
+  [metric]="metric"
+  [connections]="connections$ | async"
+></app-metric-editor>
