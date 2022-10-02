@@ -4,18 +4,20 @@ services:
   spyglass:
     image: spyglass
     build:
-      context: .
+      context: ./src/Spyglass.Server
       dockerfile: Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://*:5000
     ports:
-      - "5002:5000"
+      - "5000:5000"
     links:
-      - mongo
+      #- mongo
       - sqlserver
     volumes:
-      - "./db:/etc/spyglass"
+      - "./db:/data"
+
+# Server=localhost,1433;Database=master;User ID=sa;Password=Spyglass@123;TrustServerCertificate=true;Encrypt=false;Integrated Security=false
 
   # mongo:
   #   image: mongo:4.1

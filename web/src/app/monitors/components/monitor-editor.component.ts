@@ -1,18 +1,19 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Metric } from '../../models/metric.model';
+import { Monitor } from '../../models/monitor.model';
 import { Connection } from '../../models/connection.model';
 
 @Component({
-  selector: 'app-metric-editor',
-  templateUrl: './metric-editor.component.html'
+  selector: 'app-monitor-editor',
+  templateUrl: './monitor-editor.component.html'
 })
-export class MetricEditorComponent implements OnChanges {
-  @Input() metric: Metric = {} as Metric;
+export class MonitorEditorComponent implements OnChanges {
+  @Input() monitor: Monitor = {} as Monitor;
   @Input() connections: Array<Connection> = [];
 
-  metricForm = this.fb.group({
+  monitorForm = this.fb.group({
     name: ['', Validators.required],
+    category: [''],
     description: [''],
     connectionId: ['', Validators.required],
     query: ['', Validators.required],
@@ -20,24 +21,25 @@ export class MetricEditorComponent implements OnChanges {
   });
 
   get valid(): boolean {
-    return this.metricForm.valid;
+    return this.monitorForm.valid;
   }
 
-  get value(): Metric {
-    return this.metricForm.value as Metric;
+  get value(): Monitor {
+    return this.monitorForm.value as Monitor;
   }
 
   constructor(private fb: FormBuilder) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['metric'] && this.metric) {
-      this.load(this.metric);
+    if (changes['monitor'] && this.monitor) {
+      this.load(this.monitor);
     }
   }
 
-  load(data: Metric): void {
-    this.metricForm.patchValue({
+  load(data: Monitor): void {
+    this.monitorForm.patchValue({
       name: data.name,
+      category: data.category,
       description: data.description,
       connectionId: data.connectionId,
       query: data.query,

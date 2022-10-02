@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   title = 'Spyglass';
   navItems = [
     { name: 'Home', route: '', icon: 'home' },
-    { name: 'Metrics', route: '/metrics', icon: 'assessment' },
+    { name: 'Monitors', route: '/monitors', icon: 'assessment' },
     { name: 'Connections', route: '/connections', icon: 'lock outline' }
   ];
 

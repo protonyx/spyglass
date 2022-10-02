@@ -6,6 +6,6 @@ namespace Spyglass.Server.Providers
 {
     public interface IMetricValueProvider
     {
-        Task<IMetricValue> GetValueAsync(Metric metric, DatabaseConnection connection);
+        Task<IMetricValue> GetValueAsync(Monitor monitor, DatabaseConnection connection);
     }
 }

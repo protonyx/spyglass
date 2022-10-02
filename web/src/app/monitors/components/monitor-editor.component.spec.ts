@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MetricPageComponent } from './metric-page.component';
+import { MonitorEditorComponent } from './monitor-editor.component';
 
-describe('MetricPageComponent', () => {
-  let component: MetricPageComponent;
-  let fixture: ComponentFixture<MetricPageComponent>;
+describe('MetricEditorComponent', () => {
+  let component: MonitorEditorComponent;
+  let fixture: ComponentFixture<MonitorEditorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MetricPageComponent]
+      declarations: [MonitorEditorComponent]
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MetricPageComponent);
+    fixture = TestBed.createComponent(MonitorEditorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

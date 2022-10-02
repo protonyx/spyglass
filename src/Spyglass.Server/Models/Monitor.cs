@@ -4,12 +4,12 @@ using Spyglass.Server.Data;
 
 namespace Spyglass.Server.Models
 {
-    public class Metric : IHasKey
+    public class Monitor : IHasKey
     {
         
         public Guid Id { get; set; } = Guid.NewGuid();
-        
-        public Guid? MetricGroupId { get; set; }
+
+        public string Category { get; set; }
 
         [Required]
         [RegularExpression("[a-zA-Z_:][a-zA-Z0-9_:]*")]
@@ -29,7 +29,7 @@ namespace Spyglass.Server.Models
         
         public string Units { get; set; }
         
-        public virtual MetricGroup Group { get; set; }
+        public virtual DatabaseConnection Connection { get; set; }
 
         public object GetKey()
         {

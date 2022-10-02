@@ -68,21 +68,8 @@ namespace Spyglass.Server
 
                 opt.UseSqlite(csb.ToString());
             });
-            services.AddScoped<IRepository<DatabaseConnection>>(sp =>
-            {
-                var context = sp.GetRequiredService<SpyglassDbContext>();
-                return new EntityFrameworkRepository<DatabaseConnection>(context);
-            });
-            services.AddScoped<IRepository<MetricGroup>>(sp =>
-            {
-                var context = sp.GetRequiredService<SpyglassDbContext>();
-                return new EntityFrameworkRepository<MetricGroup>(context);
-            });
-            services.AddScoped<IRepository<Metric>>(sp =>
-            {
-                var context = sp.GetRequiredService<SpyglassDbContext>();
-                return new EntityFrameworkRepository<Metric>(context);
-            });
+            services.AddScoped(typeof(IRepository<>), typeof(EntityFrameworkRepository<>));
+            services.AddScoped<IRepository<Monitor>, MonitorRepository>();
             services.AddScoped<MetricsService>();
 
             // Swagger

@@ -9,7 +9,7 @@ using Spyglass.Server.Data;
 namespace Spyglass.Server.Migrations
 {
     [DbContext(typeof(SpyglassDbContext))]
-    [Migration("20211228024045_Initial")]
+    [Migration("20221002210846_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,10 +39,13 @@ namespace Spyglass.Server.Migrations
                     b.ToTable("DatabaseConnection");
                 });
 
-            modelBuilder.Entity("Spyglass.Server.Models.Metric", b =>
+            modelBuilder.Entity("Spyglass.Server.Models.Monitor", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Category")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("ConnectionId")
@@ -53,9 +56,6 @@ namespace Spyglass.Server.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("MetricGroupId")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("ModifiedDate")
@@ -74,7 +74,25 @@ namespace Spyglass.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Metric");
+                    b.HasIndex("ConnectionId");
+
+                    b.ToTable("Monitor");
+                });
+
+            modelBuilder.Entity("Spyglass.Server.Models.Monitor", b =>
+                {
+                    b.HasOne("Spyglass.Server.Models.DatabaseConnection", "Connection")
+                        .WithMany("Monitors")
+                        .HasForeignKey("ConnectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Connection");
+                });
+
+            modelBuilder.Entity("Spyglass.Server.Models.DatabaseConnection", b =>
+                {
+                    b.Navigation("Monitors");
                 });
 #pragma warning restore 612, 618
         }

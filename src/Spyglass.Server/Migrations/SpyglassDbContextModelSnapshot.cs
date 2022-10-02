@@ -37,10 +37,13 @@ namespace Spyglass.Server.Migrations
                     b.ToTable("DatabaseConnection");
                 });
 
-            modelBuilder.Entity("Spyglass.Server.Models.Metric", b =>
+            modelBuilder.Entity("Spyglass.Server.Models.Monitor", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Category")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("ConnectionId")
@@ -51,9 +54,6 @@ namespace Spyglass.Server.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("MetricGroupId")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("ModifiedDate")
@@ -72,41 +72,25 @@ namespace Spyglass.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MetricGroupId");
+                    b.HasIndex("ConnectionId");
 
-                    b.ToTable("Metric");
+                    b.ToTable("Monitor");
                 });
 
-            modelBuilder.Entity("Spyglass.Server.Models.MetricGroup", b =>
+            modelBuilder.Entity("Spyglass.Server.Models.Monitor", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                    b.HasOne("Spyglass.Server.Models.DatabaseConnection", "Connection")
+                        .WithMany("Monitors")
+                        .HasForeignKey("ConnectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MetricGroup");
+                    b.Navigation("Connection");
                 });
 
-            modelBuilder.Entity("Spyglass.Server.Models.Metric", b =>
+            modelBuilder.Entity("Spyglass.Server.Models.DatabaseConnection", b =>
                 {
-                    b.HasOne("Spyglass.Server.Models.MetricGroup", "Group")
-                        .WithMany("Metrics")
-                        .HasForeignKey("MetricGroupId");
-
-                    b.Navigation("Group");
-                });
-
-            modelBuilder.Entity("Spyglass.Server.Models.MetricGroup", b =>
-                {
-                    b.Navigation("Metrics");
+                    b.Navigation("Monitors");
                 });
 #pragma warning restore 612, 618
         }

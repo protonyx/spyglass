@@ -6,12 +6,12 @@ import {
   MetaReducer
 } from '@ngrx/store';
 import { environment } from '../../environments/environment';
-import * as fromMetrics from '../metrics/state/metrics.reducer';
-import * as fromConnections from '../metrics/state/connections.reducer';
+import * as fromMetrics from '../monitors/state/monitors.reducer';
+import * as fromConnections from '../monitors/state/connections.reducer';
 import { AppState } from '../state/app.state';
 
 export const reducers: ActionReducerMap<AppState> = {
-  metrics: fromMetrics.metricsReducer,
+  monitors: fromMetrics.monitorsReducer,
   connections: fromConnections.connectionsReducer
 };
 

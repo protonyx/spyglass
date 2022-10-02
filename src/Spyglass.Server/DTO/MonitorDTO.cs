@@ -3,9 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Spyglass.Server.DTO
 {
-    public class MetricDTO
+    public class MonitorDTO
     {
         public Guid? Id { get; set; }
+
+        public string Category { get; set; }
 
         [Required]
         [RegularExpression("[a-zA-Z_:][a-zA-Z0-9_:]*")]

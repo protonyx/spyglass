@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MetricListComponent } from './metric-list.component';
+import { MonitorListComponent } from './monitor-list.component';
 
 describe('MetricListComponent', () => {
-  let component: MetricListComponent;
-  let fixture: ComponentFixture<MetricListComponent>;
+  let component: MonitorListComponent;
+  let fixture: ComponentFixture<MonitorListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MetricListComponent]
+      declarations: [MonitorListComponent]
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MetricListComponent);
+    fixture = TestBed.createComponent(MonitorListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home/home.component';
-import { MetricPageComponent } from './metrics/containers/metric-page.component';
+import { MonitorPageComponent } from './monitors/containers/monitor-page.component';
 import { NotFoundComponent } from './not-found.component';
 
 const routes: Routes = [
@@ -10,8 +10,8 @@ const routes: Routes = [
     component: HomeComponent
   },
   {
-    path: 'metrics',
-    children: [{ path: '', component: MetricPageComponent }]
+    path: 'monitors',
+    children: [{ path: '', component: MonitorPageComponent }]
   },
   { path: '**', component: NotFoundComponent }
 ];

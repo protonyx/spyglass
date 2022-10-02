@@ -1,5 +1,6 @@
-export interface Metric {
+export interface Monitor {
   id: string;
+  category: string;
   name: string;
   description: string;
   connectionId: string;

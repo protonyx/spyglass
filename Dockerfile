@@ -1,9 +1,9 @@
-ARG DOTNET_SDK=3.1
+ARG DOTNET_SDK=3.1-buster
 
 ###########################################################
 ## Build Server
 ###########################################################
-FROM mcr.microsoft.com/dotnet/core/sdk:$DOTNET_SDK-buster as build-api
+FROM mcr.microsoft.com/dotnet/sdk:$DOTNET_SDK as build-api
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ RUN dotnet tool install Cake.Tool --version 2.0.0 --tool-path ./tools
 
 COPY . ./
 
-RUN ./tools/dotnet-cake --target=Publish-Solution --verbosity=Diagnostic
+RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages ./tools/dotnet-cake --target=Publish-Solution --verbosity=Diagnostic
 
 ###########################################################
 ## Build Angular App
@@ -28,7 +28,7 @@ RUN npm run build -- --progress false
 ###########################################################
 ## Build Final Image
 ###########################################################
-FROM mcr.microsoft.com/dotnet/core/aspnet:$DOTNET_SDK-buster-slim
+FROM mcr.microsoft.com/dotnet/aspnet:$DOTNET_SDK-slim
 
 LABEL author="Protonyx"
 
@@ -39,6 +39,6 @@ COPY --from=build-ng /src/dist ./wwwroot
 ENV ASPNETCORE_URLS http://*:5000
 EXPOSE 5000
 
-VOLUME /etc/spyglass
+VOLUME /data
 
 ENTRYPOINT ["dotnet", "Spyglass.Server.dll"]

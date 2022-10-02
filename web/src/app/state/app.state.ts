@@ -1,6 +1,6 @@
-import { ConnectionsState, MetricState } from '../metrics/state';
+import { ConnectionsState, MonitorState } from '../monitors/state';
 
 export interface AppState {
-  metrics: MetricState;
+  monitors: MonitorState;
   connections: ConnectionsState;
 }

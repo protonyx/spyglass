@@ -4,15 +4,15 @@ using Spyglass.Server.Models;
 
 namespace Spyglass.Server.Mapping
 {
-    public class MetricMap : IEntityTypeConfiguration<Metric>
+    public class MetricMap : IEntityTypeConfiguration<Monitor>
     {
-        public void Configure(EntityTypeBuilder<Metric> builder)
+        public void Configure(EntityTypeBuilder<Monitor> builder)
         {
             builder.HasKey(t => t.Id);
 
-            builder.HasOne<MetricGroup>(t => t.Group)
-                .WithMany(t => t.Metrics)
-                .HasForeignKey(t => t.MetricGroupId);
+            builder.HasOne<DatabaseConnection>(t => t.Connection)
+                .WithMany(t => t.Monitors)
+                .HasForeignKey(t => t.ConnectionId);
         }
     }
 }

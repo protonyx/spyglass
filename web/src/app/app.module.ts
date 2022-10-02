@@ -8,22 +8,22 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './reducers';
-import { MetricListComponent } from './metrics/components/metric-list.component';
+import { MonitorListComponent } from './monitors/components/monitor-list.component';
 import { HomeComponent } from './home/home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { MetricPageComponent } from './metrics/containers/metric-page.component';
+import { MonitorPageComponent } from './monitors/containers/monitor-page.component';
 import { NotFoundComponent } from './not-found.component';
-import { MetricEditorComponent } from './metrics/components/metric-editor.component';
+import { MonitorEditorComponent } from './monitors/components/monitor-editor.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MetricListComponent,
+    MonitorListComponent,
     HomeComponent,
-    MetricPageComponent,
+    MonitorPageComponent,
     NotFoundComponent,
-    MetricEditorComponent
+    MonitorEditorComponent
   ],
   imports: [
     AppRoutingModule,

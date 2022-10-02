@@ -1,9 +1,9 @@
-<h1 class="page-header">Metrics</h1>
+<h1 class="page-header">Monitors</h1>
 
 <div>
   <button class="btn btn-link btn-icon" (click)="handleAddNew()">
     <cds-icon shape="plus"></cds-icon>
-    Add Metric
+    Add Monitor
   </button>
 
   <button class="btn btn-link btn-icon" (click)="handleRefresh()">
@@ -12,12 +12,12 @@
   </button>
 </div>
 
-<app-metric-list
-  [metrics]="metrics$ | async"
+<app-monitor-list
+  [monitors]="monitors$ | async"
   (edit)="handleEdit($event)"
-></app-metric-list>
+></app-monitor-list>
 
-<app-metric-editor
-  [metric]="metric"
+<app-monitor-editor
+  [monitor]="monitor"
   [connections]="connections$ | async"
-></app-metric-editor>
+></app-monitor-editor>

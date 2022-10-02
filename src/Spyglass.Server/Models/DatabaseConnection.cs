@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Spyglass.Server.Data;
 
@@ -14,6 +15,9 @@ namespace Spyglass.Server.Models
         public string DatabaseType { get; set; }
         
         public string ConnectionString { get; set; }
+        
+        public virtual ICollection<Monitor> Monitors { get; set; }
+        
         public object GetKey()
         {
             return Id;

@@ -1,7 +1,7 @@
 <form
   clrForm
   class="metric-form"
-  [formGroup]="metricForm"
+  [formGroup]="monitorForm"
   (submit)="handleFormSubmit($event)"
 >
   <clr-input-container>
@@ -12,6 +12,17 @@
       id="name"
       formControlName="name"
       placeholder="Name"
+    />
+  </clr-input-container>
+
+  <clr-input-container>
+    <label for="category">Category</label>
+    <input
+      clrInput
+      required
+      id="category"
+      formControlName="category"
+      placeholder="Category"
     />
   </clr-input-container>
 

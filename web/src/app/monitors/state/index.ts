@@ -1,10 +1,10 @@
-import { Metric } from '../../models/metric.model';
+import { Monitor } from '../../models/monitor.model';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Connection } from '../../models/connection.model';
 
-export interface MetricState extends EntityState<Metric> {
+export interface MonitorState extends EntityState<Monitor> {
   selectedId: string | null;
-  newMetric: Metric | null;
+  newMonitor: Monitor | null;
 }
 
 export function selectId(a: any): string {
@@ -15,7 +15,7 @@ export function sortByName(a: any, b: any): number {
   return a.name.localeCompare(b.name);
 }
 
-export const adapter: EntityAdapter<Metric> = createEntityAdapter<Metric>({
+export const adapter: EntityAdapter<Monitor> = createEntityAdapter<Monitor>({
   selectId: selectId,
   sortComparer: sortByName
 });

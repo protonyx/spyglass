@@ -22,11 +22,11 @@ namespace Spyglass.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Metric",
+                name: "Monitor",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    MetricGroupId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    Category = table.Column<string>(type: "TEXT", nullable: true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     ConnectionId = table.Column<Guid>(type: "TEXT", nullable: false),
@@ -37,17 +37,28 @@ namespace Spyglass.Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Metric", x => x.Id);
+                    table.PrimaryKey("PK_Monitor", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Monitor_DatabaseConnection_ConnectionId",
+                        column: x => x.ConnectionId,
+                        principalTable: "DatabaseConnection",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Monitor_ConnectionId",
+                table: "Monitor",
+                column: "ConnectionId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "DatabaseConnection");
+                name: "Monitor");
 
             migrationBuilder.DropTable(
-                name: "Metric");
+                name: "DatabaseConnection");
         }
     }
 }

@@ -8,61 +8,62 @@ namespace Spyglass.Server.Data
 {
     public class EntityFrameworkRepository<TModel> : IRepository<TModel> where TModel : class, IHasKey
     {
-        private DbContext DbContext { get; }
-        private DbSet<TModel> DbSet { get; }
+        protected SpyglassDbContext _dbContext;
+        
+        protected  DbSet<TModel> _dbSet;
 
-        public EntityFrameworkRepository(DbContext dbContext)
+        public EntityFrameworkRepository(SpyglassDbContext dbContext)
         {
-            DbContext = dbContext;
-            DbSet = dbContext.Set<TModel>();
+            _dbContext = dbContext;
+            _dbSet = dbContext.Set<TModel>();
         }
 
         public IEnumerable<TModel> GetAll()
         {
-            return DbSet.AsEnumerable();
+            return _dbSet.AsEnumerable();
         }
 
         public IEnumerable<TModel> FindBy(Expression<Func<TModel, bool>> predicate)
         {
-            return DbSet.AsQueryable().Where(predicate).AsEnumerable();
+            return _dbSet.AsQueryable().Where(predicate).AsEnumerable();
         }
 
         public IEnumerable<TModel> FindBy(Func<IQueryable<TModel>, IEnumerable<TModel>> queryable)
         {
-            var q = DbSet.AsQueryable();
+            var q = _dbSet.AsQueryable();
             return queryable(q).AsEnumerable();
         }
 
-        public TModel Get(object key)
+        public virtual TModel Get(object key)
         {
-            return DbSet.Find(key);
+            return _dbSet.Find(key);
         }
 
-        public TModel Add(TModel entity)
+        public virtual TModel Add(TModel entity)
         {
-            DbSet.Add(entity);
-            DbContext.SaveChanges();
+            _dbSet.Add(entity);
+            _dbContext.SaveChanges();
             return entity;
         }
 
-        public TModel Update(TModel entity)
+        public virtual TModel Update(TModel entity)
         {
-            DbSet.Update(entity);
-            DbContext.SaveChanges();
+            _dbSet.Update(entity);
+            _dbContext.SaveChanges();
             return entity;
         }
 
-        public void Delete(TModel entity)
+        public virtual void Delete(TModel entity)
         {
-            DbSet.Remove(entity);
-            DbContext.SaveChanges();
+            _dbSet.Remove(entity);
+            _dbContext.SaveChanges();
         }
 
-        public void Delete(object key)
+        public virtual void Delete(object key)
         {
-            var entity = DbSet.Find(key);
-            DbSet.Remove(entity);
-            DbContext.SaveChanges();
+            var entity = _dbSet.Find(key);
+            _dbSet.Remove(entity);
+            _dbContext.SaveChanges();
         }
     }
 }

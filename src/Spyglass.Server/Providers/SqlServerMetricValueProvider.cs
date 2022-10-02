@@ -10,18 +10,20 @@ namespace Spyglass.Server.Providers
     public class SqlServerMetricValueProvider : IMetricValueProvider
     {
 
-        public async Task<IMetricValue> GetValueAsync(Metric metric, DatabaseConnection connection)
+        public async Task<IMetricValue> GetValueAsync(Monitor monitor, DatabaseConnection connection)
         {
-            var csb = new SqlConnectionStringBuilder(connection.ConnectionString);
-            var cs = csb.ToString();
+            var csb = new SqlConnectionStringBuilder(connection.ConnectionString)
+            {
+                ApplicationName = "Spyglass"
+            };
 
-            var dbConn = new SqlConnection(cs);
-            var res = await dbConn.ExecuteScalarAsync<double>(metric.Query);
+            var dbConn = new SqlConnection(csb.ConnectionString);
+            var res = await dbConn.ExecuteScalarAsync<double>(monitor.Query);
 
             return new MetricValue()
             {
-                Name = metric.Name,
-                Units = metric.Units,
+                Name = monitor.Name,
+                Units = monitor.Units,
                 Value = res
             };
         }

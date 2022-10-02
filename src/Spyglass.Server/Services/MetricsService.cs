@@ -13,39 +13,35 @@ namespace Spyglass.Server.Services
     public class MetricsService
     {
         private static readonly Gauge MetricsRaw = Metrics
-            .CreateGauge("metrics_raw", "Raw metric value", "group", "name");
+            .CreateGauge("metrics_raw", "Raw metric value", "category", "name");
 
-        private DbContext DbContext { get; }
-        
-        private IRepository<Metric> MetricRepository { get; }
+        private readonly IRepository<Monitor> _monitorRepository;
 
-        private IRepository<DatabaseConnection> ConnectionRepository { get; }
+        private readonly IRepository<DatabaseConnection> _connectionRepository;
 
         public MetricsService(
-            SpyglassDbContext dbContext,
-            IRepository<Metric> metricRepository,
+            IRepository<Monitor> monitorRepository,
             IRepository<DatabaseConnection> connectionRepository)
         {
-            DbContext = dbContext;
-            MetricRepository = metricRepository;
-            ConnectionRepository = connectionRepository;
+            _monitorRepository = monitorRepository;
+            _connectionRepository = connectionRepository;
         }
 
-        public Task<IMetricValue> GetMetricValue(Metric metric)
+        public Task<IMetricValue> GetMetricValue(Monitor monitor)
         {
-            var conn = ConnectionRepository.Get(metric.ConnectionId);
+            var conn = _connectionRepository.Get(monitor.ConnectionId);
             
             switch (conn.DatabaseType)
             {
                 case "SqlServer":
                     var provider = new SqlServerMetricValueProvider();
-                    return provider.GetValueAsync(metric, conn);
+                    return provider.GetValueAsync(monitor, conn);
             }
             
             var res = new MetricValue()
             {
-                Name = metric.Name,
-                Units = metric.Units,
+                Name = monitor.Name,
+                Units = monitor.Units,
                 Value = 0.0
             };
             
@@ -54,9 +50,7 @@ namespace Spyglass.Server.Services
 
         public Task UpdateMetricsAsync()
         {
-            var metrics = DbContext.Set<Metric>()
-                .Include(t => t.Group)
-                .ToList();
+            var metrics = _monitorRepository.GetAll();
             
             var tasks = new List<Task>();
 
@@ -67,7 +61,7 @@ namespace Spyglass.Server.Services
                     var res = ant.Result;
                     if (res != null)
                     {
-                        MetricsRaw.WithLabels(metric.Group?.Name ?? string.Empty, metric.Name).Set(res.Value);
+                        MetricsRaw.WithLabels(metric.Category ?? string.Empty, metric.Name).Set(res.Value);
                     }
                 }));
             }

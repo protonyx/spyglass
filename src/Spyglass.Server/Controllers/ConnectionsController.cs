@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Spyglass.Server.Data;
@@ -12,26 +11,26 @@ namespace Spyglass.Server.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class ConnectionController : ControllerBase
+    public class ConnectionsController : ControllerBase
     {
-        
-        protected IRepository<DatabaseConnection> ConnectionRepository { get; }
-        
-        protected IMapper Mapper { get; }
 
-        public ConnectionController(
+        private readonly IRepository<DatabaseConnection> _connectionRepository;
+
+        private readonly IMapper _mapper;
+
+        public ConnectionsController(
             IRepository<DatabaseConnection> connectionRepository,
             IMapper mapper)
         {
-            ConnectionRepository = connectionRepository;
-            Mapper = mapper;
+            _connectionRepository = connectionRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult GetConnections()
         {
-            var metrics = this.ConnectionRepository.GetAll()
-                .Select(this.Mapper.Map<ConnectionDTO>)
+            var metrics = this._connectionRepository.GetAll()
+                .Select(this._mapper.Map<ConnectionDTO>)
                 .ToList();
             
             return Ok(metrics);
@@ -40,12 +39,12 @@ namespace Spyglass.Server.Controllers
         [HttpGet("{id}")]
         public IActionResult GetConnection(Guid id)
         {
-            var entity = this.ConnectionRepository.Get(id);
+            var entity = this._connectionRepository.Get(id);
 
             if (entity == null)
                 return NotFound();
 
-            var dto = this.Mapper.Map<ConnectionDTO>(entity);
+            var dto = this._mapper.Map<ConnectionDTO>(entity);
 
             return Ok(dto);
         }
@@ -58,13 +57,13 @@ namespace Spyglass.Server.Controllers
                 return BadRequest(this.ModelState);
             }
 
-            var entity = this.Mapper.Map<DatabaseConnection>(dto);
+            var entity = this._mapper.Map<DatabaseConnection>(dto);
             
             entity.Id = Guid.NewGuid();
 
-            this.ConnectionRepository.Add(entity);
+            this._connectionRepository.Add(entity);
 
-            this.Mapper.Map(entity, dto);
+            this._mapper.Map(entity, dto);
 
             return Ok(dto);
         }
@@ -72,16 +71,16 @@ namespace Spyglass.Server.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateConnection(Guid id, [FromBody] ConnectionDTO dto)
         {
-            var entity = this.ConnectionRepository.Get(id);
+            var entity = this._connectionRepository.Get(id);
 
             if (entity == null)
                 return NotFound();
             
-            this.Mapper.Map(dto, entity);
+            this._mapper.Map(dto, entity);
 
-            this.ConnectionRepository.Update(entity);
+            this._connectionRepository.Update(entity);
             
-            this.Mapper.Map(entity, dto);
+            this._mapper.Map(entity, dto);
 
             return Ok(dto);
         }
@@ -89,12 +88,12 @@ namespace Spyglass.Server.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteConnection(Guid id)
         {
-            var entity = this.ConnectionRepository.Get(id);
+            var entity = this._connectionRepository.Get(id);
 
             if (entity == null)
                 return NotFound();
 
-            this.ConnectionRepository.Delete(entity);
+            this._connectionRepository.Delete(entity);
 
             return NoContent();
         }

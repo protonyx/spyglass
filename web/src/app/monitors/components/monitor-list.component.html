@@ -1,0 +1,19 @@
+<clr-datagrid>
+  <clr-dg-column [clrDgField]="'name'">Name</clr-dg-column>
+  <clr-dg-column [clrDgField]="'description'">Description</clr-dg-column>
+  <clr-dg-column [clrDgField]="'units'">Units</clr-dg-column>
+
+  <clr-dg-placeholder>We couldn't find any monitors!</clr-dg-placeholder>
+
+  <clr-dg-row *clrDgItems="let monitor of monitors" [clrDgItem]="monitor">
+    <clr-dg-action-overflow>
+      <button class="action-item" (click)="onEdit(monitor)">Edit</button>
+      <button class="action-item" (click)="onDelete(monitor)">Delete</button>
+    </clr-dg-action-overflow>
+    <clr-dg-cell>{{ monitor.name }}</clr-dg-cell>
+    <clr-dg-cell>{{ monitor.description }}</clr-dg-cell>
+    <clr-dg-cell>{{ monitor.units }}</clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>{{ monitors.length }} Record(s)</clr-dg-footer>
+</clr-datagrid>
