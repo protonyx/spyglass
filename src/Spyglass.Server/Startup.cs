@@ -68,6 +68,9 @@ namespace Spyglass.Server
 
                 opt.UseSqlite(csb.ToString());
             });
+
+            services.AddHealthChecks();
+            
             services.AddScoped(typeof(IRepository<>), typeof(EntityFrameworkRepository<>));
             services.AddScoped<IRepository<Monitor>, MonitorRepository>();
             services.AddScoped<MetricsService>();
@@ -113,7 +116,6 @@ namespace Spyglass.Server
                 app.UseHsts();
             }
             
-            app.UseSwagger();
             app.UseSwaggerUI(c => 
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Spyglass v1");
@@ -132,6 +134,8 @@ namespace Spyglass.Server
             {
                 endpoints.MapControllers();
                 endpoints.MapMetrics();
+                endpoints.MapHealthChecks("/health");
+                endpoints.MapSwagger();
             });
             
             app.UseRewriter(new RewriteOptions()

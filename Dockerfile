@@ -1,4 +1,4 @@
-ARG DOTNET_SDK=3.1-buster
+ARG DOTNET_SDK=6.0
 
 ###########################################################
 ## Build Server
@@ -28,7 +28,7 @@ RUN npm run build -- --progress false
 ###########################################################
 ## Build Final Image
 ###########################################################
-FROM mcr.microsoft.com/dotnet/aspnet:$DOTNET_SDK-slim
+FROM mcr.microsoft.com/dotnet/aspnet:$DOTNET_SDK
 
 LABEL author="Protonyx"
 
