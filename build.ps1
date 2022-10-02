@@ -1,7 +1,7 @@
 [CmdletBinding()]
 Param(
     [string]$Script = "build.cake",
-    [string]$CakeVersion = "0.35.0",
+    [string]$CakeVersion = "2.0.0",
     [string]$Target,
     [Parameter(Position=0,Mandatory=$false,ValueFromRemainingArguments=$true)]
     [string[]]$ScriptArgs

@@ -3,10 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Spyglass.SDK.Data;
-using Spyglass.SDK.Models;
-using Spyglass.SDK.Services;
+using Spyglass.Server.Data;
 using Spyglass.Server.DTO;
+using Spyglass.Server.Models;
+using Spyglass.Server.Services;
 
 namespace Spyglass.Server.Controllers
 {
@@ -17,14 +17,18 @@ namespace Spyglass.Server.Controllers
     {
         private IRepository<Metric> MetricRepository { get; }
         
+        private MetricsService MetricService { get; }
+        
         private IMapper Mapper { get; }
 
         public MetricController(
-            IDataContext dataContext,
-            IMapper mapper)
+            IRepository<Metric> metricRepository,
+            IMapper mapper,
+            MetricsService metricService)
         {
+            MetricRepository = metricRepository;
             Mapper = mapper;
-            MetricRepository = dataContext.Repository<Metric>();
+            MetricService = metricService;
         }
 
         [HttpGet]
@@ -40,9 +44,7 @@ namespace Spyglass.Server.Controllers
         [HttpGet("{id}")]
         public IActionResult GetMetric(Guid id)
         {
-            var entity = this.MetricRepository
-                .FindBy(t => t.Id.Equals(id))
-                .FirstOrDefault();
+            var entity = this.MetricRepository.Get(id);
 
             if (entity == null)
                 return NotFound();
@@ -55,15 +57,12 @@ namespace Spyglass.Server.Controllers
         [HttpGet("{id}/Value")]
         public async Task<IActionResult> GetMetricValueAsync(Guid id)
         {
-            var entity = this.MetricRepository
-                .FindBy(t => t.Id.Equals(id))
-                .FirstOrDefault();
+            var entity = this.MetricRepository.Get(id);
 
             if (entity == null)
                 return NotFound();
 
-            var provider = entity.Provider;
-            var value = await provider.GetValueAsync();
+            var value = await MetricService.GetMetricValue(entity);
             
             return Ok(value);
         }
@@ -71,11 +70,6 @@ namespace Spyglass.Server.Controllers
         [HttpPost]
         public IActionResult CreateMetric([FromBody] MetricDTO dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(this.ModelState);
-            }
-
             var entity = this.Mapper.Map<Metric>(dto);
             
             entity.Id = Guid.NewGuid();
@@ -92,9 +86,7 @@ namespace Spyglass.Server.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateMetric(Guid id, [FromBody] MetricDTO dto)
         {
-            var entity = this.MetricRepository
-                .FindBy(t => t.Id.Equals(id))
-                .FirstOrDefault();
+            var entity = this.MetricRepository.Get(id);
 
             if (entity == null)
                 return NotFound();
@@ -113,9 +105,7 @@ namespace Spyglass.Server.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteMetric(Guid id)
         {
-            var entity = this.MetricRepository
-                .FindBy(t => t.Id.Equals(id))
-                .FirstOrDefault();
+            var entity = this.MetricRepository.Get(id);
 
             if (entity == null)
                 return NotFound();
